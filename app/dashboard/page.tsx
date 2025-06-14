@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import { useClerk } from '@clerk/nextjs';
 import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card';
 import { Button } from '../components/ui/button';
 import { Badge } from '../components/ui/badge';
@@ -50,6 +51,7 @@ const Progress = ({ value, className = "" }: { value: number; className?: string
 
 export default function Dashboard() {
   const router = useRouter();
+  const { signOut } = useClerk();
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
@@ -93,9 +95,15 @@ export default function Dashboard() {
     router.push('/settings');
   };
 
-  const handleLogout = () => {
-    localStorage.clear();
-    window.location.href = '/';
+  const handleLogout = async () => {
+    try {
+      localStorage.clear();
+      await signOut({ redirectUrl: '/' });
+    } catch (error) {
+      console.error('Logout error:', error);
+      // Fallback: force redirect if Clerk fails
+      window.location.href = '/';
+    }
   };
 
   const menuItems = [
@@ -270,22 +278,22 @@ export default function Dashboard() {
           <Card className="bg-gray-800/50 border-gray-700 backdrop-blur-sm">
             <CardHeader>
               <CardTitle className="text-white">
-                2024 Track Record
+                Service Portfolio
               </CardTitle>
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
-                  <span className="text-gray-400">SaaS Launched</span>
-                  <span className="text-2xl font-bold text-white">12</span>
+                  <span className="text-gray-400">Quick Strategy</span>
+                  <span className="text-2xl font-bold text-white">£197</span>
                 </div>
                 <div className="flex items-center justify-between">
-                  <span className="text-gray-400">Success Rate</span>
-                  <span className="text-2xl font-bold text-green-400">85%</span>
+                  <span className="text-gray-400">MVP Build</span>
+                  <span className="text-2xl font-bold text-green-400">£2,997</span>
                 </div>
                 <div className="flex items-center justify-between">
-                  <span className="text-gray-400">Avg. Delivery</span>
-                  <span className="text-2xl font-bold text-blue-400">30 days</span>
+                  <span className="text-gray-400">Full SaaS</span>
+                  <span className="text-2xl font-bold text-blue-400">£4,997</span>
                 </div>
               </div>
             </CardContent>

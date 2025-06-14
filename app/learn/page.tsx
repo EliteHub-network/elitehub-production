@@ -20,79 +20,17 @@ import {
 } from 'lucide-react';
 
 export default function Learn() {
+  // Educational resources will be loaded from your CMS/database
   const freeResources = [
-    {
-      title: "What is Business Automation?",
-      description: "Complete beginner's guide to understanding automation and how it can transform your business",
-      type: "Article",
-      readTime: "10 min read",
-      link: "#"
-    },
-    {
-      title: "Automation vs Manual Work: Real Cost Analysis",
-      description: "See the real numbers behind automation ROI with practical examples",
-      type: "Guide",
-      readTime: "15 min read",
-      link: "#"
-    },
-    {
-      title: "5 Automations Every Business Needs",
-      description: "Start with these essential automations that save 10+ hours per week",
-      type: "Tutorial",
-      readTime: "20 min read",
-      link: "#"
-    },
-    {
-      title: "Email Marketing Automation Basics",
-      description: "Build your first email sequence that nurtures leads automatically",
-      type: "Tutorial",
-      readTime: "25 min read",
-      link: "#"
-    }
+    // Resources will be added from your content management system
   ];
 
   const videoTutorials = [
-    {
-      title: "Getting Started with Automation",
-      duration: "12:45",
-      description: "Perfect introduction for complete beginners"
-    },
-    {
-      title: "Building Your First Workflow",
-      duration: "18:30",
-      description: "Step-by-step workflow creation tutorial"
-    },
-    {
-      title: "Connecting Your Tools",
-      duration: "15:20",
-      description: "How to integrate your existing tools"
-    },
-    {
-      title: "Automation Best Practices",
-      duration: "22:15",
-      description: "Common mistakes and how to avoid them"
-    }
+    // Video tutorials will be loaded from your video platform
   ];
 
   const downloadables = [
-    {
-      title: "Automation Planning Worksheet",
-      type: "PDF",
-      description: "Map out your automation strategy with this free worksheet",
-      size: "2.4 MB"
-    },
-    {
-      title: "50 Automation Ideas Checklist",
-      type: "PDF",
-      description: "Discover automation opportunities in your business",
-      size: "1.8 MB"
-    },
-    {
-      title: "ROI Calculator Spreadsheet",
-      type: "Excel",
-      description: "Calculate exactly how much automation will save you",
-      size: "845 KB"
-    }
+    // Downloadable resources will be loaded from your file storage
   ];
 
   return (
@@ -139,86 +77,146 @@ export default function Learn() {
         {/* Free Articles & Guides */}
         <div className="mb-16">
           <h2 className="text-3xl font-bold text-white mb-8">Free Guides & Articles</h2>
-          <div className="grid md:grid-cols-2 gap-6">
-            {freeResources.map((resource, index) => (
-              <Card key={index} className="bg-gray-800/50 border-gray-700 backdrop-blur-sm hover:bg-gray-800/70 transition-all cursor-pointer">
-                <CardContent className="p-6">
-                  <div className="flex items-start justify-between mb-4">
-                    <div>
-                      <Badge variant="outline" className="mb-3">{resource.type}</Badge>
-                      <h3 className="text-white font-semibold text-lg mb-2">{resource.title}</h3>
-                      <p className="text-gray-400 mb-3">{resource.description}</p>
-                      <p className="text-sm text-blue-400">{resource.readTime}</p>
-                    </div>
-                    <ExternalLink className="h-5 w-5 text-gray-400 mt-1" />
-                  </div>
+          {freeResources.length === 0 ? (
+            <div className="text-center py-12">
+              <Card className="bg-gray-800/50 border-gray-700 backdrop-blur-sm max-w-2xl mx-auto">
+                <CardContent className="p-8">
+                  <BookOpen className="h-12 w-12 text-blue-400 mx-auto mb-4" />
+                  <h3 className="text-white font-semibold text-xl mb-4">Learning Resources Coming Soon</h3>
+                  <p className="text-gray-400 mb-6">
+                    We're preparing comprehensive guides and tutorials to help you master business automation.
+                  </p>
+                  <Button 
+                    onClick={() => window.location.href = '/contact'}
+                    className="bg-blue-600 hover:bg-blue-700"
+                  >
+                    Request Specific Topics
+                  </Button>
                 </CardContent>
               </Card>
-            ))}
-          </div>
+            </div>
+          ) : (
+            <div className="grid md:grid-cols-2 gap-6">
+              {freeResources.map((resource, index) => (
+                <Card key={index} className="bg-gray-800/50 border-gray-700 backdrop-blur-sm hover:bg-gray-800/70 transition-all cursor-pointer">
+                  <CardContent className="p-6">
+                    <div className="flex items-start justify-between mb-4">
+                      <div>
+                        <Badge variant="outline" className="mb-3 border-gray-600 text-gray-300">{resource.type}</Badge>
+                        <h3 className="text-white font-semibold text-lg mb-2">{resource.title}</h3>
+                        <p className="text-gray-400 mb-3">{resource.description}</p>
+                        <p className="text-sm text-blue-400">{resource.readTime}</p>
+                      </div>
+                      <ExternalLink className="h-5 w-5 text-gray-400 mt-1" />
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          )}
         </div>
 
         {/* Video Tutorials */}
         <div className="mb-16">
           <h2 className="text-3xl font-bold text-white mb-8">Free Video Tutorials</h2>
-          <div className="grid md:grid-cols-2 gap-8">
-            {videoTutorials.map((video, index) => (
-              <Card key={index} className="bg-gray-800/50 border-gray-700 backdrop-blur-sm">
-                <CardContent className="p-0">
-                  <div className="aspect-video bg-gray-900 rounded-t-lg flex items-center justify-center relative">
-                    <div className="absolute top-4 right-4">
-                      <Badge className="bg-green-500/20 text-green-300 border border-green-500/30">
-                        FREE
-                      </Badge>
-                    </div>
-                    <div className="text-center">
-                      <div className="w-16 h-16 bg-blue-500/20 rounded-full flex items-center justify-center mx-auto mb-4">
-                        <Play className="h-8 w-8 text-blue-400 ml-1" />
-                      </div>
-                    </div>
-                  </div>
-                  <div className="p-6">
-                    <h3 className="text-white font-semibold mb-2">{video.title}</h3>
-                    <p className="text-gray-400 text-sm mb-3">{video.description}</p>
-                    <div className="flex items-center justify-between">
-                      <span className="text-gray-500 text-sm flex items-center gap-1">
-                        <Clock className="h-4 w-4" />
-                        {video.duration}
-                      </span>
-                      <Button variant="outline" size="sm">
-                        Watch Now
-                        <Play className="h-3 w-3 ml-2" />
-                      </Button>
-                    </div>
-                  </div>
+          {videoTutorials.length === 0 ? (
+            <div className="text-center py-12">
+              <Card className="bg-gray-800/50 border-gray-700 backdrop-blur-sm max-w-2xl mx-auto">
+                <CardContent className="p-8">
+                  <Video className="h-12 w-12 text-green-400 mx-auto mb-4" />
+                  <h3 className="text-white font-semibold text-xl mb-4">Video Content In Production</h3>
+                  <p className="text-gray-400 mb-6">
+                    Professional video tutorials are being created to walk you through automation step-by-step.
+                  </p>
+                  <Button 
+                    onClick={() => window.location.href = '/contact'}
+                    className="bg-green-600 hover:bg-green-700"
+                  >
+                    Get Notified When Ready
+                  </Button>
                 </CardContent>
               </Card>
-            ))}
-          </div>
+            </div>
+          ) : (
+            <div className="grid md:grid-cols-2 gap-8">
+              {videoTutorials.map((video, index) => (
+                <Card key={index} className="bg-gray-800/50 border-gray-700 backdrop-blur-sm">
+                  <CardContent className="p-0">
+                    <div className="aspect-video bg-gray-900 rounded-t-lg flex items-center justify-center relative">
+                      <div className="absolute top-4 right-4">
+                        <Badge className="bg-green-500/20 text-green-300 border border-green-500/30">
+                          FREE
+                        </Badge>
+                      </div>
+                      <div className="text-center">
+                        <div className="w-16 h-16 bg-blue-500/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                          <Play className="h-8 w-8 text-blue-400 ml-1" />
+                        </div>
+                      </div>
+                    </div>
+                    <div className="p-6">
+                      <h3 className="text-white font-semibold mb-2">{video.title}</h3>
+                      <p className="text-gray-400 text-sm mb-3">{video.description}</p>
+                      <div className="flex items-center justify-between">
+                        <span className="text-gray-500 text-sm flex items-center gap-1">
+                          <Clock className="h-4 w-4" />
+                          {video.duration}
+                        </span>
+                        <Button variant="outline" size="sm" className="border-gray-600 text-gray-300 hover:bg-gray-700">
+                          Watch Now
+                          <Play className="h-3 w-3 ml-2" />
+                        </Button>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          )}
         </div>
 
         {/* Downloadable Resources */}
         <div className="mb-16">
           <h2 className="text-3xl font-bold text-white mb-8">Free Downloads</h2>
-          <div className="grid md:grid-cols-3 gap-6">
-            {downloadables.map((resource, index) => (
-              <Card key={index} className="bg-gray-800/50 border-gray-700 backdrop-blur-sm">
-                <CardContent className="p-6">
-                  <FileText className="h-12 w-12 text-blue-400 mb-4" />
-                  <h3 className="text-white font-semibold mb-2">{resource.title}</h3>
-                  <p className="text-gray-400 text-sm mb-4">{resource.description}</p>
-                  <div className="flex items-center justify-between mb-4">
-                    <Badge variant="outline">{resource.type}</Badge>
-                    <span className="text-gray-500 text-sm">{resource.size}</span>
-                  </div>
-                  <Button variant="outline" className="w-full">
-                    <Download className="h-4 w-4 mr-2" />
-                    Download Free
+          {downloadables.length === 0 ? (
+            <div className="text-center py-12">
+              <Card className="bg-gray-800/50 border-gray-700 backdrop-blur-sm max-w-2xl mx-auto">
+                <CardContent className="p-8">
+                  <FileText className="h-12 w-12 text-purple-400 mx-auto mb-4" />
+                  <h3 className="text-white font-semibold text-xl mb-4">Downloadable Resources Coming Soon</h3>
+                  <p className="text-gray-400 mb-6">
+                    Templates, worksheets, and guides are being prepared for download.
+                  </p>
+                  <Button 
+                    onClick={() => window.location.href = '/contact'}
+                    className="bg-purple-600 hover:bg-purple-700"
+                  >
+                    Request Templates
                   </Button>
                 </CardContent>
               </Card>
-            ))}
-          </div>
+            </div>
+          ) : (
+            <div className="grid md:grid-cols-3 gap-6">
+              {downloadables.map((resource, index) => (
+                <Card key={index} className="bg-gray-800/50 border-gray-700 backdrop-blur-sm">
+                  <CardContent className="p-6">
+                    <FileText className="h-12 w-12 text-blue-400 mb-4" />
+                    <h3 className="text-white font-semibold mb-2">{resource.title}</h3>
+                    <p className="text-gray-400 text-sm mb-4">{resource.description}</p>
+                    <div className="flex items-center justify-between mb-4">
+                      <Badge variant="outline" className="border-gray-600 text-gray-300">{resource.type}</Badge>
+                      <span className="text-gray-500 text-sm">{resource.size}</span>
+                    </div>
+                    <Button variant="outline" className="w-full border-gray-600 text-gray-300 hover:bg-gray-700">
+                      <Download className="h-4 w-4 mr-2" />
+                      Download Free
+                    </Button>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          )}
         </div>
 
         {/* Key Concepts */}

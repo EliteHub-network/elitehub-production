@@ -17,6 +17,8 @@ import {
   CheckCircle,
   ArrowRight,
   Users,
+  ArrowLeft,
+  Home
 } from 'lucide-react';
 
 export default function Contact() {
@@ -74,6 +76,31 @@ export default function Contact() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-blue-900">
+      {/* Navigation Bar */}
+      <div className="bg-gray-900/50 backdrop-blur-sm border-b border-gray-700">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+          <div className="flex items-center justify-between">
+            <Button
+              variant="ghost"
+              onClick={() => window.location.href = '/dashboard'}
+              className="text-gray-300 hover:text-white"
+            >
+              <ArrowLeft className="h-4 w-4 mr-2" />
+              Back to Dashboard
+            </Button>
+            <Button
+              variant="outline"
+              onClick={() => window.location.href = '/'}
+              className="border-gray-600 text-gray-300 hover:bg-gray-700"
+            >
+              <Home className="h-4 w-4 mr-2" />
+              Home
+            </Button>
+          </div>
+        </div>
+      </div>
+
+      {/* Main Content */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
         {/* Header */}
         <div className="text-center mb-12">
@@ -132,7 +159,7 @@ export default function Contact() {
               </CardHeader>
               <CardContent className="space-y-3">
                 <Button 
-                  className="w-full justify-start"
+                  className="w-full justify-start border-gray-600 text-gray-300 hover:bg-gray-700 hover:text-white"
                   variant="outline"
                   onClick={() => window.location.href = '/work-with-me'}
                 >
@@ -140,7 +167,7 @@ export default function Contact() {
                   Book a Consultation
                 </Button>
                 <Button 
-                  className="w-full justify-start"
+                  className="w-full justify-start border-gray-600 text-gray-300 hover:bg-gray-700 hover:text-white"
                   variant="outline"
                   onClick={() => window.location.href = '/learn'}
                 >
@@ -219,6 +246,52 @@ export default function Contact() {
                     </div>
                   </div>
 
+                  <div className="grid md:grid-cols-2 gap-4">
+                    <div>
+                      <label className="text-gray-300 text-sm mb-2 block">Country/Region</label>
+                      <select 
+                        name="country"
+                        className="w-full px-3 py-2 bg-gray-700/50 border border-gray-600 rounded-md text-white"
+                        required
+                      >
+                        <option value="">Select your country</option>
+                        <option value="United Kingdom">United Kingdom</option>
+                        <option value="United States">United States</option>
+                        <option value="Canada">Canada</option>
+                        <option value="Australia">Australia</option>
+                        <option value="Germany">Germany</option>
+                        <option value="France">France</option>
+                        <option value="Netherlands">Netherlands</option>
+                        <option value="Ireland">Ireland</option>
+                        <option value="Spain">Spain</option>
+                        <option value="Italy">Italy</option>
+                        <option value="Switzerland">Switzerland</option>
+                        <option value="Norway">Norway</option>
+                        <option value="Sweden">Sweden</option>
+                        <option value="Denmark">Denmark</option>
+                        <option value="Other">Other (please specify in message)</option>
+                      </select>
+                    </div>
+                    <div>
+                      <label className="text-gray-300 text-sm mb-2 block">Time Zone</label>
+                      <select 
+                        name="timezone"
+                        className="w-full px-3 py-2 bg-gray-700/50 border border-gray-600 rounded-md text-white"
+                        required
+                      >
+                        <option value="">Select your timezone</option>
+                        <option value="GMT (London)">GMT (London)</option>
+                        <option value="EST (New York)">EST (New York)</option>
+                        <option value="PST (Los Angeles)">PST (Los Angeles)</option>
+                        <option value="CET (Berlin/Paris)">CET (Berlin/Paris)</option>
+                        <option value="AEST (Sydney)">AEST (Sydney)</option>
+                        <option value="JST (Tokyo)">JST (Tokyo)</option>
+                        <option value="IST (Mumbai)">IST (Mumbai)</option>
+                        <option value="Other">Other (please specify in message)</option>
+                      </select>
+                    </div>
+                  </div>
+
                   <div>
                     <label className="text-gray-300 text-sm mb-2 block">Subject</label>
                     <Input
@@ -245,7 +318,7 @@ export default function Contact() {
                   </div>
 
                   {/* Hidden fields for Formspree */}
-                  <input type="hidden" name="_subject" value="New Contact Form Submission" />
+                  <input type="hidden" name="_subject" value="New International Contact Form Submission" />
                   <input type="hidden" name="_next" value="https://yourdomain.com/thank-you" />
 
                   <Button 

@@ -19,7 +19,9 @@ import {
   Rocket,
   TrendingUp,
   Code,
-  Shield
+  Shield,
+  ArrowLeft,
+  Home
 } from 'lucide-react';
 
 export default function WorkWithMe() {
@@ -33,12 +35,11 @@ export default function WorkWithMe() {
   };
 
   const handleServiceClick = (serviceName: string, price: string) => {
-    // Map services to their Cal.com booking links
     const calLinks: { [key: string]: string } = {
       "SaaS Strategy Session": "https://cal.com/elitehubnetwork/saas-strategy-session",
-      "Idea to Prototype": "https://cal.com/elitehubnetwork/saas-prototype-consultation",
-      "SaaS MVP Builder": "https://cal.com/elitehubnetwork/saas-mvp-consultation",
-      "Full SaaS Development": "https://cal.com/elitehubnetwork/saas-full-consultation"
+      "Idea to Prototype": "https://cal.com/elitehubnetwork/idea-to-prototype",
+      "SaaS MVP Builder": "https://cal.com/elitehubnetwork/saas-mvp-product",
+      "Full SaaS Development": "https://cal.com/elitehubnetwork/full-saas-development"
     };
 
     const bookingLink = calLinks[serviceName];
@@ -52,16 +53,14 @@ export default function WorkWithMe() {
       name: "SaaS Strategy Session",
       duration: "2 hours",
       price: "£197",
-      description: "Perfect if you want to build it yourself but need expert guidance on the technical approach",
+      description: "Technical roadmap and architecture planning. For those building it themselves.",
       includes: [
-        "2-hour deep dive consultation",
         "Technical architecture planning",
-        "Best technology stack recommendations",
-        "Database design and structure",
-        "Development roadmap and milestones",
-        "Cost estimates and hosting recommendations",
-        "Security best practices",
-        "Recorded session for future reference"
+        "Technology stack recommendations",
+        "Database design guidance",
+        "Development roadmap with milestones",
+        "Security and hosting recommendations",
+        "Recorded session for reference"
       ],
       popular: false
     },
@@ -69,15 +68,13 @@ export default function WorkWithMe() {
       name: "Idea to Prototype",
       duration: "2 weeks",
       price: "£1,497",
-      description: "Perfect for testing your concept with real users before building the full product",
+      description: "Working prototype to test your concept with real users before full development.",
       includes: [
-        "Discovery & planning session (2 hours)",
-        "Basic working prototype with core features", 
-        "User registration and authentication system",
-        "Simple, clean user interface design",
-        "Basic data management functionality",
-        "Hosting setup and deployment",
-        "1 week of tweaks based on user feedback",
+        "Core functionality prototype",
+        "User authentication system",
+        "Clean, functional interface",
+        "Basic data management",
+        "Deployment and hosting setup",
         "Code ownership and documentation"
       ],
       popular: false
@@ -86,19 +83,16 @@ export default function WorkWithMe() {
       name: "SaaS MVP Builder",
       duration: "4 weeks", 
       price: "£2,997",
-      description: "Complete, production-ready SaaS that you can start selling to customers immediately",
+      description: "Complete SaaS ready for customers. Payment processing, admin panel, the works.",
       includes: [
-        "Comprehensive discovery and planning (4 hours)",
-        "Complete user authentication and authorization",
+        "Full user authentication and authorization",
         "Stripe payment processing integration", 
-        "Full dashboard with all core features",
-        "Admin panel for user and content management",
-        "Mobile-responsive design and optimization",
-        "Email notifications and basic analytics",
-        "Database design and hosting setup",
-        "2 weeks of post-launch support and bug fixes",
-        "Complete code ownership and documentation",
-        "Training session on managing your SaaS"
+        "Complete dashboard with core features",
+        "Admin panel for management",
+        "Mobile-responsive design",
+        "Email notifications and analytics",
+        "Post-launch support included",
+        "Complete code ownership"
       ],
       popular: true
     },
@@ -106,74 +100,107 @@ export default function WorkWithMe() {
       name: "Full SaaS Development",
       duration: "6 weeks",
       price: "£4,997", 
-      description: "Enterprise-ready SaaS with advanced features, integrations, and marketing support",
+      description: "Enterprise-ready SaaS with advanced features and integrations.",
       includes: [
-        "Everything in SaaS MVP Builder PLUS:",
-        "Advanced user roles and permissions system",
-        "Third-party integrations (Zapier, APIs, webhooks)",
-        "Advanced analytics and reporting dashboard",
-        "Custom branding and professional design",
-        "Marketing landing page with conversion optimization",
-        "Advanced security features and compliance",
-        "Launch strategy and go-to-market plan",
-        "1 month of post-launch optimization and feature additions",
-        "Priority support and consultation access"
+        "Everything in MVP Builder",
+        "Advanced user roles and permissions",
+        "Third-party integrations (APIs, webhooks)",
+        "Advanced analytics dashboard",
+        "Custom branding and design",
+        "Marketing landing page",
+        "Advanced security features",
+        "Launch strategy included"
       ],
       popular: false
     }
   ];
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Hero Section */}
-      <div className="bg-gradient-to-br from-blue-600 to-purple-600 text-white py-16">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <Badge className="bg-green-500/20 text-green-300 border border-green-500/30 px-4 py-2 mb-6">
-            ✨ 12 SAAS PRODUCTS LAUNCHED IN 2024
-          </Badge>
-          <h1 className="text-4xl md:text-5xl font-bold mb-6">
-            From Idea to Profitable SaaS in 30 Days
-          </h1>
-          <p className="text-xl mb-8 text-blue-100">
-            Skip months of trial and error. Get your SaaS product built by an experienced developer 
-            who&apos;s launched 12+ profitable products. From validated idea to paying customers in 4 weeks.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button 
-              size="lg" 
-              className="bg-white text-blue-600 hover:bg-gray-100"
-              onClick={() => {
-                document.getElementById('services-section')?.scrollIntoView({ behavior: 'smooth' });
-              }}
+    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-blue-900">
+      {/* Navigation Bar */}
+      <div className="bg-gray-900/50 backdrop-blur-sm border-b border-gray-700">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+          <div className="flex items-center justify-between">
+            <Button
+              variant="ghost"
+              onClick={() => window.location.href = '/dashboard'}
+              className="text-gray-300 hover:text-white"
             >
-              <Rocket className="h-5 w-5 mr-2" />
-              View Packages
+              <ArrowLeft className="h-4 w-4 mr-2" />
+              Back to Dashboard
             </Button>
-            <Button 
-              size="lg" 
-              variant="outline" 
-              className="border-white text-white hover:bg-white hover:text-blue-600"
-              onClick={handleSendMessage}
+            <Button
+              variant="outline"
+              onClick={() => window.location.href = '/'}
+              className="border-gray-600 text-gray-300 hover:bg-gray-700"
             >
-              <MessageSquare className="h-5 w-5 mr-2" />
-              Discuss Your Idea
+              <Home className="h-4 w-4 mr-2" />
+              Home
             </Button>
           </div>
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-        {/* Services */}
-        <div className="text-center mb-12">
-          <h2 className="text-3xl font-bold text-gray-900 mb-4">Choose Your SaaS Development Package</h2>
-          <p className="text-lg text-gray-600 max-w-3xl mx-auto">
-            From quick prototypes to full-scale SaaS platforms, get exactly what you need to validate and launch your product
+      {/* Hero Section */}
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16 text-center">
+        <Badge className="bg-blue-500/20 text-blue-300 border border-blue-500/30 px-4 py-2 mb-8">
+          DIRECT. FAST. NO BS.
+        </Badge>
+        
+        <h1 className="text-4xl md:text-5xl font-bold text-white mb-8 leading-tight">
+          I build SaaS products for businesses that need software that actually works.
+        </h1>
+        
+        <div className="bg-gray-800/50 backdrop-blur-sm border border-gray-700 rounded-xl p-8 mb-8">
+          <h2 className="text-2xl font-bold text-white mb-4">
+            4 weeks from idea to live product. Fixed price. No scope creep.
+          </h2>
+          <p className="text-gray-300 text-lg leading-relaxed mb-6">
+            Most developers will spend 3 months in "discovery calls" then deliver something that doesn't match what you asked for. I build working software fast because I understand business problems, not just code.
+          </p>
+          <p className="text-gray-300 text-lg">
+            You tell me what you need. I build it. It works. You own everything.
+          </p>
+          <p className="text-blue-400 text-xl font-semibold mt-4">
+            That's it.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16" id="services-section">
+        <div className="flex flex-col sm:flex-row gap-4 justify-center">
+          <Button 
+            size="lg" 
+            className="bg-blue-600 hover:bg-blue-700"
+            onClick={() => {
+              document.getElementById('services-section')?.scrollIntoView({ behavior: 'smooth' });
+            }}
+          >
+            <Rocket className="h-5 w-5 mr-2" />
+            See Packages
+          </Button>
+          <Button 
+            size="lg" 
+            variant="outline" 
+            className="border-gray-600 text-gray-300 hover:bg-gray-700"
+            onClick={handleSendMessage}
+          >
+            <MessageSquare className="h-5 w-5 mr-2" />
+            Send Message
+          </Button>
+        </div>
+      </div>
+
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+        {/* Services */}
+        <div className="text-center mb-12" id="services-section">
+          <h2 className="text-3xl font-bold text-white mb-4">Pick What You Need</h2>
+          <p className="text-lg text-gray-300 max-w-3xl mx-auto">
+            Fixed prices. Clear deliverables. No surprises.
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8 mb-16">
           {services.map((service, index) => (
-            <Card key={index} className={`relative ${service.popular ? 'ring-2 ring-blue-500 scale-105' : ''}`}>
+            <Card key={index} className={`relative bg-gray-800/50 border-gray-700 backdrop-blur-sm ${service.popular ? 'ring-2 ring-blue-500' : ''}`}>
               {service.popular && (
                 <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">
                   <Badge className="bg-blue-500 text-white">Most Popular</Badge>
@@ -181,34 +208,33 @@ export default function WorkWithMe() {
               )}
               
               <CardHeader className="text-center">
-                <CardTitle className="text-xl mb-2">{service.name}</CardTitle>
-                <div className="text-3xl font-bold text-blue-600 mb-2">{service.price}</div>
-                <p className="text-gray-600 text-sm">{service.duration}</p>
+                <CardTitle className="text-xl mb-2 text-white">{service.name}</CardTitle>
+                <div className="text-3xl font-bold text-blue-400 mb-2">{service.price}</div>
+                <p className="text-gray-400 text-sm">{service.duration}</p>
               </CardHeader>
               
               <CardContent>
-                <p className="text-gray-600 mb-6">{service.description}</p>
+                <p className="text-gray-300 mb-6">{service.description}</p>
                 
                 <ul className="space-y-3 mb-6">
-                  {service.includes.slice(0, 5).map((item, i) => (
+                  {service.includes.map((item, i) => (
                     <li key={i} className="flex items-start gap-3">
-                      <CheckCircle className="h-5 w-5 text-green-500 mt-0.5 flex-shrink-0" />
-                      <span className="text-sm">{item}</span>
+                      <CheckCircle className="h-5 w-5 text-green-400 mt-0.5 flex-shrink-0" />
+                      <span className="text-sm text-gray-300">{item}</span>
                     </li>
                   ))}
-                  {service.includes.length > 5 && (
-                    <li className="text-sm text-gray-500 italic">
-                      + {service.includes.length - 5} more features...
-                    </li>
-                  )}
                 </ul>
                 
+                {/* Fixed button styling for better visibility */}
                 <Button 
-                  className="w-full" 
-                  variant={service.popular ? "default" : "outline"}
+                  className={`w-full font-semibold ${
+                    service.popular 
+                      ? 'bg-blue-600 hover:bg-blue-700 text-white' 
+                      : 'bg-gray-700 hover:bg-gray-600 text-white border-0'
+                  }`}
                   onClick={() => handleServiceClick(service.name, service.price)}
                 >
-                  Book Consultation
+                  Book Now
                   <ArrowRight className="h-4 w-4 ml-2" />
                 </Button>
               </CardContent>
@@ -216,201 +242,98 @@ export default function WorkWithMe() {
           ))}
         </div>
 
-        {/* Additional Services Section */}
-        <div className="bg-gray-900 text-white rounded-2xl p-8 md:p-12 mb-16">
-          <h2 className="text-3xl font-bold text-center mb-12">Additional Services & Options</h2>
-          
-          <div className="grid md:grid-cols-2 gap-8">
-            {/* White Label SaaS Templates */}
-            <Card className="bg-gray-800 border-gray-700">
-              <CardHeader>
-                <CardTitle className="text-white flex items-center gap-2">
-                  <Zap className="h-5 w-5 text-yellow-400" />
-                  White Label SaaS Templates
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-gray-300 mb-4">
-                  Ready-made SaaS templates you can rebrand and launch as your own
-                </p>
-                <div className="space-y-3 mb-6">
-                  <div className="flex justify-between items-center text-sm">
-                    <span className="text-gray-400">Booking/Scheduling SaaS</span>
-                    <span className="text-green-400 font-semibold">£997</span>
-                  </div>
-                  <div className="flex justify-between items-center text-sm">
-                    <span className="text-gray-400">Project Management SaaS</span>
-                    <span className="text-green-400 font-semibold">£1,497</span>
-                  </div>
-                  <div className="flex justify-between items-center text-sm">
-                    <span className="text-gray-400">CRM SaaS</span>
-                    <span className="text-green-400 font-semibold">£1,997</span>
-                  </div>
-                  <div className="flex justify-between items-center text-sm">
-                    <span className="text-gray-400">Membership Site SaaS</span>
-                    <span className="text-green-400 font-semibold">£1,297</span>
-                  </div>
-                </div>
-                <Button 
-                  variant="outline" 
-                  className="w-full border-gray-600 text-gray-300 hover:bg-gray-700"
-                  onClick={() => window.open('https://cal.com/elitehubnetwork/white-label-templates', '_blank')}
-                >
-                  View Templates
-                </Button>
-              </CardContent>
-            </Card>
-
-            {/* Training & Coaching */}
-            <Card className="bg-gray-800 border-gray-700">
-              <CardHeader>
-                <CardTitle className="text-white flex items-center gap-2">
-                  <Users className="h-5 w-5 text-blue-400" />
-                  Training & Coaching
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-gray-300 mb-4">
-                  Learn to build SaaS products yourself with expert guidance
-                </p>
-                <div className="space-y-3 mb-6">
-                  <div className="flex justify-between items-center text-sm">
-                    <span className="text-gray-400">"Build Your Own SaaS" Course</span>
-                    <span className="text-green-400 font-semibold">£497</span>
-                  </div>
-                  <div className="flex justify-between items-center text-sm">
-                    <span className="text-gray-400">1-on-1 Coaching (per hour)</span>
-                    <span className="text-green-400 font-semibold">£297</span>
-                  </div>
-                  <div className="flex justify-between items-center text-sm">
-                    <span className="text-gray-400">Group Workshop (8 people)</span>
-                    <span className="text-green-400 font-semibold">£197/person</span>
-                  </div>
-                </div>
-                <Button 
-                  variant="outline" 
-                  className="w-full border-gray-600 text-gray-300 hover:bg-gray-700"
-                  onClick={() => window.open('https://cal.com/elitehubnetwork/saas-training', '_blank')}
-                >
-                  Learn More
-                </Button>
-              </CardContent>
-            </Card>
-          </div>
-
-          {/* Partnership/Equity Section */}
-          <div className="mt-8 bg-gradient-to-r from-purple-900 to-blue-900 rounded-xl p-6 border border-purple-700">
+        {/* How I Work */}
+        <div className="bg-gray-800/50 backdrop-blur-sm rounded-2xl p-8 md:p-12 mb-16 border border-gray-700">
+          <h2 className="text-3xl font-bold text-white text-center mb-12">How I Work</h2>
+          <div className="grid md:grid-cols-3 gap-8">
             <div className="text-center">
-              <h3 className="text-2xl font-bold mb-3 flex items-center justify-center gap-2">
-                <Rocket className="h-6 w-6 text-purple-400" />
-                Partnership & Equity Opportunities
-              </h3>
-              <p className="text-gray-300 mb-4 max-w-2xl mx-auto">
-                Have a great idea but limited budget? Let&apos;s discuss equity partnerships or revenue sharing models. 
-                I&apos;m open to building your SaaS for 10-30% equity or a revenue share arrangement.
+              <div className="w-16 h-16 bg-blue-500/20 rounded-full flex items-center justify-center mx-auto mb-4 border-2 border-blue-500/30">
+                <span className="text-2xl font-bold text-blue-400">1</span>
+              </div>
+              <h3 className="text-white font-bold text-xl mb-4">You Tell Me What You Need</h3>
+              <p className="text-gray-400">
+                One call. You explain your business problem. I tell you exactly what I'll build and when it'll be done.
               </p>
-              <Button 
-                className="bg-purple-600 hover:bg-purple-700"
-                onClick={() => window.open('https://cal.com/elitehubnetwork/partnership-discussion', '_blank')}
-              >
-                Discuss Partnership
-              </Button>
+            </div>
+
+            <div className="text-center">
+              <div className="w-16 h-16 bg-green-500/20 rounded-full flex items-center justify-center mx-auto mb-4 border-2 border-green-500/30">
+                <span className="text-2xl font-bold text-green-400">2</span>
+              </div>
+              <h3 className="text-white font-bold text-xl mb-4">I Build It</h3>
+              <p className="text-gray-400">
+                No weekly check-ins. No status meetings. I build your software and show you when it's done.
+              </p>
+            </div>
+
+            <div className="text-center">
+              <div className="w-16 h-16 bg-purple-500/20 rounded-full flex items-center justify-center mx-auto mb-4 border-2 border-purple-500/30">
+                <span className="text-2xl font-bold text-purple-400">3</span>
+              </div>
+              <h3 className="text-white font-bold text-xl mb-4">You Own Everything</h3>
+              <p className="text-gray-400">
+                Complete code ownership. Full documentation. Hosting setup. You're not dependent on me.
+              </p>
             </div>
           </div>
         </div>
 
-        {/* Results Section */}
-        <div className="bg-white rounded-2xl p-8 md:p-12 mb-16">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">My SaaS Development Track Record</h2>
-            <p className="text-lg text-gray-600">
-              Real results from real products launched in 2024
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="text-center">
-              <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Rocket className="h-8 w-8 text-blue-600" />
-              </div>
-              <h3 className="text-2xl font-bold text-gray-900 mb-2">12 SaaS Products</h3>
-              <p className="text-gray-600">Successfully launched in 2024</p>
-            </div>
-            
-            <div className="text-center">
-              <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <TrendingUp className="h-8 w-8 text-green-600" />
-              </div>
-              <h3 className="text-2xl font-bold text-gray-900 mb-2">85% Success Rate</h3>
-              <p className="text-gray-600">Products reaching profitability</p>
-            </div>
-            
-            <div className="text-center">
-              <div className="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Clock className="h-8 w-8 text-purple-600" />
-              </div>
-              <h3 className="text-2xl font-bold text-gray-900 mb-2">30-Day Average</h3>
-              <p className="text-gray-600">From idea to launch</p>
-            </div>
-          </div>
-        </div>
-
-        {/* Why Choose Me Section */}
-        <div className="bg-gray-50 rounded-2xl p-8 md:p-12 mb-16">
-          <h2 className="text-3xl font-bold text-gray-900 text-center mb-12">Why Work With Me?</h2>
+        {/* Why Me Section */}
+        <div className="bg-gray-800/50 backdrop-blur-sm rounded-2xl p-8 md:p-12 mb-16 border border-gray-700">
+          <h2 className="text-3xl font-bold text-white text-center mb-12">Why Work With Me</h2>
           <div className="grid md:grid-cols-2 gap-8">
             <div className="flex gap-4">
               <div className="flex-shrink-0">
-                <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
-                  <Code className="h-5 w-5 text-blue-600" />
+                <div className="w-10 h-10 bg-blue-500/20 rounded-lg flex items-center justify-center">
+                  <Code className="h-5 w-5 text-blue-400" />
                 </div>
               </div>
               <div>
-                <h3 className="font-semibold text-gray-900 mb-2">Experienced SaaS Developer</h3>
-                <p className="text-gray-600">
-                  12+ successful SaaS products launched in 2024 alone. I know what works and what doesn&apos;t.
+                <h3 className="font-semibold text-white mb-2">I Actually Ship</h3>
+                <p className="text-gray-400">
+                  No endless revisions. No feature creep. I build what we agreed on and deliver it on time.
                 </p>
               </div>
             </div>
 
             <div className="flex gap-4">
               <div className="flex-shrink-0">
-                <div className="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center">
-                  <Rocket className="h-5 w-5 text-green-600" />
+                <div className="w-10 h-10 bg-green-500/20 rounded-lg flex items-center justify-center">
+                  <Rocket className="h-5 w-5 text-green-400" />
                 </div>
               </div>
               <div>
-                <h3 className="font-semibold text-gray-900 mb-2">Fast, Reliable Delivery</h3>
-                <p className="text-gray-600">
-                  30-day average from idea to launch. No endless revisions or scope creep.
+                <h3 className="font-semibold text-white mb-2">Business-First Approach</h3>
+                <p className="text-gray-400">
+                  I understand business problems, not just code. Your software will actually solve real issues.
                 </p>
               </div>
             </div>
 
             <div className="flex gap-4">
               <div className="flex-shrink-0">
-                <div className="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center">
-                  <Shield className="h-5 w-5 text-purple-600" />
+                <div className="w-10 h-10 bg-purple-500/20 rounded-lg flex items-center justify-center">
+                  <Shield className="h-5 w-5 text-purple-400" />
                 </div>
               </div>
               <div>
-                <h3 className="font-semibold text-gray-900 mb-2">You Own Everything</h3>
-                <p className="text-gray-600">
-                  100% code ownership, documentation, and deployment access. It&apos;s your product.
+                <h3 className="font-semibold text-white mb-2">You Own Everything</h3>
+                <p className="text-gray-400">
+                  Complete code ownership. Full documentation. No vendor lock-in.
                 </p>
               </div>
             </div>
 
             <div className="flex gap-4">
               <div className="flex-shrink-0">
-                <div className="w-10 h-10 bg-yellow-100 rounded-lg flex items-center justify-center">
-                  <Star className="h-5 w-5 text-yellow-600" />
+                <div className="w-10 h-10 bg-yellow-500/20 rounded-lg flex items-center justify-center">
+                  <Clock className="h-5 w-5 text-yellow-400" />
                 </div>
               </div>
               <div>
-                <h3 className="font-semibold text-gray-900 mb-2">Launch Support Included</h3>
-                <p className="text-gray-600">
-                  I don&apos;t just build and disappear. Get support through launch and initial growth.
+                <h3 className="font-semibold text-white mb-2">Fixed Timeline & Price</h3>
+                <p className="text-gray-400">
+                  What I quote is what you pay. When I say 4 weeks, I mean 4 weeks.
                 </p>
               </div>
             </div>
@@ -420,48 +343,47 @@ export default function WorkWithMe() {
         {/* Contact Form */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12" id="contact-form">
           <div>
-            <h2 className="text-3xl font-bold text-gray-900 mb-6">Ready to Build Your SaaS?</h2>
-            <p className="text-lg text-gray-600 mb-8">
-              Tell me about your idea and I&apos;ll get back to you within 24 hours with a custom 
-              development plan and timeline.
+            <h2 className="text-3xl font-bold text-white mb-6">Ready to Get Started?</h2>
+            <p className="text-lg text-gray-300 mb-8">
+              Tell me what you need built. I'll get back to you within 24 hours with exactly how I'll build it and when it'll be done.
             </p>
             
             <div className="space-y-6">
               <div className="flex items-center gap-4">
-                <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
-                  <Phone className="h-5 w-5 text-blue-600" />
+                <div className="w-10 h-10 bg-blue-500/20 rounded-full flex items-center justify-center">
+                  <Phone className="h-5 w-5 text-blue-400" />
                 </div>
                 <div>
-                  <h4 className="font-semibold">Free Consultation</h4>
-                  <p className="text-gray-600">30-minute discovery call</p>
+                  <h4 className="font-semibold text-white">No Sales Calls</h4>
+                  <p className="text-gray-400">Straight to technical discussion</p>
                 </div>
               </div>
               
               <div className="flex items-center gap-4">
-                <div className="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center">
-                  <MessageSquare className="h-5 w-5 text-green-600" />
+                <div className="w-10 h-10 bg-green-500/20 rounded-full flex items-center justify-center">
+                  <MessageSquare className="h-5 w-5 text-green-400" />
                 </div>
                 <div>
-                  <h4 className="font-semibold">Quick Response</h4>
-                  <p className="text-gray-600">24-hour response guarantee</p>
+                  <h4 className="font-semibold text-white">24-Hour Response</h4>
+                  <p className="text-gray-400">Usually much faster</p>
                 </div>
               </div>
               
               <div className="flex items-center gap-4">
-                <div className="w-10 h-10 bg-purple-100 rounded-full flex items-center justify-center">
-                  <Star className="h-5 w-5 text-purple-600" />
+                <div className="w-10 h-10 bg-purple-500/20 rounded-full flex items-center justify-center">
+                  <Star className="h-5 w-5 text-purple-400" />
                 </div>
                 <div>
-                  <h4 className="font-semibold">Fixed Pricing</h4>
-                  <p className="text-gray-600">No surprises or hidden costs</p>
+                  <h4 className="font-semibold text-white">Clear Proposal</h4>
+                  <p className="text-gray-400">Exactly what you'll get and when</p>
                 </div>
               </div>
             </div>
           </div>
 
-          <Card className={showMessageForm ? 'ring-2 ring-blue-500' : ''}>
+          <Card className={`bg-gray-800/50 border-gray-700 backdrop-blur-sm ${showMessageForm ? 'ring-2 ring-blue-500' : ''}`}>
             <CardHeader>
-              <CardTitle>Get Your Custom SaaS Development Plan</CardTitle>
+              <CardTitle className="text-white">Tell Me What You Need</CardTitle>
             </CardHeader>
             <CardContent>
               <form 
@@ -474,44 +396,71 @@ export default function WorkWithMe() {
                     name="name"
                     placeholder="Your Name"
                     required
+                    className="bg-gray-700/50 border-gray-600 text-white placeholder-gray-400"
                   />
                   <Input
                     name="email"
                     type="email"
                     placeholder="Email Address"
                     required
+                    className="bg-gray-700/50 border-gray-600 text-white placeholder-gray-400"
                   />
                 </div>
                 
-                <Input
-                  name="company"
-                  placeholder="Company Name (optional)"
-                />
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <Input
+                    name="company"
+                    placeholder="Company Name (optional)"
+                    className="bg-gray-700/50 border-gray-600 text-white placeholder-gray-400"
+                  />
+                  <select 
+                    name="country"
+                    className="w-full px-3 py-2 bg-gray-700/50 border border-gray-600 rounded-md text-white"
+                    required
+                  >
+                    <option value="">Select your country</option>
+                    <option value="United Kingdom">United Kingdom</option>
+                    <option value="United States">United States</option>
+                    <option value="Canada">Canada</option>
+                    <option value="Australia">Australia</option>
+                    <option value="Germany">Germany</option>
+                    <option value="France">France</option>
+                    <option value="Netherlands">Netherlands</option>
+                    <option value="Ireland">Ireland</option>
+                    <option value="Spain">Spain</option>
+                    <option value="Italy">Italy</option>
+                    <option value="Switzerland">Switzerland</option>
+                    <option value="Norway">Norway</option>
+                    <option value="Sweden">Sweden</option>
+                    <option value="Denmark">Denmark</option>
+                    <option value="Other">Other</option>
+                  </select>
+                </div>
 
                 <div>
-                  <label className="text-gray-700 text-sm mb-2 block font-medium">
-                    Describe Your SaaS Idea
+                  <label className="text-gray-300 text-sm mb-2 block font-medium">
+                    What do you need built?
                   </label>
                   <Textarea
-                    name="saas_idea"
-                    placeholder="What problem does your SaaS solve? Who are your target users? What are the main features you need?"
+                    name="project_description"
+                    placeholder="Describe your business problem and what software would solve it..."
                     rows={4}
                     required
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="bg-gray-700/50 border-gray-600 text-white placeholder-gray-400"
                   />
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
-                    <label className="text-gray-700 text-sm mb-2 block font-medium">
+                    <label className="text-gray-300 text-sm mb-2 block font-medium">
                       Budget Range
                     </label>
                     <select 
                       name="budget"
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      className="w-full px-3 py-2 bg-gray-700/50 border border-gray-600 rounded-md text-white"
                       required
                     >
-                      <option value="">Select budget range</option>
+                      <option value="">Select budget</option>
                       <option value="£1,000-£2,000">£1,000 - £2,000</option>
                       <option value="£2,000-£3,500">£2,000 - £3,500</option>
                       <option value="£3,500-£5,000">£3,500 - £5,000</option>
@@ -520,12 +469,32 @@ export default function WorkWithMe() {
                   </div>
                   
                   <div>
-                    <label className="text-gray-700 text-sm mb-2 block font-medium">
+                    <label className="text-gray-300 text-sm mb-2 block font-medium">
+                      Preferred Payment
+                    </label>
+                    <select 
+                      name="payment_preference"
+                      className="w-full px-3 py-2 bg-gray-700/50 border border-gray-600 rounded-md text-white"
+                      required
+                    >
+                      <option value="">Select payment method</option>
+                      <option value="Bank Transfer">Bank Transfer (SEPA/Wire)</option>
+                      <option value="Stripe (Card)">Credit/Debit Card</option>
+                      <option value="PayPal">PayPal</option>
+                      <option value="Crypto">Cryptocurrency</option>
+                      <option value="Other">Other (discuss)</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label className="text-gray-300 text-sm mb-2 block font-medium">
                       Timeline
                     </label>
                     <select 
                       name="timeline"
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      className="w-full px-3 py-2 bg-gray-700/50 border border-gray-600 rounded-md text-white"
                       required
                     >
                       <option value="">Select timeline</option>
@@ -535,38 +504,41 @@ export default function WorkWithMe() {
                       <option value="2+ months">2+ months</option>
                     </select>
                   </div>
+                  
+                  <div>
+                    <label className="text-gray-300 text-sm mb-2 block font-medium">
+                      Time Zone
+                    </label>
+                    <select 
+                      name="timezone"
+                      className="w-full px-3 py-2 bg-gray-700/50 border border-gray-600 rounded-md text-white"
+                      required
+                    >
+                      <option value="">Select timezone</option>
+                      <option value="GMT (London)">GMT (London)</option>
+                      <option value="EST (New York)">EST (New York)</option>
+                      <option value="PST (Los Angeles)">PST (Los Angeles)</option>
+                      <option value="CET (Berlin/Paris)">CET (Berlin/Paris)</option>
+                      <option value="AEST (Sydney)">AEST (Sydney)</option>
+                      <option value="JST (Tokyo)">JST (Tokyo)</option>
+                      <option value="IST (Mumbai)">IST (Mumbai)</option>
+                      <option value="Other">Other</option>
+                    </select>
+                  </div>
                 </div>
 
-                <div>
-                  <label className="text-gray-700 text-sm mb-2 block font-medium">
-                    Additional Information (optional)
-                  </label>
-                  <Textarea
-                    name="additional_info"
-                    placeholder="Any specific requirements, technical preferences, or questions?"
-                    rows={3}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  />
-                </div>
-
-                {/* Hidden field to track which package they're interested in */}
-                <input 
-                  type="hidden" 
-                  name="_subject" 
-                  value="New SaaS Development Request - EliteHub" 
-                />
+                <input type="hidden" name="_subject" value="New International SaaS Project Request" />
                 
-                {/* Redirect after submission (optional) */}
-                <input 
-                  type="hidden" 
-                  name="_next" 
-                  value="http://localhost:3000/thank-you" 
-                />
-                
-                <Button type="submit" className="w-full" size="lg">
-                  Send My SaaS Project Request
+                <Button type="submit" className="w-full bg-blue-600 hover:bg-blue-700" size="lg">
+                  Send Project Details
                   <ArrowRight className="h-5 w-5 ml-2" />
                 </Button>
+
+                <div className="bg-blue-900/20 border border-blue-700/50 rounded-lg p-3 mt-4">
+                  <p className="text-blue-300 text-sm">
+                    💳 <strong>Payment Options:</strong> Bank transfer (SEPA/Wire), PayPal, Stripe, or crypto accepted for international clients.
+                  </p>
+                </div>
               </form>
             </CardContent>
           </Card>
