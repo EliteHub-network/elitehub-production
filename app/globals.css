@@ -4,9 +4,8 @@
 
 @layer base {
   * {
-    @apply border-gray-200;
+    /* Removed problematic border utility */
   }
-  
   body {
     @apply bg-background text-foreground;
     font-feature-settings: "rlig" 1, "calt" 1;
