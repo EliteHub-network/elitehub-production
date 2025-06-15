@@ -33,7 +33,7 @@ const Badge = ({ children, className = "", variant = "default" }) => {
   const variantClasses = {
     default: "bg-blue-100 text-blue-900 border border-blue-200",
     success: "bg-green-500/20 text-green-300 border border-green-500/30",
-    secondary: "bg-gray-100 text-gray-900 border border-gray-300"
+    secondary: "bg-gray-100 text-gray-900 border border-gray-200"
   };
   
   return (
