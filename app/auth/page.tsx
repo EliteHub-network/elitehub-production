@@ -156,7 +156,7 @@ const Auth = () => {
               />
             )}
             
-            <div className="text-center pt-4 border-t border-gray-200 mt-6">
+            <div className="text-center pt-4 border-t border-gray-300 mt-6">
               <button
                 onClick={() => setIsSignUp(!isSignUp)}
                 className="text-blue-600 hover:text-blue-700 text-sm font-medium underline transition-colors"
