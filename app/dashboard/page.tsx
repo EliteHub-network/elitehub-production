@@ -31,7 +31,9 @@ import {
   Video,
   MessageSquare,
   Lock,
-  Shield
+  Shield,
+  Menu,
+  X
 } from 'lucide-react';
 
 // ADMIN EMAIL - ONLY THIS EMAIL GETS ADMIN ACCESS
@@ -57,6 +59,7 @@ export default function Dashboard() {
   const [email, setEmail] = useState('');
   const [membershipType, setMembershipType] = useState('Free');
   const [loading, setLoading] = useState(true);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   // Check if current user is admin
   const isAdmin = user?.emailAddresses?.[0]?.emailAddress?.toLowerCase() === ADMIN_EMAIL.toLowerCase();
@@ -137,9 +140,9 @@ export default function Dashboard() {
 
   const menuItems = [
     { name: 'Dashboard', href: '/dashboard', icon: Home, active: true },
-    { name: 'Tools Marketplace', href: '/tools-marketplace', icon: ShoppingBag },
+    // { name: 'Tools Marketplace', href: '/tools-marketplace', icon: ShoppingBag }, // REMOVED
     { name: 'Work With Me', href: '/work-with-me', icon: Briefcase },
-    { name: 'Community', href: '/community-hub', icon: Users },
+    { name: 'Community', href: '/community-hub', icon: Users, locked: true }, // LOCKED
     { name: 'About', href: '/about', icon: Info },
     { name: 'Contact', href: '/contact', icon: Mail },
   ];
@@ -157,9 +160,69 @@ export default function Dashboard() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-blue-900">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Header */}
-        <div className="flex items-center justify-between mb-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-8">
+        {/* Mobile Header */}
+        <div className="flex items-center justify-between mb-6 lg:hidden">
+          <h1 className="text-2xl font-bold text-white">Dashboard</h1>
+          <button
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            className="p-2 text-gray-300 hover:text-white"
+          >
+            {mobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+          </button>
+        </div>
+
+        {/* Mobile Menu Overlay */}
+        {mobileMenuOpen && (
+          <div className="fixed inset-0 z-50 lg:hidden">
+            <div className="fixed inset-0 bg-black/50" onClick={() => setMobileMenuOpen(false)} />
+            <div className="fixed right-0 top-0 h-full w-64 bg-gray-800 p-6">
+              <div className="flex items-center justify-between mb-8">
+                <Badge className={`${getMembershipColor()} text-white`}>
+                  {getMembershipIcon()}
+                  <span className="ml-1">{membershipType}</span>
+                </Badge>
+                <button
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="text-gray-400 hover:text-white"
+                >
+                  <X className="h-6 w-6" />
+                </button>
+              </div>
+              
+              <div className="space-y-4">
+                {isAdmin && (
+                  <Button 
+                    onClick={handleAdminAccess}
+                    className="w-full bg-red-600 hover:bg-red-700 text-white font-semibold"
+                  >
+                    <Shield className="h-4 w-4 mr-2" />
+                    Admin Panel
+                  </Button>
+                )}
+                
+                <Button 
+                  variant="outline" 
+                  onClick={handleSettings} 
+                  className="w-full border-gray-600 text-gray-300 hover:bg-gray-700"
+                >
+                  <Settings className="h-4 w-4 mr-2" />
+                  Settings
+                </Button>
+                
+                <SignOutButton afterSignOutUrl="/">
+                  <Button variant="outline" className="w-full border-gray-600 text-gray-300 hover:bg-gray-700">
+                    <LogOut className="h-4 w-4 mr-2" />
+                    Logout
+                  </Button>
+                </SignOutButton>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Desktop Header */}
+        <div className="hidden lg:flex items-center justify-between mb-8">
           <div>
             <h1 className="text-3xl font-bold text-white">Dashboard</h1>
             <p className="text-blue-200 mt-2">Welcome back, {firstName}! Build, automate, and scale your business</p>
@@ -170,7 +233,6 @@ export default function Dashboard() {
               <span className="ml-1">{membershipType} Plan</span>
             </Badge>
 
-            {/* ADMIN ACCESS BUTTON - ONLY VISIBLE TO ADMIN EMAIL */}
             {isAdmin && (
               <Button 
                 onClick={handleAdminAccess}
@@ -195,18 +257,23 @@ export default function Dashboard() {
           </div>
         </div>
 
+        {/* Mobile Welcome */}
+        <div className="lg:hidden mb-6">
+          <p className="text-blue-200">Welcome back, {firstName}!</p>
+        </div>
+
         {/* ADMIN BANNER - ONLY VISIBLE TO ADMIN */}
         {isAdmin && (
           <div className="mb-8 p-4 bg-red-900/30 border border-red-700/50 rounded-lg backdrop-blur-sm">
-            <div className="flex items-center gap-3">
-              <Shield className="h-5 w-5 text-red-400" />
-              <div>
+            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3">
+              <Shield className="h-5 w-5 text-red-400 flex-shrink-0" />
+              <div className="flex-1">
                 <h3 className="text-red-300 font-semibold">Admin Access Detected</h3>
                 <p className="text-red-200 text-sm">You have full administrative control over EliteHub.</p>
               </div>
               <Button 
                 onClick={handleAdminAccess}
-                className="ml-auto bg-red-600 hover:bg-red-700 text-white"
+                className="w-full sm:w-auto bg-red-600 hover:bg-red-700 text-white hidden sm:block"
               >
                 Open Admin Panel
               </Button>
@@ -215,30 +282,39 @@ export default function Dashboard() {
         )}
 
         {/* Navigation Menu */}
-        <div className="mb-8">
-          <nav className="flex space-x-1 bg-gray-800/50 backdrop-blur-sm rounded-lg p-1 border border-gray-700">
+        <div className="mb-8 overflow-x-auto">
+          <nav className="flex space-x-1 bg-gray-800/50 backdrop-blur-sm rounded-lg p-1 border border-gray-700 min-w-max">
             {menuItems.map((item) => {
               const Icon = item.icon;
               return (
                 <a
                   key={item.name}
-                  href={item.href}
-                  className={`flex items-center gap-2 px-4 py-2 rounded-md text-sm font-medium transition-colors ${
+                  href={item.locked ? '#' : item.href}
+                  onClick={(e) => {
+                    if (item.locked) {
+                      e.preventDefault();
+                      alert('Community Hub coming soon! 🚀\n\nWe\'re building an amazing community experience for you.');
+                    }
+                  }}
+                  className={`flex items-center gap-2 px-3 sm:px-4 py-2 rounded-md text-sm font-medium transition-colors whitespace-nowrap ${
                     item.active 
                       ? 'bg-gradient-to-r from-blue-500 to-purple-500 text-white' 
+                      : item.locked
+                      ? 'text-gray-500 hover:text-gray-400 hover:bg-gray-700/50 cursor-not-allowed'
                       : 'text-gray-300 hover:text-white hover:bg-gray-700/50'
                   }`}
                 >
                   <Icon className="h-4 w-4" />
-                  {item.name}
+                  <span className="hidden sm:inline">{item.name}</span>
+                  {item.locked && <Lock className="h-3 w-3 ml-1" />}
                 </a>
               );
             })}
           </nav>
         </div>
 
-        {/* Download Usage Stats */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+        {/* Download Usage Stats - YOUR ORIGINAL FEATURE */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6 mb-8">
           {/* Free Tools */}
           <Card className="bg-gray-800/50 border-gray-700 backdrop-blur-sm">
             <CardHeader className="pb-3">
@@ -327,16 +403,16 @@ export default function Dashboard() {
           </Card>
         </div>
 
-        {/* Your Benefits */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
+        {/* Your Benefits - YOUR ORIGINAL FEATURE */}
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
           <Card className="bg-gray-800/50 border-gray-700 backdrop-blur-sm">
-            <CardContent className="p-4">
-              <div className="flex items-center justify-between">
+            <CardContent className="p-3 sm:p-4">
+              <div className="flex flex-col sm:flex-row items-center sm:justify-between gap-2">
                 <div className="flex items-center">
-                  <Tag className="h-5 w-5 text-green-400 mr-2" />
-                  <span className="text-sm text-gray-300">Discount</span>
+                  <Tag className="h-4 sm:h-5 w-4 sm:w-5 text-green-400 mr-2" />
+                  <span className="text-xs sm:text-sm text-gray-300">Discount</span>
                 </div>
-                <Badge className="bg-green-600/20 text-green-400 border-green-600/30">
+                <Badge className="bg-green-600/20 text-green-400 border-green-600/30 text-xs">
                   {getDiscount()}% OFF
                 </Badge>
               </div>
@@ -344,76 +420,76 @@ export default function Dashboard() {
           </Card>
 
           <Card className="bg-gray-800/50 border-gray-700 backdrop-blur-sm">
-            <CardContent className="p-4">
-              <div className="flex items-center justify-between">
+            <CardContent className="p-3 sm:p-4">
+              <div className="flex flex-col sm:flex-row items-center sm:justify-between gap-2">
                 <div className="flex items-center">
-                  <Video className="h-5 w-5 text-blue-400 mr-2" />
-                  <span className="text-sm text-gray-300">Video Calls</span>
+                  <Video className="h-4 sm:h-5 w-4 sm:w-5 text-blue-400 mr-2" />
+                  <span className="text-xs sm:text-sm text-gray-300">Video Calls</span>
                 </div>
                 {membershipType === 'Enterprise' ? (
-                  <Badge className="bg-blue-600/20 text-blue-400 border-blue-600/30">Soon</Badge>
+                  <Badge className="bg-blue-600/20 text-blue-400 border-blue-600/30 text-xs">Soon</Badge>
                 ) : (
-                  <Lock className="h-4 w-4 text-gray-500" />
+                  <Lock className="h-3 sm:h-4 w-3 sm:w-4 text-gray-500" />
                 )}
               </div>
             </CardContent>
           </Card>
 
           <Card className="bg-gray-800/50 border-gray-700 backdrop-blur-sm">
-            <CardContent className="p-4">
-              <div className="flex items-center justify-between">
+            <CardContent className="p-3 sm:p-4">
+              <div className="flex flex-col sm:flex-row items-center sm:justify-between gap-2">
                 <div className="flex items-center">
-                  <MessageSquare className="h-5 w-5 text-purple-400 mr-2" />
-                  <span className="text-sm text-gray-300">Groups</span>
+                  <MessageSquare className="h-4 sm:h-5 w-4 sm:w-5 text-purple-400 mr-2" />
+                  <span className="text-xs sm:text-sm text-gray-300">Groups</span>
                 </div>
                 {membershipType !== 'Free' ? (
-                  <Badge className="bg-purple-600/20 text-purple-400 border-purple-600/30">Soon</Badge>
+                  <Badge className="bg-purple-600/20 text-purple-400 border-purple-600/30 text-xs">Soon</Badge>
                 ) : (
-                  <Lock className="h-4 w-4 text-gray-500" />
+                  <Lock className="h-3 sm:h-4 w-3 sm:w-4 text-gray-500" />
                 )}
               </div>
             </CardContent>
           </Card>
 
           <Card className="bg-gray-800/50 border-gray-700 backdrop-blur-sm">
-            <CardContent className="p-4">
-              <div className="flex items-center justify-between">
+            <CardContent className="p-3 sm:p-4">
+              <div className="flex flex-col sm:flex-row items-center sm:justify-between gap-2">
                 <div className="flex items-center">
-                  <TrendingUp className="h-5 w-5 text-yellow-400 mr-2" />
-                  <span className="text-sm text-gray-300">Status</span>
+                  <TrendingUp className="h-4 sm:h-5 w-4 sm:w-5 text-yellow-400 mr-2" />
+                  <span className="text-xs sm:text-sm text-gray-300">Status</span>
                 </div>
-                <span className="text-sm font-medium text-white">{membershipType}</span>
+                <span className="text-xs sm:text-sm font-medium text-white">{membershipType}</span>
               </div>
             </CardContent>
           </Card>
         </div>
 
-        {/* Main Action Cards */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
+        {/* Main Action Cards - YOUR ORIGINAL DESIGN */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 sm:gap-8 mb-8">
           {/* Get Started */}
-          <Card className="bg-gradient-to-br from-blue-600 to-purple-600 border-0 text-white col-span-2">
+          <Card className="bg-gradient-to-br from-blue-600 to-purple-600 border-0 text-white lg:col-span-2">
             <CardHeader>
-              <CardTitle className="flex items-center gap-2 text-xl">
-                <Zap className="h-6 w-6" />
+              <CardTitle className="flex items-center gap-2 text-lg sm:text-xl">
+                <Zap className="h-5 sm:h-6 w-5 sm:w-6" />
                 Ready to Build Your First Automation?
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-blue-100 mb-6">
-                Browse our marketplace of proven automation templates and start building your profitable business today.
+              <p className="text-blue-100 mb-6 text-sm sm:text-base">
+                Explore our services and start building your profitable automated business today.
               </p>
-              <div className="flex gap-4">
+              <div className="flex flex-col sm:flex-row gap-4">
                 <Button 
-                  onClick={() => window.location.href = '/tools-marketplace'} 
+                  onClick={() => window.location.href = '/work-with-me'} 
                   className="bg-white text-blue-600 hover:bg-gray-100 font-semibold"
                 >
-                  <Search className="h-4 w-4 mr-2" />
-                  Browse Tools
+                  <Briefcase className="h-4 w-4 mr-2" />
+                  Work With Me
                 </Button>
                 <Button 
                   variant="outline" 
                   className="border-white/30 text-white hover:bg-white/10"
-                  onClick={() => window.location.href = '/resources'}
+                  onClick={() => window.location.href = '/learn'}
                 >
                   <Plus className="h-4 w-4 mr-2" />
                   Learn More
@@ -422,7 +498,7 @@ export default function Dashboard() {
             </CardContent>
           </Card>
 
-          {/* Upgrade Card */}
+          {/* Upgrade Card - YOUR ORIGINAL DESIGN */}
           <Card className="bg-gray-800/50 border-gray-700 backdrop-blur-sm">
             <CardHeader>
               <CardTitle className="text-white">
@@ -484,7 +560,7 @@ export default function Dashboard() {
           </Card>
         </div>
 
-        {/* Quick Actions */}
+        {/* Quick Actions - YOUR ORIGINAL DESIGN BUT WITH CHANGES */}
         <Card className="bg-gray-800/50 border-gray-700 backdrop-blur-sm">
           <CardHeader>
             <CardTitle className="text-white flex items-center gap-2">
@@ -493,40 +569,42 @@ export default function Dashboard() {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
               <Button 
-                onClick={() => window.location.href = '/tools-marketplace'} 
-                className="h-24 flex-col bg-gray-700/50 hover:bg-gray-600/50 text-white border-gray-600"
+                onClick={() => window.location.href = '/work-with-me'} 
+                className="h-20 sm:h-24 flex-col bg-gray-700/50 hover:bg-gray-600/50 text-white border-gray-600 text-xs sm:text-sm"
                 variant="outline"
               >
-                <Search className="h-6 w-6 mb-2 text-blue-400" />
-                <span>Browse Marketplace</span>
+                <Briefcase className="h-5 sm:h-6 w-5 sm:w-6 mb-2 text-blue-400" />
+                <span>Work With Me</span>
               </Button>
               
               <Button 
                 onClick={() => window.location.href = '/billing'} 
-                className="h-24 flex-col bg-gray-700/50 hover:bg-gray-600/50 text-white border-gray-600"
+                className="h-20 sm:h-24 flex-col bg-gray-700/50 hover:bg-gray-600/50 text-white border-gray-600 text-xs sm:text-sm"
                 variant="outline"
               >
-                <TrendingUp className="h-6 w-6 mb-2 text-green-400" />
+                <TrendingUp className="h-5 sm:h-6 w-5 sm:w-6 mb-2 text-green-400" />
                 <span>Manage Billing</span>
               </Button>
               
               <Button 
-                className="h-24 flex-col bg-gray-700/50 hover:bg-gray-600/50 text-white border-gray-600"
+                className="h-20 sm:h-24 flex-col bg-gray-700/50 hover:bg-gray-600/50 text-white border-gray-600 text-xs sm:text-sm opacity-50 cursor-not-allowed"
                 variant="outline"
-                onClick={() => window.location.href = '/community-hub'}
+                onClick={() => alert('Community Hub coming soon! 🚀\n\nWe\'re building an amazing community experience for you.')}
+                disabled
               >
-                <Users className="h-6 w-6 mb-2 text-purple-400" />
-                <span>Join Community</span>
+                <Users className="h-5 sm:h-6 w-5 sm:w-6 mb-2 text-purple-400" />
+                <span>Community</span>
+                <Lock className="h-3 w-3" />
               </Button>
               
               <Button 
                 onClick={handleSettings}
-                className="h-24 flex-col bg-gray-700/50 hover:bg-gray-600/50 text-white border-gray-600"
+                className="h-20 sm:h-24 flex-col bg-gray-700/50 hover:bg-gray-600/50 text-white border-gray-600 text-xs sm:text-sm"
                 variant="outline"
               >
-                <Settings className="h-6 w-6 mb-2 text-yellow-400" />
+                <Settings className="h-5 sm:h-6 w-5 sm:w-6 mb-2 text-yellow-400" />
                 <span>Settings</span>
               </Button>
             </div>
