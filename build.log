@@ -1,0 +1,27 @@
+
+> elitehub@0.1.0 build
+> next build
+
+   ▲ Next.js 15.3.3
+   - Environments: .env.local
+
+   Creating an optimized production build ...
+ ✓ Compiled successfully in 1000ms
+   Skipping validation of types
+   Skipping linting
+   Collecting page data ...
+   Generating static pages (0/21) ...
+Error occurred prerendering page "/contact". Read more: https://nextjs.org/docs/messages/prerender-error
+Error: @clerk/clerk-react: Missing publishableKey. You can get your key at https://dashboard.clerk.com/last-active?path=api-keys.
+    at Object.throwMissingPublishableKeyError (/var/www/elitehub/.next/server/chunks/911.js:29:1546)
+    at /var/www/elitehub/.next/server/chunks/911.js:37:51997
+    at nF (/var/www/elitehub/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:76:46843)
+    at nH (/var/www/elitehub/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:76:48618)
+    at nW (/var/www/elitehub/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:76:67762)
+    at nz (/var/www/elitehub/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:76:65337)
+    at nB (/var/www/elitehub/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:76:47195)
+    at nH (/var/www/elitehub/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:76:48664)
+    at nW (/var/www/elitehub/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:76:67762)
+    at nz (/var/www/elitehub/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:76:65337)
+Export encountered an error on /contact/page: /contact, exiting the build.
+ ⨯ Next.js build worker exited with code: 1 and signal: null
