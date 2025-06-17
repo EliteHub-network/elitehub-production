@@ -228,7 +228,7 @@ export default function Dashboard() {
   const menuItems = [
     { name: 'Dashboard', href: '/dashboard', icon: Home, active: true },
     { name: 'Work With Me', href: '/work-with-me', icon: Briefcase },
-    { name: 'Community', href: '/community-hub', icon: Users },
+    { name: 'What is EliteHub', href: '/what-is-elite-hub', icon: Zap },
     { name: 'About', href: '/about', icon: Info },
     { name: 'Contact', href: '/contact', icon: Mail },
   ];

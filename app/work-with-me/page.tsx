@@ -75,47 +75,14 @@ export default function WorkWithMe() {
           </p>
         </div>
 
-        {/* Stats Section */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-16">
-          <Card className="bg-gray-800/50 border-gray-700 backdrop-blur-sm">
-            <CardContent className="p-6 text-center">
-              <Building className="h-8 w-8 text-blue-500 mx-auto mb-3" />
-              <p className="text-2xl font-bold text-white">50+</p>
-              <p className="text-gray-400">Businesses Built</p>
-            </CardContent>
-          </Card>
-          <Card className="bg-gray-800/50 border-gray-700 backdrop-blur-sm">
-            <CardContent className="p-6 text-center">
-              <TrendingUp className="h-8 w-8 text-green-500 mx-auto mb-3" />
-              <p className="text-2xl font-bold text-white">£2.4M</p>
-              <p className="text-gray-400">Revenue Generated</p>
-            </CardContent>
-          </Card>
-          <Card className="bg-gray-800/50 border-gray-700 backdrop-blur-sm">
-            <CardContent className="p-6 text-center">
-              <Clock className="h-8 w-8 text-purple-500 mx-auto mb-3" />
-              <p className="text-2xl font-bold text-white">15k+</p>
-              <p className="text-gray-400">Hours Saved</p>
-            </CardContent>
-          </Card>
-          <Card className="bg-gray-800/50 border-gray-700 backdrop-blur-sm">
-            <CardContent className="p-6 text-center">
-              <Star className="h-8 w-8 text-yellow-500 mx-auto mb-3" />
-              <p className="text-2xl font-bold text-white">98%</p>
-              <p className="text-gray-400">Success Rate</p>
-            </CardContent>
-          </Card>
-        </div>
-
         {/* Packages Section */}
         <div className="mb-20" id="pricing">
           <div className="text-center mb-12">
             <h2 className="text-4xl font-bold text-white mb-6">
-              Investment Options
+              Choose Your Package
             </h2>
             <p className="text-xl text-gray-400 max-w-3xl mx-auto">
-              From testing your idea to building enterprise solutions. All packages include 
-              support and you own everything we build.
+              Every package includes full code ownership, training, and launch support.
             </p>
           </div>
           
@@ -150,7 +117,7 @@ export default function WorkWithMe() {
                 
                 <Button 
                   className="w-full"
-                  onClick={() => handleBooking('https://cal.com/elitehub')}
+                  onClick={() => handleBooking('https://cal.com/elitehubnetwork/starter-consultation')}
                 >
                   Get Started
                 </Button>
@@ -194,7 +161,7 @@ export default function WorkWithMe() {
                 
                 <Button 
                   className="w-full bg-blue-600 hover:bg-blue-700"
-                  onClick={() => handleBooking('https://cal.com/elitehub')}
+                  onClick={() => handleBooking('https://cal.com/elitehubnetwork/full-saas-consultation')}
                 >
                   Get Started
                 </Button>
@@ -235,7 +202,7 @@ export default function WorkWithMe() {
                 
                 <Button 
                   className="w-full"
-                  onClick={() => handleBooking('https://cal.com/elitehub')}
+                  onClick={() => handleBooking('https://cal.com/elitehubnetwork/enterprise-consultation')}
                 >
                   Get Started
                 </Button>
@@ -280,7 +247,7 @@ export default function WorkWithMe() {
                 
                 <Button 
                   className="w-full"
-                  onClick={() => handleBooking('https://cal.com/elitehub/business-transformation-consultation')}
+                  onClick={() => handleBooking('https://cal.com/elitehubnetwork/business-transformation-consultation')}
                 >
                   Get Started
                 </Button>
@@ -325,7 +292,7 @@ export default function WorkWithMe() {
                 
                 <Button 
                   className="w-full"
-                  onClick={() => handleBooking('https://cal.com/elitehub/enterprise-solution-consultation')}
+                  onClick={() => handleBooking('https://cal.com/elitehubnetwork/enterprise-solution-consultation')}
                 >
                   Get Started
                 </Button>
@@ -373,7 +340,7 @@ export default function WorkWithMe() {
                 
                 <Button 
                   className="w-full bg-purple-600 hover:bg-purple-700"
-                  onClick={() => handleBooking('https://cal.com/elitehub/custom-build-consultation')}
+                  onClick={() => handleBooking('https://cal.com/elitehubnetwork/custom-build-consultation')}
                 >
                   Discuss Project
                 </Button>
@@ -431,10 +398,10 @@ export default function WorkWithMe() {
           <Button 
             size="lg"
             className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700"
-            onClick={() => handleBooking('https://cal.com/elitehub')}
+            onClick={() => handleBooking('https://cal.com/elitehubnetwork/free-strategy-call')}
           >
             <Calendar className="h-5 w-5 mr-2" />
-            Book Your Consultation
+            Book Your Free Strategy Call
           </Button>
         </div>
       </div>

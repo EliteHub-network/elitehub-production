@@ -191,24 +191,16 @@ export default function About() {
             <p className="text-gray-300 mb-6 leading-relaxed pb-1">
               Join our community and discover workflows that actually work.
             </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button 
-                size="lg" 
-                className="bg-blue-600 hover:bg-blue-700"
-                onClick={() => window.location.href = '/tools-marketplace'}
-              >
-                Explore Workflows
-                <ArrowRight className="h-4 w-4 ml-2" />
-              </Button>
-              <Button 
-                variant="outline" 
-                size="lg" 
-                className="border-gray-600 text-gray-300 hover:bg-gray-700"
-                onClick={() => window.location.href = '/community-hub'}
-              >
-                Join Community
-              </Button>
-            </div>
+            <div className="flex justify-center">
+  <Button 
+    size="lg" 
+    className="bg-blue-600 hover:bg-blue-700"
+    onClick={() => window.location.href = '/work-with-me'}
+  >
+    Work With Me
+    <ArrowRight className="h-4 w-4 ml-2" />
+  </Button>
+</div>
           </div>
         </div>
       </div>
