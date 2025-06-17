@@ -1,0 +1,779 @@
+"use client"
+
+import { useState, useEffect } from 'react';
+import { useUser, SignOutButton } from '@clerk/nextjs';
+import { useRouter } from 'next/navigation';
+import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card';
+import { Button } from '../components/ui/button';
+import { Badge } from '../components/ui/badge';
+import { 
+  Rocket,
+  Code,
+  Users,
+  Settings,
+  LogOut,
+  Zap,
+  Target,
+  BarChart3,
+  Home,
+  Briefcase,
+  Info,
+  Mail,
+  ArrowRight,
+  CheckCircle,
+  Clock,
+  TrendingUp,
+  MessageSquare,
+  BookOpen,
+  Lightbulb,
+  Sparkles,
+  Building2,
+  DollarSign,
+  Timer,
+  HeartHandshake
+} from 'lucide-react';
+
+export default function Dashboard() {
+  const { user, isLoaded } = useUser();
+  const router = useRouter();
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    if (isLoaded && user) {
+      setLoading(false);
+    }
+  }, [isLoaded, user]);
+
+  const handleSettings = () => {
+    router.push('/settings');
+  };
+
+  const menuItems = [
+    { name: 'Dashboard', href: '/dashboard', icon: Home, active: true },
+    { name: 'Build Your SaaS', href: '/work-with-me', icon: Rocket },
+    { name: 'Success Stories', href: '/community-hub', icon: Users },
+    { name: 'How It Works', href: '/about', icon: Info },
+    { name: 'Get Started', href: '/contact', icon: Mail },
+  ];
+
+  if (loading || !isLoaded) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-blue-900 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
+          <p className="mt-4 text-gray-300">Loading your dashboard...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (!user) {
+    router.push('/auth');
+    return null;
+  }
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-blue-900">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {/* Header */}
+        <div className="flex items-center justify-between mb-8">
+          <div>
+            <h1 className="text-3xl font-bold text-white">Welcome to EliteHub, {user.firstName || 'Entrepreneur'}!</h1>
+            <p className="text-blue-200 mt-2">Your journey to building a profitable SaaS starts here</p>
+          </div>
+          <div className="flex items-center gap-4">
+            <Button variant="outline" size="sm" onClick={handleSettings} className="border-gray-600 text-gray-300 hover:bg-gray-700">
+              <Settings className="h-4 w-4 mr-2" />
+              Settings
+            </Button>
+            
+            <SignOutButton afterSignOutUrl="/">
+              <Button variant="outline" size="sm" className="border-gray-600 text-gray-300 hover:bg-gray-700">
+                <LogOut className="h-4 w-4 mr-2" />
+                Logout
+              </Button>
+            </SignOutButton>
+          </div>
+        </div>
+
+        {/* Navigation Menu */}
+        <div className="mb-8">
+          <nav className="flex space-x-1 bg-gray-800/50 backdrop-blur-sm rounded-lg p-1 border border-gray-700">
+            {menuItems.map((item) => {
+              const Icon = item.icon;
+              return (
+                <a
+                  key={item.name}
+                  href={item.href}
+                  className={`flex items-center gap-2 px-4 py-2 rounded-md text-sm font-medium transition-colors ${
+                    item.active 
+                      ? 'bg-gradient-to-r from-blue-500 to-purple-500 text-white' 
+                      : 'text-gray-300 hover:text-white hover:bg-gray-700/50'
+                  }`}
+                >
+                  <Icon className="h-4 w-4" />
+                  {item.name}
+                </a>
+              );
+            })}
+          </nav>
+        </div>
+
+        {/* Main Value Proposition */}
+        <Card className="bg-gradient-to-r from-blue-600 to-purple-600 border-0 text-white mb-8">
+          <CardContent className="p-8">
+            <div className="flex items-center gap-3 mb-4">
+              <Sparkles className="h-8 w-8" />
+              <h2 className="text-2xl font-bold">Turn Your Idea Into a Working SaaS in 30 Days</h2>
+            </div>
+            <p className="text-blue-100 mb-6 text-lg">
+              Stop dreaming about your business idea and start building it. I help entrepreneurs like you create 
+              profitable SaaS products without the technical overwhelm or massive upfront costs.
+            </p>
+            <div className="grid md:grid-cols-3 gap-4 mb-6">
+              <div className="flex items-center gap-2">
+                <CheckCircle className="h-5 w-5 text-green-300" />
+                <span>No coding required</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <CheckCircle className="h-5 w-5 text-green-300" />
+                <span>Proven process</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <CheckCircle className="h-5 w-5 text-green-300" />
+                <span>You own everything</span>
+              </div>
+            </div>
+            <Button 
+              size="lg"
+              className="bg-white text-blue-600 hover:bg-gray-100"
+              onClick={() => window.location.href = '/work-with-me'}
+            >
+              Start Building Your SaaS
+              <ArrowRight className="h-5 w-5 ml-2" />
+            </Button>
+          </CardContent>
+        </Card>
+
+        {/* What We Do Section */}
+        <div className="mb-8">
+          <h2 className="text-2xl font-bold text-white mb-6 text-center">Here's How I Help You Build Your Business</h2>
+          <div className="grid md:grid-cols-3 gap-6">
+            <Card className="bg-gray-800/50 border-gray-700 backdrop-blur-sm hover:scale-105 transition-all">
+              <CardHeader>
+                <div className="w-14 h-14 bg-blue-500/20 rounded-lg flex items-center justify-center mb-4">
+                  <Lightbulb className="h-7 w-7 text-blue-400" />
+                </div>
+                <CardTitle className="text-white">1. Validate Your Idea</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-gray-300">
+                  We start by refining your business idea, identifying your target market, and ensuring 
+                  there's real demand. No building until we know it will sell.
+                </p>
+              </CardContent>
+            </Card>
+
+            <Card className="bg-gray-800/50 border-gray-700 backdrop-blur-sm hover:scale-105 transition-all">
+              <CardHeader>
+                <div className="w-14 h-14 bg-green-500/20 rounded-lg flex items-center justify-center mb-4">
+                  <Code className="h-7 w-7 text-green-400" />
+                </div>
+                <CardTitle className="text-white">2. Build Your MVP</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-gray-300">
+                  I handle all the technical work - from user authentication to payment processing. 
+                  You get a professional SaaS product ready to launch in 30 days.
+                </p>
+              </CardContent>
+            </Card>
+
+            <Card className="bg-gray-800/50 border-gray-700 backdrop-blur-sm hover:scale-105 transition-all">
+              <CardHeader>
+                <div className="w-14 h-14 bg-purple-500/20 rounded-lg flex items-center justify-center mb-4">
+                  <TrendingUp className="h-7 w-7 text-purple-400" />
+                </div>
+                <CardTitle className="text-white">3. Launch & Scale</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-gray-300">
+                  Get ongoing support to acquire your first customers, optimize your product, and scale 
+                  to consistent monthly revenue. You're never alone.
+                </p>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
+
+        {/* Success Metrics */}
+        <div className="grid md:grid-cols-4 gap-4 mb-8">
+          <Card className="bg-gray-800/50 border-gray-700 backdrop-blur-sm">
+            <CardContent className="p-6 text-center">
+              <Timer className="h-8 w-8 text-blue-400 mx-auto mb-3" />
+              <p className="text-2xl font-bold text-white">30 Days</p>
+              <p className="text-gray-400 text-sm">Average time to launch</p>
+            </CardContent>
+          </Card>
+
+          <Card className="bg-gray-800/50 border-gray-700 backdrop-blur-sm">
+            <CardContent className="p-6 text-center">
+              <Building2 className="h-8 w-8 text-green-400 mx-auto mb-3" />
+              <p className="text-2xl font-bold text-white">50+</p>
+              <p className="text-gray-400 text-sm">SaaS products built</p>
+            </CardContent>
+          </Card>
+
+          <Card className="bg-gray-800/50 border-gray-700 backdrop-blur-sm">
+            <CardContent className="p-6 text-center">
+              <DollarSign className="h-8 w-8 text-purple-400 mx-auto mb-3" />
+              <p className="text-2xl font-bold text-white">£5-50k</p>
+              <p className="text-gray-400 text-sm">Monthly client revenue</p>
+            </CardContent>
+          </Card>
+
+          <Card className="bg-gray-800/50 border-gray-700 backdrop-blur-sm">
+            <CardContent className="p-6 text-center">
+              <HeartHandshake className="h-8 w-8 text-yellow-400 mx-auto mb-3" />
+              <p className="text-2xl font-bold text-white">100%</p>
+              <p className="text-gray-400 text-sm">Ownership retained</p>
+            </CardContent>
+          </Card>
+        </div>
+
+        {/* Action Cards */}
+        <div className="grid md:grid-cols-2 gap-6 mb-8">
+          <Card className="bg-gray-800/50 border-gray-700 backdrop-blur-sm">
+            <CardHeader>
+              <CardTitle className="text-white flex items-center gap-2">
+                <BookOpen className="h-5 w-5" />
+                Learn the Process
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className="text-gray-300 mb-4">
+                Discover exactly how we take your idea from concept to profitable SaaS. See real examples 
+                and understand the proven framework.
+              </p>
+              <Button 
+                variant="outline"
+                className="w-full border-gray-600 text-gray-300 hover:bg-gray-700"
+                onClick={() => window.location.href = '/about'}
+              >
+                How It Works
+                <ArrowRight className="h-4 w-4 ml-2" />
+              </Button>
+            </CardContent>
+          </Card>
+
+          <Card className="bg-gray-800/50 border-gray-700 backdrop-blur-sm">
+            <CardHeader>
+              <CardTitle className="text-white flex items-center gap-2">
+                <Users className="h-5 w-5" />
+                See Success Stories
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className="text-gray-300 mb-4">
+                Read how other entrepreneurs turned their ideas into profitable businesses. Real stories, 
+                real numbers, real inspiration.
+              </p>
+              <Button 
+                variant="outline"
+                className="w-full border-gray-600 text-gray-300 hover:bg-gray-700"
+                onClick={() => window.location.href = '/community-hub'}
+              >
+                Success Stories
+                <ArrowRight className="h-4 w-4 ml-2" />
+              </Button>
+            </CardContent>
+          </Card>
+        </div>
+
+        {/* Next Steps */}
+        <Card className="bg-gray-800/50 border-gray-700 backdrop-blur-sm">
+          <CardHeader>
+            <CardTitle className="text-white flex items-center gap-2">
+              <Target className="h-5 w-5" />
+              Your Next Steps
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="grid md:grid-cols-3 gap-4">
+              <div className="p-4 bg-gray-700/50 rounded-lg">
+                <div className="flex items-center gap-3 mb-3">
+                  <div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center text-white font-bold">
+                    1
+                  </div>
+                  <h3 className="text-white font-semibold">Schedule a Call</h3>
+                </div>
+                <p className="text-gray-300 text-sm mb-3">
+                  Let's discuss your idea and see if we're a good fit to work together.
+                </p>
+                <Button 
+                  size="sm"
+                  className="w-full bg-blue-600 hover:bg-blue-700"
+                  onClick={() => window.location.href = '/contact'}
+                >
+                  Book Free Call
+                </Button>
+              </div>
+
+              <div className="p-4 bg-gray-700/50 rounded-lg">
+                <div className="flex items-center gap-3 mb-3">
+                  <div className="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center text-white font-bold">
+                    2
+                  </div>
+                  <h3 className="text-white font-semibold">Plan Your SaaS</h3>
+                </div>
+                <p className="text-gray-300 text-sm mb-3">
+                  We'll create a roadmap for your product with features and timeline.
+                </p>
+                <Button 
+                  size="sm"
+                  variant="outline"
+                  className="w-full border-gray-600 text-gray-300 hover:bg-gray-700"
+                  onClick={() => window.location.href = '/work-with-me'}
+                >
+                  View Services
+                </Button>
+              </div>
+
+              <div className="p-4 bg-gray-700/50 rounded-lg">
+                <div className="flex items-center gap-3 mb-3">
+                  <div className="w-8 h-8 bg-purple-500 rounded-full flex items-center justify-center text-white font-bold">
+                    3
+                  </div>
+                  <h3 className="text-white font-semibold">Launch & Grow</h3>
+                </div>
+                <p className="text-gray-300 text-sm mb-3">
+                  Go live in 30 days and start building your customer base.
+                </p>
+                <Button 
+                  size="sm"
+                  variant="outline"
+                  className="w-full border-gray-600 text-gray-300 hover:bg-gray-700"
+                  onClick={() => window.location.href = '/community-hub'}
+                >
+                  See Examples
+                </Button>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* FAQ Preview */}
+        <div className="mt-8 text-center">
+          <h3 className="text-xl font-semibold text-white mb-4">Common Questions</h3>
+          <div className="grid md:grid-cols-2 gap-4 max-w-3xl mx-auto">
+            <div className="text-left">
+              <p className="text-blue-400 font-medium mb-1">Do I need technical skills?</p>
+              <p className="text-gray-300 text-sm">No, I handle all the technical work. You focus on your business.</p>
+            </div>
+            <div className="text-left">
+              <p className="text-blue-400 font-medium mb-1">How long does it really take?</p>
+              <p className="text-gray-300 text-sm">30 days for a working MVP, 60 days to first paying customers.</p>
+            </div>
+          </div>
+          <Button 
+            variant="link"
+            className="mt-4 text-blue-400 hover:text-blue-300"
+            onClick={() => window.location.href = '/contact'}
+          >
+            Have a different question? Let's talk
+            <ArrowRight className="h-4 w-4 ml-2" />
+          </Button>
+        </div>
+      </div>
+    </div>
+  );
+}"use client"
+
+import { useState, useEffect } from 'react';
+import { useUser, SignOutButton } from '@clerk/nextjs';
+import { useRouter } from 'next/navigation';
+import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card';
+import { Button } from '../components/ui/button';
+import { Badge } from '../components/ui/badge';
+import { 
+  Rocket,
+  Code,
+  Users,
+  Settings,
+  LogOut,
+  Zap,
+  Target,
+  BarChart3,
+  Home,
+  Briefcase,
+  Info,
+  Mail,
+  ArrowRight,
+  CheckCircle,
+  Clock,
+  TrendingUp,
+  MessageSquare,
+  BookOpen,
+  Lightbulb,
+  Sparkles,
+  Building2,
+  DollarSign,
+  Timer,
+  HeartHandshake
+} from 'lucide-react';
+
+export default function Dashboard() {
+  const { user, isLoaded } = useUser();
+  const router = useRouter();
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    if (isLoaded && user) {
+      setLoading(false);
+    }
+  }, [isLoaded, user]);
+
+  const handleSettings = () => {
+    router.push('/settings');
+  };
+
+  const menuItems = [
+    { name: 'Dashboard', href: '/dashboard', icon: Home, active: true },
+    { name: 'Build Your SaaS', href: '/work-with-me', icon: Rocket },
+    { name: 'Success Stories', href: '/community-hub', icon: Users },
+    { name: 'How It Works', href: '/about', icon: Info },
+    { name: 'Get Started', href: '/contact', icon: Mail },
+  ];
+
+  if (loading || !isLoaded) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-blue-900 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
+          <p className="mt-4 text-gray-300">Loading your dashboard...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (!user) {
+    router.push('/auth');
+    return null;
+  }
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-blue-900">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {/* Header */}
+        <div className="flex items-center justify-between mb-8">
+          <div>
+            <h1 className="text-3xl font-bold text-white">Welcome to EliteHub, {user.firstName || 'Entrepreneur'}!</h1>
+            <p className="text-blue-200 mt-2">Your journey to building a profitable SaaS starts here</p>
+          </div>
+          <div className="flex items-center gap-4">
+            <Button variant="outline" size="sm" onClick={handleSettings} className="border-gray-600 text-gray-300 hover:bg-gray-700">
+              <Settings className="h-4 w-4 mr-2" />
+              Settings
+            </Button>
+            
+            <SignOutButton afterSignOutUrl="/">
+              <Button variant="outline" size="sm" className="border-gray-600 text-gray-300 hover:bg-gray-700">
+                <LogOut className="h-4 w-4 mr-2" />
+                Logout
+              </Button>
+            </SignOutButton>
+          </div>
+        </div>
+
+        {/* Navigation Menu */}
+        <div className="mb-8">
+          <nav className="flex space-x-1 bg-gray-800/50 backdrop-blur-sm rounded-lg p-1 border border-gray-700">
+            {menuItems.map((item) => {
+              const Icon = item.icon;
+              return (
+                <a
+                  key={item.name}
+                  href={item.href}
+                  className={`flex items-center gap-2 px-4 py-2 rounded-md text-sm font-medium transition-colors ${
+                    item.active 
+                      ? 'bg-gradient-to-r from-blue-500 to-purple-500 text-white' 
+                      : 'text-gray-300 hover:text-white hover:bg-gray-700/50'
+                  }`}
+                >
+                  <Icon className="h-4 w-4" />
+                  {item.name}
+                </a>
+              );
+            })}
+          </nav>
+        </div>
+
+        {/* Main Value Proposition */}
+        <Card className="bg-gradient-to-r from-blue-600 to-purple-600 border-0 text-white mb-8">
+          <CardContent className="p-8">
+            <div className="flex items-center gap-3 mb-4">
+              <Sparkles className="h-8 w-8" />
+              <h2 className="text-2xl font-bold">Turn Your Idea Into a Working SaaS in 30 Days</h2>
+            </div>
+            <p className="text-blue-100 mb-6 text-lg">
+              Stop dreaming about your business idea and start building it. I help entrepreneurs like you create 
+              profitable SaaS products without the technical overwhelm or massive upfront costs.
+            </p>
+            <div className="grid md:grid-cols-3 gap-4 mb-6">
+              <div className="flex items-center gap-2">
+                <CheckCircle className="h-5 w-5 text-green-300" />
+                <span>No coding required</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <CheckCircle className="h-5 w-5 text-green-300" />
+                <span>Proven process</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <CheckCircle className="h-5 w-5 text-green-300" />
+                <span>You own everything</span>
+              </div>
+            </div>
+            <Button 
+              size="lg"
+              className="bg-white text-blue-600 hover:bg-gray-100"
+              onClick={() => window.location.href = '/work-with-me'}
+            >
+              Start Building Your SaaS
+              <ArrowRight className="h-5 w-5 ml-2" />
+            </Button>
+          </CardContent>
+        </Card>
+
+        {/* What We Do Section */}
+        <div className="mb-8">
+          <h2 className="text-2xl font-bold text-white mb-6 text-center">Here's How I Help You Build Your Business</h2>
+          <div className="grid md:grid-cols-3 gap-6">
+            <Card className="bg-gray-800/50 border-gray-700 backdrop-blur-sm hover:scale-105 transition-all">
+              <CardHeader>
+                <div className="w-14 h-14 bg-blue-500/20 rounded-lg flex items-center justify-center mb-4">
+                  <Lightbulb className="h-7 w-7 text-blue-400" />
+                </div>
+                <CardTitle className="text-white">1. Validate Your Idea</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-gray-300">
+                  We start by refining your business idea, identifying your target market, and ensuring 
+                  there's real demand. No building until we know it will sell.
+                </p>
+              </CardContent>
+            </Card>
+
+            <Card className="bg-gray-800/50 border-gray-700 backdrop-blur-sm hover:scale-105 transition-all">
+              <CardHeader>
+                <div className="w-14 h-14 bg-green-500/20 rounded-lg flex items-center justify-center mb-4">
+                  <Code className="h-7 w-7 text-green-400" />
+                </div>
+                <CardTitle className="text-white">2. Build Your MVP</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-gray-300">
+                  I handle all the technical work - from user authentication to payment processing. 
+                  You get a professional SaaS product ready to launch in 30 days.
+                </p>
+              </CardContent>
+            </Card>
+
+            <Card className="bg-gray-800/50 border-gray-700 backdrop-blur-sm hover:scale-105 transition-all">
+              <CardHeader>
+                <div className="w-14 h-14 bg-purple-500/20 rounded-lg flex items-center justify-center mb-4">
+                  <TrendingUp className="h-7 w-7 text-purple-400" />
+                </div>
+                <CardTitle className="text-white">3. Launch & Scale</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-gray-300">
+                  Get ongoing support to acquire your first customers, optimize your product, and scale 
+                  to consistent monthly revenue. You're never alone.
+                </p>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
+
+        {/* Success Metrics */}
+        <div className="grid md:grid-cols-4 gap-4 mb-8">
+          <Card className="bg-gray-800/50 border-gray-700 backdrop-blur-sm">
+            <CardContent className="p-6 text-center">
+              <Timer className="h-8 w-8 text-blue-400 mx-auto mb-3" />
+              <p className="text-2xl font-bold text-white">30 Days</p>
+              <p className="text-gray-400 text-sm">Average time to launch</p>
+            </CardContent>
+          </Card>
+
+          <Card className="bg-gray-800/50 border-gray-700 backdrop-blur-sm">
+            <CardContent className="p-6 text-center">
+              <Building2 className="h-8 w-8 text-green-400 mx-auto mb-3" />
+              <p className="text-2xl font-bold text-white">50+</p>
+              <p className="text-gray-400 text-sm">SaaS products built</p>
+            </CardContent>
+          </Card>
+
+          <Card className="bg-gray-800/50 border-gray-700 backdrop-blur-sm">
+            <CardContent className="p-6 text-center">
+              <DollarSign className="h-8 w-8 text-purple-400 mx-auto mb-3" />
+              <p className="text-2xl font-bold text-white">£5-50k</p>
+              <p className="text-gray-400 text-sm">Monthly client revenue</p>
+            </CardContent>
+          </Card>
+
+          <Card className="bg-gray-800/50 border-gray-700 backdrop-blur-sm">
+            <CardContent className="p-6 text-center">
+              <HeartHandshake className="h-8 w-8 text-yellow-400 mx-auto mb-3" />
+              <p className="text-2xl font-bold text-white">100%</p>
+              <p className="text-gray-400 text-sm">Ownership retained</p>
+            </CardContent>
+          </Card>
+        </div>
+
+        {/* Action Cards */}
+        <div className="grid md:grid-cols-2 gap-6 mb-8">
+          <Card className="bg-gray-800/50 border-gray-700 backdrop-blur-sm">
+            <CardHeader>
+              <CardTitle className="text-white flex items-center gap-2">
+                <BookOpen className="h-5 w-5" />
+                Learn the Process
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className="text-gray-300 mb-4">
+                Discover exactly how we take your idea from concept to profitable SaaS. See real examples 
+                and understand the proven framework.
+              </p>
+              <Button 
+                variant="outline"
+                className="w-full border-gray-600 text-gray-300 hover:bg-gray-700"
+                onClick={() => window.location.href = '/about'}
+              >
+                How It Works
+                <ArrowRight className="h-4 w-4 ml-2" />
+              </Button>
+            </CardContent>
+          </Card>
+
+          <Card className="bg-gray-800/50 border-gray-700 backdrop-blur-sm">
+            <CardHeader>
+              <CardTitle className="text-white flex items-center gap-2">
+                <Users className="h-5 w-5" />
+                See Success Stories
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className="text-gray-300 mb-4">
+                Read how other entrepreneurs turned their ideas into profitable businesses. Real stories, 
+                real numbers, real inspiration.
+              </p>
+              <Button 
+                variant="outline"
+                className="w-full border-gray-600 text-gray-300 hover:bg-gray-700"
+                onClick={() => window.location.href = '/community-hub'}
+              >
+                Success Stories
+                <ArrowRight className="h-4 w-4 ml-2" />
+              </Button>
+            </CardContent>
+          </Card>
+        </div>
+
+        {/* Next Steps */}
+        <Card className="bg-gray-800/50 border-gray-700 backdrop-blur-sm">
+          <CardHeader>
+            <CardTitle className="text-white flex items-center gap-2">
+              <Target className="h-5 w-5" />
+              Your Next Steps
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="grid md:grid-cols-3 gap-4">
+              <div className="p-4 bg-gray-700/50 rounded-lg">
+                <div className="flex items-center gap-3 mb-3">
+                  <div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center text-white font-bold">
+                    1
+                  </div>
+                  <h3 className="text-white font-semibold">Schedule a Call</h3>
+                </div>
+                <p className="text-gray-300 text-sm mb-3">
+                  Let's discuss your idea and see if we're a good fit to work together.
+                </p>
+                <Button 
+                  size="sm"
+                  className="w-full bg-blue-600 hover:bg-blue-700"
+                  onClick={() => window.location.href = '/contact'}
+                >
+                  Book Free Call
+                </Button>
+              </div>
+
+              <div className="p-4 bg-gray-700/50 rounded-lg">
+                <div className="flex items-center gap-3 mb-3">
+                  <div className="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center text-white font-bold">
+                    2
+                  </div>
+                  <h3 className="text-white font-semibold">Plan Your SaaS</h3>
+                </div>
+                <p className="text-gray-300 text-sm mb-3">
+                  We'll create a roadmap for your product with features and timeline.
+                </p>
+                <Button 
+                  size="sm"
+                  variant="outline"
+                  className="w-full border-gray-600 text-gray-300 hover:bg-gray-700"
+                  onClick={() => window.location.href = '/work-with-me'}
+                >
+                  View Services
+                </Button>
+              </div>
+
+              <div className="p-4 bg-gray-700/50 rounded-lg">
+                <div className="flex items-center gap-3 mb-3">
+                  <div className="w-8 h-8 bg-purple-500 rounded-full flex items-center justify-center text-white font-bold">
+                    3
+                  </div>
+                  <h3 className="text-white font-semibold">Launch & Grow</h3>
+                </div>
+                <p className="text-gray-300 text-sm mb-3">
+                  Go live in 30 days and start building your customer base.
+                </p>
+                <Button 
+                  size="sm"
+                  variant="outline"
+                  className="w-full border-gray-600 text-gray-300 hover:bg-gray-700"
+                  onClick={() => window.location.href = '/community-hub'}
+                >
+                  See Examples
+                </Button>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* FAQ Preview */}
+        <div className="mt-8 text-center">
+          <h3 className="text-xl font-semibold text-white mb-4">Common Questions</h3>
+          <div className="grid md:grid-cols-2 gap-4 max-w-3xl mx-auto">
+            <div className="text-left">
+              <p className="text-blue-400 font-medium mb-1">Do I need technical skills?</p>
+              <p className="text-gray-300 text-sm">No, I handle all the technical work. You focus on your business.</p>
+            </div>
+            <div className="text-left">
+              <p className="text-blue-400 font-medium mb-1">How long does it really take?</p>
+              <p className="text-gray-300 text-sm">30 days for a working MVP, 60 days to first paying customers.</p>
+            </div>
+          </div>
+          <Button 
+            variant="link"
+            className="mt-4 text-blue-400 hover:text-blue-300"
+            onClick={() => window.location.href = '/contact'}
+          >
+            Have a different question? Let's talk
+            <ArrowRight className="h-4 w-4 ml-2" />
+          </Button>
+        </div>
+      </div>
+    </div>
+  );
+}
