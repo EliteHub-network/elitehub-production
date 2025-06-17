@@ -1,6 +1,8 @@
 "use client"
 
 import { useState, useEffect } from 'react';
+import { useUser } from '@clerk/nextjs';
+import { useRouter } from 'next/navigation';
 
 // Built-in UI Components
 const Button = ({ children, className = "", size = "default", variant = "default", onClick, disabled = false }) => {
@@ -186,16 +188,21 @@ const ArrowRight = ({ className = "h-5 w-5" }) => (
 );
 
 export default function Dashboard() {
-  // Mock user data - replace with your authentication system
-  const [user, setUser] = useState({
-    firstName: 'John',
-    lastName: 'Smith', 
-    email: 'john@example.com'
-  });
-  
+  const { user } = useUser();
+  const router = useRouter();
   const [firstName, setFirstName] = useState('');
   const [loading, setLoading] = useState(true);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  useEffect(() => {
+    if (!user) {
+      router.push('/auth');
+      return;
+    }
+    
+    setFirstName(user.firstName || 'User');
+    setLoading(false);
+  }, [user, router]);
 
   useEffect(() => {
     if (user) {

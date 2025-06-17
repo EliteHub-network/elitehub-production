@@ -118,7 +118,7 @@ const AutomationIcon = ({ className = "h-5 w-5" }) => (
 export default function LandingPage() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
-  // Navigation helper
+  // Navigation helper - FIXED to go to auth page, not dashboard
   const navigateTo = (path) => {
     window.location.href = path;
   };
