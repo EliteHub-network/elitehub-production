@@ -64,10 +64,9 @@ const RocketIcon = ({ className = "h-5 w-5" }) => (
   </svg>
 );
 
-const CodeIcon = ({ className = "h-5 w-5" }) => (
+const ShopIcon = ({ className = "h-5 w-5" }) => (
   <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-    <polyline points="16,18 22,12 16,6"/>
-    <polyline points="8,6 2,12 8,18"/>
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/>
   </svg>
 );
 
@@ -103,7 +102,34 @@ const ArrowRightIcon = ({ className = "h-5 w-5" }) => (
   </svg>
 );
 
+const TrendingUpIcon = ({ className = "h-5 w-5" }) => (
+  <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <polyline points="23,6 13.5,15.5 8.5,10.5 1,18"/>
+    <polyline points="17,6 23,6 23,12"/>
+  </svg>
+);
+
+const AutomationIcon = ({ className = "h-5 w-5" }) => (
+  <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z"/>
+  </svg>
+);
+
 export default function LandingPage() {
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  // Navigation helper
+  const navigateTo = (path) => {
+    window.location.href = path;
+  };
+
+  const scrollToSection = (sectionId) => {
+    const element = document.getElementById(sectionId);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-blue-900">
       {/* Navigation */}
@@ -111,13 +137,14 @@ export default function LandingPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             <div className="flex items-center gap-3">
-              <CodeIcon className="h-8 w-8 text-blue-500" />
+              <ShopIcon className="h-8 w-8 text-blue-500" />
               <span className="text-2xl font-bold text-white">EliteHub</span>
             </div>
             <div className="hidden md:flex items-center gap-6">
-              <a href="#pricing" className="text-gray-300 hover:text-white transition-colors">Pricing</a>
-              <a href="#how-it-works" className="text-gray-300 hover:text-white transition-colors">How It Works</a>
-              <Button onClick={() => window.location.href = '/auth'}>
+              <button onClick={() => scrollToSection('how-it-works')} className="text-gray-300 hover:text-white transition-colors">How It Works</button>
+              <button onClick={() => scrollToSection('pricing')} className="text-gray-300 hover:text-white transition-colors">Pricing</button>
+              <button onClick={() => scrollToSection('success-stories')} className="text-gray-300 hover:text-white transition-colors">Success Stories</button>
+              <Button onClick={() => navigateTo('/auth')}>
                 Get Started
               </Button>
             </div>
@@ -129,38 +156,38 @@ export default function LandingPage() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
         <div className="text-center mb-20">
           <Badge variant="success" className="mb-8 text-sm px-6 py-3">
-            ✨ TURN YOUR IDEA INTO A PROFITABLE SAAS
+            ✨ TURN YOUR BUSINESS IDEA INTO REALITY
           </Badge>
           
           <h1 className="text-5xl md:text-7xl font-bold text-white mb-8 leading-tight">
-            Build Your{' '}
+            Start Your{' '}
             <span className="bg-gradient-to-r from-blue-400 via-cyan-400 to-emerald-400 bg-clip-text text-transparent">
-              SaaS Product
+              Online Business
             </span>{' '}
             in 30 Days
           </h1>
           
           <p className="text-xl md:text-2xl text-blue-200 max-w-4xl mx-auto mb-12 leading-relaxed">
-            EliteHub helps entrepreneurs turn their business ideas into working SaaS products. 
-            Get expert development, proven systems, and ongoing support to build a profitable business.
+            I help small business owners and entrepreneurs build profitable online businesses 
+            with automated systems that work 24/7 - even while you sleep.
           </p>
           
           <div className="flex flex-col sm:flex-row gap-6 justify-center items-center mb-12">
             <Button 
               size="lg" 
-              onClick={() => window.location.href = '/auth'}
+              onClick={() => navigateTo('/auth')}
               className="text-lg px-12 py-4"
             >
               <RocketIcon className="h-6 w-6 mr-3" />
-              Start Building Now
+              Start Your Business
             </Button>
             <Button 
               size="lg" 
               variant="outline" 
-              onClick={() => window.location.href = '#how-it-works'}
+              onClick={() => scrollToSection('how-it-works')}
               className="text-lg px-12 py-4"
             >
-              Learn How It Works
+              See How It Works
             </Button>
           </div>
 
@@ -168,15 +195,15 @@ export default function LandingPage() {
           <div className="flex flex-col sm:flex-row items-center justify-center gap-8 text-gray-400 text-sm">
             <div className="flex items-center gap-2">
               <ShieldIcon className="h-4 w-4 text-green-400" />
-              <span>No Technical Skills Required</span>
+              <span>No Technical Knowledge Required</span>
             </div>
             <div className="flex items-center gap-2">
               <StarIcon className="h-4 w-4 text-yellow-400" />
-              <span>Proven Process</span>
+              <span>Proven Results</span>
             </div>
             <div className="flex items-center gap-2">
               <ClockIcon className="h-4 w-4 text-blue-400" />
-              <span>30-Day Delivery</span>
+              <span>30-Day Launch</span>
             </div>
           </div>
         </div>
@@ -185,10 +212,10 @@ export default function LandingPage() {
         <div className="mb-20">
           <div className="text-center mb-12">
             <h2 className="text-4xl font-bold text-white mb-6">
-              What Is EliteHub?
+              What Exactly Do I Do For You?
             </h2>
             <p className="text-xl text-gray-400 max-w-3xl mx-auto">
-              Your complete platform for turning business ideas into profitable SaaS products
+              I help business owners like you turn ideas into money-making online businesses
             </p>
           </div>
           
@@ -196,12 +223,12 @@ export default function LandingPage() {
             <Card className="text-center hover:scale-105 transition-all">
               <CardContent className="p-8">
                 <div className="w-16 h-16 bg-blue-500/20 rounded-full flex items-center justify-center mx-auto mb-6">
-                  <CodeIcon className="h-8 w-8 text-blue-400" />
+                  <ShopIcon className="h-8 w-8 text-blue-400" />
                 </div>
-                <h3 className="text-white font-bold text-xl mb-4">Expert Development</h3>
+                <h3 className="text-white font-bold text-xl mb-4">Build Your Online Store</h3>
                 <p className="text-gray-400 leading-relaxed">
-                  Work with experienced developers who understand both business and technology. 
-                  We build your SaaS product from scratch using modern, scalable technology.
+                  Create a professional website where customers can find you, learn about your services, 
+                  and buy from you 24/7. No coding required.
                 </p>
               </CardContent>
             </Card>
@@ -209,12 +236,12 @@ export default function LandingPage() {
             <Card className="text-center hover:scale-105 transition-all">
               <CardContent className="p-8">
                 <div className="w-16 h-16 bg-green-500/20 rounded-full flex items-center justify-center mx-auto mb-6">
-                  <RocketIcon className="h-8 w-8 text-green-400" />
+                  <AutomationIcon className="h-8 w-8 text-green-400" />
                 </div>
-                <h3 className="text-white font-bold text-xl mb-4">Fast Launch</h3>
+                <h3 className="text-white font-bold text-xl mb-4">Automate Your Business</h3>
                 <p className="text-gray-400 leading-relaxed">
-                  Go from idea to working product in 30 days or less. Our proven process 
-                  eliminates months of trial and error, getting you to market quickly.
+                  Set up systems that handle customer emails, bookings, payments, and follow-ups 
+                  automatically, so you can focus on what you do best.
                 </p>
               </CardContent>
             </Card>
@@ -222,15 +249,78 @@ export default function LandingPage() {
             <Card className="text-center hover:scale-105 transition-all">
               <CardContent className="p-8">
                 <div className="w-16 h-16 bg-cyan-500/20 rounded-full flex items-center justify-center mx-auto mb-6">
-                  <ShieldIcon className="h-8 w-8 text-cyan-400" />
+                  <TrendingUpIcon className="h-8 w-8 text-cyan-400" />
                 </div>
-                <h3 className="text-white font-bold text-xl mb-4">Ongoing Support</h3>
+                <h3 className="text-white font-bold text-xl mb-4">Grow Your Revenue</h3>
                 <p className="text-gray-400 leading-relaxed">
-                  Get continued guidance to grow and scale your SaaS business. From launch 
-                  to profitability, we're here to help you succeed.
+                  Get ongoing support to help you attract more customers, increase prices, 
+                  and grow your business month after month.
                 </p>
               </CardContent>
             </Card>
+          </div>
+        </div>
+
+        {/* Perfect For Section */}
+        <div className="mb-20">
+          <div className="text-center mb-12">
+            <h2 className="text-4xl font-bold text-white mb-6">
+              Perfect For Business Owners Who Want To...
+            </h2>
+          </div>
+          
+          <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+            <div className="space-y-6">
+              <div className="flex items-start gap-4">
+                <CheckIcon className="h-6 w-6 text-green-400 mt-1 flex-shrink-0" />
+                <div>
+                  <h3 className="text-white font-semibold text-lg mb-2">Stop Trading Time for Money</h3>
+                  <p className="text-gray-400">Create systems that generate income even when you're not working</p>
+                </div>
+              </div>
+              
+              <div className="flex items-start gap-4">
+                <CheckIcon className="h-6 w-6 text-green-400 mt-1 flex-shrink-0" />
+                <div>
+                  <h3 className="text-white font-semibold text-lg mb-2">Reach More Customers</h3>
+                  <p className="text-gray-400">Get found online by people who need your services</p>
+                </div>
+              </div>
+              
+              <div className="flex items-start gap-4">
+                <CheckIcon className="h-6 w-6 text-green-400 mt-1 flex-shrink-0" />
+                <div>
+                  <h3 className="text-white font-semibold text-lg mb-2">Reduce Admin Work</h3>
+                  <p className="text-gray-400">Automate bookings, payments, and customer communication</p>
+                </div>
+              </div>
+            </div>
+            
+            <div className="space-y-6">
+              <div className="flex items-start gap-4">
+                <CheckIcon className="h-6 w-6 text-green-400 mt-1 flex-shrink-0" />
+                <div>
+                  <h3 className="text-white font-semibold text-lg mb-2">Scale Without Stress</h3>
+                  <p className="text-gray-400">Handle more customers without working longer hours</p>
+                </div>
+              </div>
+              
+              <div className="flex items-start gap-4">
+                <CheckIcon className="h-6 w-6 text-green-400 mt-1 flex-shrink-0" />
+                <div>
+                  <h3 className="text-white font-semibold text-lg mb-2">Build Something Valuable</h3>
+                  <p className="text-gray-400">Create a business asset that works for you, not the other way around</p>
+                </div>
+              </div>
+              
+              <div className="flex items-start gap-4">
+                <CheckIcon className="h-6 w-6 text-green-400 mt-1 flex-shrink-0" />
+                <div>
+                  <h3 className="text-white font-semibold text-lg mb-2">Future-Proof Your Business</h3>
+                  <p className="text-gray-400">Stay competitive with modern tools and systems</p>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
 
@@ -238,10 +328,10 @@ export default function LandingPage() {
         <div className="mb-20" id="how-it-works">
           <div className="text-center mb-12">
             <h2 className="text-4xl font-bold text-white mb-6">
-              How It Works
+              Here's Exactly How It Works
             </h2>
             <p className="text-xl text-gray-400 max-w-3xl mx-auto">
-              Simple 3-step process to get your SaaS built and launched
+              Simple 3-step process to get your automated business up and running
             </p>
           </div>
           
@@ -251,10 +341,10 @@ export default function LandingPage() {
                 <div className="w-16 h-16 bg-blue-500/20 rounded-full flex items-center justify-center mx-auto mb-6 border-2 border-blue-500/30">
                   <span className="text-2xl font-bold text-blue-400">1</span>
                 </div>
-                <h3 className="text-white font-bold text-xl mb-4">Share Your Idea</h3>
+                <h3 className="text-white font-bold text-xl mb-4">Tell Me About Your Business</h3>
                 <p className="text-gray-400 leading-relaxed">
-                  Tell us about your business idea, target customers, and what problems you want to solve. 
-                  We'll help refine your concept into a buildable product.
+                  We'll have a conversation about what you do, who your customers are, 
+                  and what you want to achieve. No technical knowledge needed.
                 </p>
               </CardContent>
             </Card>
@@ -264,10 +354,10 @@ export default function LandingPage() {
                 <div className="w-16 h-16 bg-green-500/20 rounded-full flex items-center justify-center mx-auto mb-6 border-2 border-green-500/30">
                   <span className="text-2xl font-bold text-green-400">2</span>
                 </div>
-                <h3 className="text-white font-bold text-xl mb-4">We Build It</h3>
+                <h3 className="text-white font-bold text-xl mb-4">I Build Everything For You</h3>
                 <p className="text-gray-400 leading-relaxed">
-                  Our team develops your complete SaaS product with user authentication, payments, 
-                  core features, and everything needed to start selling.
+                  I create your complete online business system - website, booking system, 
+                  payment processing, email automation, and customer management.
                 </p>
               </CardContent>
             </Card>
@@ -277,11 +367,120 @@ export default function LandingPage() {
                 <div className="w-16 h-16 bg-cyan-500/20 rounded-full flex items-center justify-center mx-auto mb-6 border-2 border-cyan-500/30">
                   <span className="text-2xl font-bold text-cyan-400">3</span>
                 </div>
-                <h3 className="text-white font-bold text-xl mb-4">Launch & Grow</h3>
+                <h3 className="text-white font-bold text-xl mb-4">You Start Getting Results</h3>
                 <p className="text-gray-400 leading-relaxed">
-                  Launch your SaaS product and start acquiring customers. We provide ongoing 
-                  support to help you scale and reach profitability.
+                  Launch your automated business and start attracting customers. 
+                  I provide ongoing support to help you grow and succeed.
                 </p>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
+
+        {/* Success Stories Section */}
+        <div className="mb-20" id="success-stories">
+          <div className="text-center mb-12">
+            <h2 className="text-4xl font-bold text-white mb-6">
+              Real Results From Real Business Owners
+            </h2>
+            <p className="text-xl text-gray-400 max-w-3xl mx-auto">
+              See how other entrepreneurs transformed their businesses with EliteHub
+            </p>
+          </div>
+          
+          <div className="grid md:grid-cols-2 gap-8 max-w-6xl mx-auto">
+            <Card className="bg-green-500/10 border-green-500/30">
+              <CardContent className="p-8">
+                <div className="flex items-center gap-1 mb-4">
+                  {[...Array(5)].map((_, i) => (
+                    <StarIcon key={i} className="w-5 h-5 text-yellow-400" />
+                  ))}
+                </div>
+                <blockquote className="text-gray-300 text-lg italic mb-6">
+                  "I'm a personal trainer who was struggling to get new clients. EliteHub built me 
+                  a website with online booking and automated email follow-ups. Now I'm booked solid 
+                  and earning £4,500/month consistently!"
+                </blockquote>
+                <div className="flex items-center gap-4">
+                  <div className="w-12 h-12 bg-green-500 rounded-full flex items-center justify-center text-white font-bold">
+                    SM
+                  </div>
+                  <div>
+                    <p className="text-white font-semibold">Sarah Mitchell</p>
+                    <p className="text-green-400 text-sm">Personal Trainer, Cardiff</p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card className="bg-blue-500/10 border-blue-500/30">
+              <CardContent className="p-8">
+                <div className="flex items-center gap-1 mb-4">
+                  {[...Array(5)].map((_, i) => (
+                    <StarIcon key={i} className="w-5 h-5 text-yellow-400" />
+                  ))}
+                </div>
+                <blockquote className="text-gray-300 text-lg italic mb-6">
+                  "My cleaning business was all word-of-mouth. EliteHub created an online booking 
+                  system and automated my scheduling. I've doubled my customer base and save 10 hours 
+                  per week on admin work!"
+                </blockquote>
+                <div className="flex items-center gap-4">
+                  <div className="w-12 h-12 bg-blue-500 rounded-full flex items-center justify-center text-white font-bold">
+                    JK
+                  </div>
+                  <div>
+                    <p className="text-white font-semibold">James Kumar</p>
+                    <p className="text-blue-400 text-sm">Cleaning Service Owner, London</p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card className="bg-purple-500/10 border-purple-500/30">
+              <CardContent className="p-8">
+                <div className="flex items-center gap-1 mb-4">
+                  {[...Array(5)].map((_, i) => (
+                    <StarIcon key={i} className="w-5 h-5 text-yellow-400" />
+                  ))}
+                </div>
+                <blockquote className="text-gray-300 text-lg italic mb-6">
+                  "I had a great idea for helping local restaurants but no clue how to build it. 
+                  EliteHub turned my concept into a working platform that now generates £3,200/month 
+                  in recurring revenue!"
+                </blockquote>
+                <div className="flex items-center gap-4">
+                  <div className="w-12 h-12 bg-purple-500 rounded-full flex items-center justify-center text-white font-bold">
+                    MR
+                  </div>
+                  <div>
+                    <p className="text-white font-semibold">Mike Rodriguez</p>
+                    <p className="text-purple-400 text-sm">Restaurant Tech Entrepreneur</p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card className="bg-orange-500/10 border-orange-500/30">
+              <CardContent className="p-8">
+                <div className="flex items-center gap-1 mb-4">
+                  {[...Array(5)].map((_, i) => (
+                    <StarIcon key={i} className="w-5 h-5 text-yellow-400" />
+                  ))}
+                </div>
+                <blockquote className="text-gray-300 text-lg italic mb-6">
+                  "As a consultant, I was manually handling everything. EliteHub automated my client 
+                  onboarding, proposals, and invoicing. I've increased my rates by 40% and work fewer hours!"
+                </blockquote>
+                <div className="flex items-center gap-4">
+                  <div className="w-12 h-12 bg-orange-500 rounded-full flex items-center justify-center text-white font-bold">
+                    EL
+                  </div>
+                  <div>
+                    <p className="text-white font-semibold">Emma Lewis</p>
+                    <p className="text-orange-400 text-sm">Business Consultant, Manchester</p>
+                  </div>
+                </div>
               </CardContent>
             </Card>
           </div>
@@ -291,10 +490,10 @@ export default function LandingPage() {
         <div className="mb-20" id="pricing">
           <div className="text-center mb-12">
             <h2 className="text-4xl font-bold text-white mb-6">
-              Simple Pricing
+              Investment In Your Business Future
             </h2>
             <p className="text-xl text-gray-400 max-w-3xl mx-auto">
-              Choose the plan that fits your needs. All plans include development, launch support, and code ownership.
+              Choose the option that fits your business needs. All packages include ongoing support.
             </p>
           </div>
           
@@ -302,9 +501,9 @@ export default function LandingPage() {
             <Card className="hover:scale-105 transition-all duration-300">
               <CardContent className="p-8">
                 <div className="text-center mb-8">
-                  <h3 className="text-white text-2xl font-bold mb-2">Prototype</h3>
+                  <h3 className="text-white text-2xl font-bold mb-2">Starter</h3>
                   <div className="text-4xl font-bold text-green-400 mb-2">£1,497</div>
-                  <p className="text-gray-400 mb-4">Test your idea with users</p>
+                  <p className="text-gray-400 mb-4">Perfect for testing your idea</p>
                   <div className="flex items-center justify-center gap-2 text-sm text-gray-500">
                     <ClockIcon className="h-4 w-4" />
                     <span>2 weeks delivery</span>
@@ -314,21 +513,25 @@ export default function LandingPage() {
                 <ul className="space-y-4 mb-8">
                   <li className="flex items-start gap-3">
                     <CheckIcon className="h-5 w-5 text-green-400 mt-0.5 flex-shrink-0" />
-                    <span className="text-gray-300">Basic working prototype</span>
+                    <span className="text-gray-300">Simple business website</span>
                   </li>
                   <li className="flex items-start gap-3">
                     <CheckIcon className="h-5 w-5 text-green-400 mt-0.5 flex-shrink-0" />
-                    <span className="text-gray-300">Core functionality</span>
+                    <span className="text-gray-300">Contact forms & basic automation</span>
                   </li>
                   <li className="flex items-start gap-3">
                     <CheckIcon className="h-5 w-5 text-green-400 mt-0.5 flex-shrink-0" />
-                    <span className="text-gray-300">User testing ready</span>
+                    <span className="text-gray-300">Perfect for service providers</span>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <CheckIcon className="h-5 w-5 text-green-400 mt-0.5 flex-shrink-0" />
+                    <span className="text-gray-300">1 week launch support</span>
                   </li>
                 </ul>
                 
                 <Button 
                   className="w-full"
-                  onClick={() => window.location.href = '/auth'}
+                  onClick={() => navigateTo('/auth')}
                 >
                   Get Started
                 </Button>
@@ -341,9 +544,9 @@ export default function LandingPage() {
               </div>
               <CardContent className="p-8 pt-12">
                 <div className="text-center mb-8">
-                  <h3 className="text-white text-2xl font-bold mb-2">Full SaaS</h3>
+                  <h3 className="text-white text-2xl font-bold mb-2">Complete Business</h3>
                   <div className="text-4xl font-bold text-blue-400 mb-2">£2,997</div>
-                  <p className="text-gray-400 mb-4">Production-ready SaaS</p>
+                  <p className="text-gray-400 mb-4">Everything you need to succeed</p>
                   <div className="flex items-center justify-center gap-2 text-sm text-gray-500">
                     <ClockIcon className="h-4 w-4" />
                     <span>4 weeks delivery</span>
@@ -353,25 +556,29 @@ export default function LandingPage() {
                 <ul className="space-y-4 mb-8">
                   <li className="flex items-start gap-3">
                     <CheckIcon className="h-5 w-5 text-green-400 mt-0.5 flex-shrink-0" />
-                    <span className="text-gray-300">Complete SaaS platform</span>
+                    <span className="text-gray-300">Professional business platform</span>
                   </li>
                   <li className="flex items-start gap-3">
                     <CheckIcon className="h-5 w-5 text-green-400 mt-0.5 flex-shrink-0" />
-                    <span className="text-gray-300">Payment integration</span>
+                    <span className="text-gray-300">Online booking & payment system</span>
                   </li>
                   <li className="flex items-start gap-3">
                     <CheckIcon className="h-5 w-5 text-green-400 mt-0.5 flex-shrink-0" />
-                    <span className="text-gray-300">Ready to sell</span>
+                    <span className="text-gray-300">Email automation & customer management</span>
                   </li>
                   <li className="flex items-start gap-3">
                     <CheckIcon className="h-5 w-5 text-green-400 mt-0.5 flex-shrink-0" />
-                    <span className="text-gray-300">2 weeks support</span>
+                    <span className="text-gray-300">Mobile-responsive design</span>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <CheckIcon className="h-5 w-5 text-green-400 mt-0.5 flex-shrink-0" />
+                    <span className="text-gray-300">2 weeks launch support</span>
                   </li>
                 </ul>
                 
                 <Button 
                   className="w-full bg-blue-600 hover:bg-blue-700"
-                  onClick={() => window.location.href = '/auth'}
+                  onClick={() => navigateTo('/auth')}
                 >
                   Get Started
                 </Button>
@@ -383,7 +590,7 @@ export default function LandingPage() {
                 <div className="text-center mb-8">
                   <h3 className="text-white text-2xl font-bold mb-2">Enterprise</h3>
                   <div className="text-4xl font-bold text-cyan-400 mb-2">£4,997</div>
-                  <p className="text-gray-400 mb-4">Advanced features</p>
+                  <p className="text-gray-400 mb-4">For ambitious growth</p>
                   <div className="flex items-center justify-center gap-2 text-sm text-gray-500">
                     <ClockIcon className="h-4 w-4" />
                     <span>6 weeks delivery</span>
@@ -393,25 +600,29 @@ export default function LandingPage() {
                 <ul className="space-y-4 mb-8">
                   <li className="flex items-start gap-3">
                     <CheckIcon className="h-5 w-5 text-green-400 mt-0.5 flex-shrink-0" />
-                    <span className="text-gray-300">Everything in Full SaaS</span>
+                    <span className="text-gray-300">Everything in Complete Business</span>
                   </li>
                   <li className="flex items-start gap-3">
                     <CheckIcon className="h-5 w-5 text-green-400 mt-0.5 flex-shrink-0" />
-                    <span className="text-gray-300">Advanced integrations</span>
+                    <span className="text-gray-300">Custom integrations & workflows</span>
                   </li>
                   <li className="flex items-start gap-3">
                     <CheckIcon className="h-5 w-5 text-green-400 mt-0.5 flex-shrink-0" />
-                    <span className="text-gray-300">Custom features</span>
+                    <span className="text-gray-300">Advanced analytics & reporting</span>
                   </li>
                   <li className="flex items-start gap-3">
                     <CheckIcon className="h-5 w-5 text-green-400 mt-0.5 flex-shrink-0" />
-                    <span className="text-gray-300">1 month support</span>
+                    <span className="text-gray-300">Multi-location/staff management</span>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <CheckIcon className="h-5 w-5 text-green-400 mt-0.5 flex-shrink-0" />
+                    <span className="text-gray-300">1 month dedicated support</span>
                   </li>
                 </ul>
                 
                 <Button 
                   className="w-full"
-                  onClick={() => window.location.href = '/auth'}
+                  onClick={() => navigateTo('/auth')}
                 >
                   Get Started
                 </Button>
@@ -420,26 +631,26 @@ export default function LandingPage() {
           </div>
         </div>
 
-        {/* FIXED Final CTA - No more purple gradient, no empty white box */}
+        {/* Final CTA */}
         <div className="bg-gray-800 border border-gray-700 rounded-3xl p-12 text-center">
           <h2 className="text-4xl font-bold text-white mb-6">
-            Ready to Build Your SaaS?
+            Ready To Transform Your Business?
           </h2>
           <p className="text-xl text-gray-300 mb-8 max-w-3xl mx-auto leading-relaxed">
-            Join entrepreneurs who are turning their ideas into profitable SaaS businesses. 
-            Start your journey today.
+            Join hundreds of business owners who've automated their operations, 
+            increased their revenue, and reclaimed their time with EliteHub.
           </p>
           <Button 
             size="lg" 
-            className="bg-blue-600 hover:bg-blue-700 text-white text-lg px-12 py-4"
-            onClick={() => window.location.href = '/auth'}
+            className="bg-blue-600 hover:bg-blue-700 text-white text-lg px-12 py-4 mb-6"
+            onClick={() => navigateTo('/auth')}
           >
             <RocketIcon className="h-6 w-6 mr-3" />
-            Get Started Now
+            Start Your Business Journey
           </Button>
           
           <div className="mt-6 text-gray-400 text-sm">
-            <p>✨ No Technical Skills Required • 30-Day Delivery • You Own Everything</p>
+            <p>✨ No Technical Knowledge Required • 30-Day Delivery • You Own Everything</p>
           </div>
         </div>
       </div>
