@@ -143,7 +143,7 @@ export default function WorkWithMe() {
             </span>
           </div>
           
-          <h1 className="text-5xl md:text-7xl font-bold text-white mb-8 leading-tight">
+          <h1 className="text-4xl md:text-6xl font-bold text-white mb-8 leading-tight">
             You Started a Business{' '}
             <span className="bg-gradient-to-r from-blue-400 via-cyan-400 to-emerald-400 bg-clip-text text-transparent">
               to Be Free.
@@ -151,7 +151,7 @@ export default function WorkWithMe() {
             Now You're More Trapped Than Ever.
           </h1>
           
-          <p className="text-xl md:text-2xl text-blue-200 max-w-4xl mx-auto mb-12 leading-relaxed">
+          <p className="text-lg md:text-xl text-blue-200 max-w-4xl mx-auto mb-12 leading-relaxed">
             Your biggest competitor isn't another company - it's your own inefficiency.
           </p>
           
@@ -420,7 +420,7 @@ export default function WorkWithMe() {
                 
                 <Button 
                   className="w-full bg-blue-600 hover:bg-blue-700"
-                  onClick={() => window.location.href = '/contact'}
+                  onClick={() => window.open('https://cal.com/elitehubnetwork/book-strategy-call', '_blank')}
                 >
                   <CalendarIcon className="h-4 w-4 mr-2" />
                   Book Strategy Call
