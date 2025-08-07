@@ -1,0 +1,10 @@
+[33medc7319[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mnew-deployment[m[33m)[m Remove hardcoded SendGrid API key
+[33me4dcf79[m Update project files
+[33m8c30bb6[m[33m ([m[1;32mmain[m[33m)[m Update EliteHub with new landing page design
+[33m2dcb9fd[m Initial commit: EliteHub landing page
+[33ma52fbd9[m[33m ([m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m Fix mobile responsive design - remove gold effects, enlarge chart, fix layout
+[33mad534ab[m Major EliteHub redesign: New landing page with Swiss precision automation theme
+[33m2cbd551[m Update work-with-me page with new messaging and Cal.com links
+[33mc28a0ed[m Update work with me page - new messaging and Cal.com integration
+[33m5df7d44[m Fix work-with-me design back to original
+[33m2c43250[m Update work-with-me, dashboard, and about pages
