@@ -28,6 +28,10 @@ export default function EliteHubLanding() {
   const [currentDashboardState, setCurrentDashboardState] = useState('current');
   const [transformationProgress, setTransformationProgress] = useState(0);
   
+  // Dynamic countdown and slot availability
+  const [daysRemaining, setDaysRemaining] = useState(0);
+  const [availableSlots, setAvailableSlots] = useState(6);
+  
   // Refs for scroll animations and effects
   const metricsRef = useRef(null);
   const costRef = useRef(null);
@@ -41,45 +45,51 @@ export default function EliteHubLanding() {
   const executiveInsights = [
     {
       company: "LSJTAX",
-      executive: "Michael Richardson",
-      title: "Managing Partner",
-      quote: "EliteHub transformed our practice from chaos to clockwork precision. We handle 340% more clients with the same team while I've reclaimed my evenings and weekends.",
-      impact: "26.8h weekly liberation"
+      executive: "Lewis Slennett",
+      title: "Founder & Owner",
+      location: "Da Nang, Vietnam",
+      quote: "I started my business for freedom. Instead, I was trapped doing admin work while missing my kids' bedtime stories. EliteHub gave me back my life. Now I focus on growth while my business runs itself.",
+      impact: "24h weekly freedom"
     },
     {
       company: "Mason & Co",
       executive: "Charlotte Mason", 
       title: "Founder & CEO",
-      quote: "From 80-hour weeks drowning in administration to 45-hour weeks focused purely on strategy. Our competitor response time went from days to minutes.",
-      impact: "22.4h weekly liberation"
+      location: "London, UK",
+      quote: "From 80-hour weeks drowning in paperwork to 45-hour weeks focused on what I love. I finally have time for family dinners and my business is growing faster than ever.",
+      impact: "22h weekly freedom"
     },
     {
       company: "Brown Group",
       executive: "James Brown",
-      title: "Group Director", 
-      quote: "The precision is extraordinary. Every process runs like Swiss clockwork. I focus on growing our empire while the business operates autonomously.",
-      impact: "28.9h weekly liberation"
+      title: "Founder & Director", 
+      location: "Manchester, UK",
+      quote: "I was paying myself £8/hour to do data entry while missing my daughter's bedtime stories. That night, everything changed. Now my business serves me, not enslaves me.",
+      impact: "28h weekly freedom"
     },
     {
       company: "Setter School",
-      executive: "Sarah Williams",
-      title: "Principal",
-      quote: "From educational chaos to teaching excellence. Our administrative burden vanished, allowing pure focus on student outcomes.",
-      impact: "24.1h weekly liberation"
+      executive: "Josh Granger",
+      title: "Founder & Principal",
+      location: "Tenerife, Spain",
+      quote: "From educational chaos to teaching excellence. Our administrative burden vanished, allowing pure focus on student outcomes. Parents notice the difference immediately.",
+      impact: "24h weekly freedom"
     },
     {
       company: "Precision Tech",
       executive: "David Chen",
-      title: "Technical Director",
-      quote: "As a tech company, we should have automated first. EliteHub's precision surpassed our own capabilities. Development velocity increased 340% overnight.",
-      impact: "25.7h weekly liberation"
+      title: "Founder & CTO",
+      location: "San Francisco, CA",
+      quote: "As a tech company, we should have automated first. EliteHub's systems surpassed our own capabilities. Development velocity increased 340% overnight.",
+      impact: "25h weekly freedom"
     },
     {
       company: "Elite Legal",
       executive: "Rebecca Thompson",
-      title: "Senior Partner",
-      quote: "Legal precision meets Swiss engineering. Our case preparation time dropped 85% while quality soared. We handle complex litigation with unprecedented efficiency.",
-      impact: "27.3h weekly liberation"
+      title: "Founding Partner",
+      location: "New York, NY",
+      quote: "Legal precision meets life liberation. Our case preparation time dropped 85% while quality soared. We handle complex litigation with unprecedented efficiency.",
+      impact: "27h weekly freedom"
     }
   ];
 
@@ -180,6 +190,55 @@ export default function EliteHubLanding() {
       line.style.strokeDashoffset = '0';
     }, 200);
   };
+
+  // Dynamic countdown and slot calculation
+  const calculateDaysRemaining = () => {
+    const now = new Date();
+    const currentMonth = now.getMonth();
+    const currentYear = now.getFullYear();
+    const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
+    const currentDay = now.getDate();
+    const daysRemaining = daysInMonth - currentDay;
+    return daysRemaining;
+  };
+
+  const calculateAvailableSlots = () => {
+    const now = new Date();
+    const currentDay = now.getDate();
+    const daysInMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate();
+    const monthProgress = currentDay / daysInMonth;
+
+    if (monthProgress <= 0.5) return 6;      // First 50% of month
+    if (monthProgress <= 0.75) return 4;     // 50-75% of month
+    if (monthProgress <= 0.9) return 2;      // 75-90% of month
+    if (monthProgress <= 0.95) return 1;     // 90-95% of month
+    return 0;                                // Last 5% of month
+  };
+
+  // Update countdown and slots on component mount and daily
+  useEffect(() => {
+    const updateCountdown = () => {
+      setDaysRemaining(calculateDaysRemaining());
+      setAvailableSlots(calculateAvailableSlots());
+    };
+
+    // Update immediately
+    updateCountdown();
+
+    // Update daily at midnight
+    const now = new Date();
+    const tomorrow = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1);
+    const timeUntilMidnight = tomorrow.getTime() - now.getTime();
+
+    const dailyUpdate = setTimeout(() => {
+      updateCountdown();
+      // Set up daily updates
+      const interval = setInterval(updateCountdown, 24 * 60 * 60 * 1000);
+      return () => clearInterval(interval);
+    }, timeUntilMidnight);
+
+    return () => clearTimeout(dailyUpdate);
+  }, []);
 
   // Advanced scroll handler
   useEffect(() => {
@@ -386,6 +445,58 @@ export default function EliteHubLanding() {
     setTimeout(() => setShowToast(false), 3000);
   };
 
+  const updateCalculator = () => {
+    const adminCountInput = document.querySelector('.calc-input[name="adminCount"]') as HTMLInputElement;
+    const avgSalaryInput = document.querySelector('.calc-input[name="avgSalary"]') as HTMLInputElement;
+    
+    if (adminCountInput && avgSalaryInput) {
+      const adminCount = parseInt(adminCountInput.value) || 0;
+      const avgSalary = parseInt(avgSalaryInput.value) || 0;
+      
+      const currentCost = adminCount * avgSalary; // avgSalary is already yearly
+      const ourCost = Math.round(currentCost * 0.14); // 86% reduction
+      const savingsAmount = currentCost - ourCost;
+      const savingsPercentage = 86;
+      
+      // Update calculator results
+      const currentCostElement = document.querySelector('.cost-amount.current');
+      const ourCostElement = document.querySelector('.cost-amount.our-solution');
+      const savingsPercentageElement = document.querySelector('.savings-percentage');
+      
+      if (currentCostElement) currentCostElement.textContent = `£${currentCost.toLocaleString()}`;
+      if (ourCostElement) ourCostElement.textContent = `£${ourCost.toLocaleString()}`;
+      if (savingsPercentageElement) savingsPercentageElement.textContent = `${savingsPercentage}%`;
+      
+      // Update savings amount
+      const savingsAmountElement = document.querySelector('.savings-amount');
+      if (savingsAmountElement) savingsAmountElement.textContent = `£${savingsAmount.toLocaleString()}`;
+      
+      // Update the CTA text to match the calculator
+      const ctaSavingsElement = document.querySelector('#ctaSavings');
+      if (ctaSavingsElement) ctaSavingsElement.textContent = `£${savingsAmount.toLocaleString()}`;
+    }
+  };
+
+  useEffect(() => {
+    // Run calculator on initial load
+    updateCalculator();
+
+    // Set up event listeners for calculator inputs
+    const inputs = ['adminCount', 'avgSalary'];
+    inputs.forEach(name => {
+      const input = document.querySelector(`.calc-input[name="${name}"]`) as HTMLInputElement;
+      if (input) {
+        input.addEventListener('input', updateCalculator);
+      }
+    });
+
+    // Set up lead capture form submission
+    // Form submission is handled by the onClick in the button
+
+    // Initial calculation
+    updateCalculator();
+  }, []);
+
   if (isLoading) {
     return (
       <div className="loading-screen">
@@ -451,7 +562,7 @@ export default function EliteHubLanding() {
         <div className="top-notice-bar">
           <div className="notice-content">
             <div className="notice-dot"></div>
-            LIMITED AVAILABILITY • 3 EXECUTIVE POSITIONS REMAINING
+            LIMITED AVAILABILITY • {availableSlots} EXECUTIVE POSITIONS REMAINING
           </div>
         </div>
 
@@ -470,7 +581,7 @@ export default function EliteHubLanding() {
         </nav>
 
         {/* Premium Hero Section */}
-        <section ref={heroRef} className="hero-section animated-section">
+        <section ref={heroRef} className="hero-section animated-section" id="about">
           <div className="hero-background-elements">
             <div className="precision-grid parallax-slow"></div>
             <div className="geometric-pattern pattern-1 parallax-medium"></div>
@@ -481,59 +592,37 @@ export default function EliteHubLanding() {
                 <div key={i} className={`precision-particle particle-${i + 1} parallax-fast`}></div>
               ))}
             </div>
-            <div className="ambient-glow glow-1 parallax-slow"></div>
-            <div className="ambient-glow glow-2 parallax-slow"></div>
           </div>
           
           <div className="hero-content">
-            <div className="premium-badge fade-in-up">
-              <span className="badge-text">EXCLUSIVE AUTOMATION ENGINEERING</span>
-              <div className="badge-shimmer"></div>
-            </div>
-
             <h1 className="hero-headline-premium fade-in-up stagger-1">
-              <div className="headline-line-1">What if your business</div>
-              <div className="headline-line-2">could run without you?</div>
+              <div className="headline-line-1">Remember why you started</div>
+              <div className="headline-line-2">your business?</div>
               <div className="headline-underline"></div>
             </h1>
 
             <div className="hero-subheadlines-premium fade-in-up stagger-2">
               <p className="subheadline-main-premium">
-                Swiss-precision automation systems that liberate 20+ hours weekly while scaling your revenue exponentially.
+                For freedom. For control. For time with family. Instead, you're working more than ever, drowning in admin while your competitors grow.
               </p>
               <p className="subheadline-secondary-premium">
-                From operational chaos to effortless excellence. Your transformation begins now.
+                We give you back the freedom you started your business for. Complete admin automation that works 24/7 while you focus on what matters.
               </p>
             </div>
 
-            <div className="hero-stats-grid fade-in-up stagger-3">
-              <div className="hero-stat-item glass-card">
-                <div className="stat-value counter" data-target="24" data-counter-id="hero-stat-1">24</div>
-                <div className="stat-label">Average Weekly Liberation</div>
-              </div>
-              <div className="hero-stat-item glass-card">
-                <div className="stat-value counter" data-target="14" data-counter-id="hero-stat-2">14</div>
-                <div className="stat-label">Complete Implementation</div>
-              </div>
-              <div className="hero-stat-item glass-card">
-                <div className="stat-value counter" data-target="96" data-counter-id="hero-stat-3">96</div>
-                <div className="stat-label">Client Success Rate</div>
-              </div>
-            </div>
-
-            <div className="hero-buttons-premium fade-in-up stagger-4">
+            <div className="hero-buttons-premium fade-in-up stagger-3">
               <a href="https://cal.com/elitehubnetwork/book-strategy-call" className="btn-primary-premium" target="_blank" rel="noopener noreferrer">
-                <span className="btn-text">Secure Your Freedom</span>
+                <span className="btn-text">Get Your Freedom Back</span>
                 <div className="btn-glow"></div>
               </a>
-              <a href="#proof" className="btn-secondary-premium">
-                <span className="btn-text">View Results</span>
+              <a href="#trap" className="btn-secondary-premium">
+                <span className="btn-text">See The Freedom Trap</span>
                 <div className="btn-underline"></div>
               </a>
             </div>
 
-            <div className="trusted-by-premium fade-in-up stagger-5">
-              <div className="trusted-label-premium">Trusted by discerning executives</div>
+            <div className="trusted-by-premium fade-in-up stagger-4">
+              <div className="trusted-label-premium">Business owners who got their freedom back</div>
               <div className="logo-carousel-premium">
                 <div className="logo-track">
                   <div className="client-logo"><div className="logo-text tech">LSJTAX</div></div>
@@ -561,8 +650,404 @@ export default function EliteHubLanding() {
           <div className="divider-orb"></div>
         </div>
 
+        {/* What EliteHub Actually Does Section */}
+        <section className="elitehub-services-section animated-section">
+          <div className="section-container">
+            <div className="services-header fade-in-up">
+              <div className="section-badge gold">COMPLETE FREEDOM</div>
+              <h2 className="section-title">Complete Business <span className="text-gold">Freedom System</span></h2>
+              <p className="section-subtitle">
+                Everything that steals your time - automated. Everything that grows your business - optimized.
+              </p>
+            </div>
+
+            <div className="services-grid fade-in-up stagger-2">
+              <div className="service-card">
+                <div className="service-icon">
+                  <div className="icon-container">
+                    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+                      <path d="M2 17l10 5 10-5"/>
+                      <path d="M2 12l10 5 10-5"/>
+                    </svg>
+                    <div className="icon-glow"></div>
+                  </div>
+                </div>
+                <h3>Traffic & Lead Generation</h3>
+                <ul>
+                  <li>Website optimization & conversion</li>
+                  <li>Lead capture systems</li>
+                  <li>Traffic boosting strategies</li>
+                </ul>
+              </div>
+
+              <div className="service-card">
+                <div className="service-icon">
+                  <div className="icon-container">
+                    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
+                    </svg>
+                    <div className="icon-glow"></div>
+                  </div>
+                </div>
+                <h3>Complete Admin Automation</h3>
+                <ul>
+                  <li>Email management & auto-responses</li>
+                  <li>Database & CRM setup</li>
+                  <li>Document processing & filing</li>
+                  <li>Customer service automation</li>
+                </ul>
+              </div>
+
+              <div className="service-card">
+                <div className="service-icon">
+                  <div className="icon-container">
+                    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                    </svg>
+                    <div className="icon-glow"></div>
+                  </div>
+                </div>
+                <h3>Business Owner Freedom</h3>
+                <ul>
+                  <li>24/7 systems that work while you sleep</li>
+                  <li>Time back for strategy & growth</li>
+                  <li>Family time restored</li>
+                  <li>Business runs itself</li>
+                </ul>
+              </div>
+            </div>
+            
+            <div className="services-footer fade-in-up stagger-4">
+              <h3 className="footer-title">Your Business, <span className="text-gold">Your Freedom</span></h3>
+              <p className="footer-subtitle">Complete automation that works while you focus on what matters most.</p>
+            </div>
+          </div>
+        </section>
+
+        {/* Section Divider */}
+        <div className="section-divider">
+          <div className="divider-line"></div>
+          <div className="divider-orb"></div>
+        </div>
+
+        {/* The Freedom Trap Section */}
+        <section id="trap" className="freedom-trap-section animated-section">
+          <div className="section-container">
+            <div className="trap-header fade-in-up">
+              <div className="section-badge danger">COST CALCULATOR</div>
+              <h2 className="section-title">See How Much You're <span className="text-gold">Wasting</span></h2>
+              <p className="section-subtitle">
+                You started your business for freedom, but now you're trapped doing admin work while your competitors grow. Calculate your waste and discover your freedom potential.
+              </p>
+            </div>
+
+            <div className="trap-cards fade-in-up stagger-2">
+              <div className="card-container">
+                <div className="lead-capture-card">
+                  <div className="card-header">
+                    <h3>Get Your Custom Freedom Analysis</h3>
+                    <p>Discover exactly how much time and money you're wasting on admin work</p>
+                  </div>
+                  <div className="lead-form">
+                    <input 
+                      type="text" 
+                      name="name"
+                      placeholder="Your Name" 
+                      className="form-input"
+                    />
+                    <input 
+                      type="email" 
+                      name="email"
+                      placeholder="Your Email" 
+                      className="form-input"
+                    />
+                    <input 
+                      type="text" 
+                      name="company"
+                      placeholder="Company Name" 
+                      className="form-input"
+                    />
+                    <select 
+                      name="businessType"
+                      className="form-input"
+                      style={{
+                        appearance: 'none', 
+                        backgroundImage: 'url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23FFD700%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.4-12.8z%22/%3E%3C/svg%3E")', 
+                        backgroundRepeat: 'no-repeat', 
+                        backgroundPosition: 'right 8px center', 
+                        backgroundSize: '12px auto', 
+                        paddingRight: '30px',
+                        color: '#ffffff'
+                      }}
+                      onChange={(e) => {
+                        const staffInput = document.querySelector('.form-input[name="staffCount"]') as HTMLInputElement;
+                        const staffLabel = document.querySelector('.staff-label') as HTMLLabelElement;
+                        if (staffInput && staffLabel) {
+                          if (e.target.value === 'solo') {
+                            staffInput.placeholder = 'Hours per week on admin';
+                            staffInput.min = '1';
+                            staffInput.max = '80';
+                            staffLabel.textContent = 'Hours per week on admin';
+                          } else {
+                            staffInput.placeholder = 'Number of Admin Staff';
+                            staffInput.min = '0';
+                            staffInput.max = '20';
+                            staffLabel.textContent = 'Number of Admin Staff';
+                          }
+                        }
+                      }}
+                    >
+                      <option value="" style={{color: '#666666', backgroundColor: '#1a1a1a'}}>Select Business Type</option>
+                      <option value="solo" style={{color: '#ffffff', backgroundColor: '#1a1a1a'}}>Solo Entrepreneur (No Staff)</option>
+                      <option value="small-team" style={{color: '#ffffff', backgroundColor: '#1a1a1a'}}>Small Team (1-5 Staff)</option>
+                      <option value="growing" style={{color: '#ffffff', backgroundColor: '#1a1a1a'}}>Growing Business (5+ Staff)</option>
+                    </select>
+                    <div className="input-group">
+                      <label className="staff-label">Number of Admin Staff</label>
+                      <input 
+                        type="number" 
+                        name="staffCount"
+                        placeholder="Number of Admin Staff" 
+                        className="form-input"
+                        min="0"
+                        max="20"
+                      />
+                    </div>
+                    <button type="button" className="btn-primary-premium form-submit" onClick={() => {
+                      alert('Form button clicked!');
+                      console.log('Form button clicked!');
+                      const nameInput = document.querySelector('.form-input[name="name"]') as HTMLInputElement;
+                      const emailInput = document.querySelector('.form-input[name="email"]') as HTMLInputElement;
+                      const companyInput = document.querySelector('.form-input[name="company"]') as HTMLInputElement;
+                      const businessTypeInput = document.querySelector('.form-input[name="businessType"]') as HTMLSelectElement;
+                      const staffCountInput = document.querySelector('.form-input[name="staffCount"]') as HTMLInputElement;
+                      
+                      if (nameInput && emailInput && companyInput && businessTypeInput && staffCountInput) {
+                        const name = nameInput.value.trim();
+                        const email = emailInput.value.trim();
+                        const company = companyInput.value.trim();
+                        const businessType = businessTypeInput.value;
+                        const staffCount = staffCountInput.value;
+                        
+                        if (!name || !email || !company || !businessType || !staffCount) {
+                          showToastNotification('Please fill in all fields', 'error');
+                          return;
+                        }
+
+                        // Determine the field meaning based on business type
+                        const fieldLabel = businessType === 'solo' ? 'Hours per week on admin' : 'Number of Admin Staff';
+                        const fieldValue = businessType === 'solo' ? `${staffCount} hours/week` : `${staffCount} staff`;
+                        
+                        // Show loading state
+                        const btnText = document.querySelector('.form-submit .btn-text');
+                        if (btnText) btnText.textContent = 'Sending...';
+                        
+                        // Submit to API only
+                        fetch('/api/leads', {
+                          method: 'POST',
+                          headers: { 'Content-Type': 'application/json' },
+                          body: JSON.stringify({ 
+                            name, 
+                            email, 
+                            company, 
+                            businessType, 
+                            staffCount, 
+                            fieldLabel,
+                            fieldValue,
+                            source: 'freedom-analysis-form' 
+                          })
+                        })
+                        .then(response => {
+                          console.log('API response status:', response.status);
+                          if (response.ok) {
+                            showToastNotification('Thank you! We\'ll send your custom freedom analysis within 24 hours.', 'success');
+                            nameInput.value = '';
+                            emailInput.value = '';
+                            companyInput.value = '';
+                            businessTypeInput.value = '';
+                            staffCountInput.value = '';
+                          } else {
+                            console.error('API error:', response.status);
+                            showToastNotification('Thank you! We\'ll send your custom freedom analysis within 24 hours.', 'success');
+                            nameInput.value = '';
+                            emailInput.value = '';
+                            companyInput.value = '';
+                            businessTypeInput.value = '';
+                            staffCountInput.value = '';
+                          }
+                        })
+                        .catch(error => {
+                          console.error('Error:', error);
+                          showToastNotification('Thank you! We\'ll send your custom freedom analysis within 24 hours.', 'success');
+                          nameInput.value = '';
+                          emailInput.value = '';
+                          companyInput.value = '';
+                          businessTypeInput.value = '';
+                          staffCountInput.value = '';
+                        })
+                        .finally(() => {
+                          if (btnText) btnText.textContent = 'Get My Freedom Analysis';
+                        });
+                      }
+                    }}>
+                      <span className="btn-text">Get My Freedom Analysis</span>
+                      <div className="btn-glow"></div>
+                    </button>
+                    
+
+                  </div>
+                  <div className="form-benefits">
+                    <div className="benefit-item">
+                      <span className="benefit-icon">📊</span>
+                      <span>Custom Cost Analysis</span>
+                    </div>
+                    <div className="benefit-item">
+                      <span className="benefit-icon">📅</span>
+                      <span>Book Free Strategy Call</span>
+                    </div>
+                    <div className="benefit-item">
+                      <span className="benefit-icon">⚡</span>
+                      <span>24-Hour Response</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="calculator-card">
+                  <div className="card-header">
+                    <h3>Calculate Your Waste</h3>
+                    <p>See how much you're losing to admin work</p>
+                  </div>
+                  <div className="calculator-inputs">
+                    <div className="input-group">
+                      <label>Current Admin Staff</label>
+                      <input 
+                        type="number" 
+                        name="adminCount"
+                        min="1" 
+                        max="10" 
+                        defaultValue="2"
+                        className="calc-input"
+                        onChange={() => updateCalculator()}
+                      />
+                    </div>
+                    
+                    <div className="input-group">
+                      <label>Average Salary (£)</label>
+                      <input 
+                        type="number" 
+                        name="avgSalary"
+                        min="20000" 
+                        max="50000" 
+                        defaultValue="28000"
+                        className="calc-input"
+                        onChange={() => updateCalculator()}
+                      />
+                    </div>
+                  </div>
+
+                  <div className="calculator-results">
+                    <div className="result-row">
+                      <span>Your Current Cost:</span>
+                      <span className="cost-amount current">£56,000</span>
+                    </div>
+                    <div className="result-row">
+                      <span>With Our Solution:</span>
+                      <span className="cost-amount our-solution">£7,840</span>
+                    </div>
+                    <div className="savings-summary">
+                      <div className="savings-box">
+                        <div className="savings-amount">£48,160</div>
+                        <div className="savings-label">SAVED</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="trap-cta fade-in-up stagger-3">
+              <h3>Ready to Save <span id="ctaSavings">£48,160</span> Per Year?</h3>
+              <a href="https://cal.com/elitehubnetwork/book-strategy-call" className="btn-primary-premium" target="_blank" rel="noopener noreferrer">
+                <span className="btn-text">Start My Freedom Journey</span>
+                <div className="btn-glow"></div>
+              </a>
+            </div>
+          </div>
+        </section>
+
+        {/* Section Divider */}
+        <div className="section-divider">
+          <div className="divider-line"></div>
+          <div className="divider-orb"></div>
+        </div>
+
+        {/* Section 3: Brutal Truth Storytelling */}
+        <section className="brutal-truth-section" style={{ maxWidth: 900, margin: "64px auto 0", padding: "0 16px" }}>
+          <h2 className="section-title hero-headline-premium" style={{ textAlign: 'center', marginBottom: 8 }}>
+            The Brutal Truth: Your Business Owns You
+          </h2>
+          <p className="section-subtitle subheadline-main-premium" style={{ textAlign: 'center', marginBottom: 40 }}>
+            You started for freedom. Now you're trapped in admin, lost leads, and endless stress.
+          </p>
+          
+          {/* 3 Pain Point Cards in a Row */}
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 32, marginBottom: 48 }}>
+            {/* Card 1: You're Working for Your Business */}
+            <div className="brutal-truth-card glass-card" style={{ padding: '32px 24px', display: 'flex', flexDirection: 'column', alignItems: 'center', minHeight: 140 }}>
+              <span className="pain-point-number" style={{ fontWeight: 700, fontSize: 22, color: 'var(--gold-primary)', fontFamily: 'Bebas Neue, Montserrat, sans-serif', marginBottom: 8 }}>You're Working for Your Business</span>
+              <span className="pain-point-desc" style={{ fontSize: 16, color: 'var(--text-primary)', textAlign: 'center', fontFamily: 'Montserrat, sans-serif' }}>54+ hours/week, always on call<br/>No real holidays—work follows you everywhere<br/>Admin chaos, endless firefighting</span>
+            </div>
+            
+            {/* Card 2: You're Bleeding Money & Time */}
+            <div className="brutal-truth-card glass-card" style={{ padding: '32px 24px', display: 'flex', flexDirection: 'column', alignItems: 'center', minHeight: 140 }}>
+              <span className="pain-point-number" style={{ fontWeight: 700, fontSize: 22, color: 'var(--gold-primary)', fontFamily: 'Bebas Neue, Montserrat, sans-serif', marginBottom: 8 }}>You're Bleeding Money & Time</span>
+              <span className="pain-point-desc" style={{ fontSize: 16, color: 'var(--text-primary)', textAlign: 'center', fontFamily: 'Montserrat, sans-serif' }}>Every hour on admin is money you'll never see again<br/>Family time sacrificed, relationships strained<br/>Growth stalls, you can't scale</span>
+            </div>
+            
+            {/* Card 3: You're Heading for Burnout */}
+            <div className="brutal-truth-card glass-card" style={{ padding: '32px 24px', display: 'flex', flexDirection: 'column', alignItems: 'center', minHeight: 140 }}>
+              <span className="pain-point-number" style={{ fontWeight: 700, fontSize: 22, color: 'var(--gold-primary)', fontFamily: 'Bebas Neue, Montserrat, sans-serif', marginBottom: 8 }}>You're Heading for Burnout</span>
+              <span className="pain-point-desc" style={{ fontSize: 16, color: 'var(--text-primary)', textAlign: 'center', fontFamily: 'Montserrat, sans-serif' }}>60% of owners report stress-related health issues<br/>Regret, exhaustion, lost years<br/>Most never escape—don't be another statistic</span>
+            </div>
+          </div>
+          
+          {/* Card 4: EliteHub Systems Solution */}
+          <div className="brutal-truth-card glass-card" style={{ padding: '40px 32px', display: 'flex', flexDirection: 'column', alignItems: 'center', maxWidth: 800, margin: '0 auto' }}>
+            <span className="pain-point-number" style={{ fontWeight: 700, fontSize: 24, color: 'var(--gold-primary)', fontFamily: 'Bebas Neue, Montserrat, sans-serif', marginBottom: 16 }}>How EliteHub Systems Changes Everything</span>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 24, width: '100%' }}>
+              <div style={{ textAlign: 'left' }}>
+                <span style={{ fontSize: 16, color: 'var(--text-primary)', fontFamily: 'Montserrat, sans-serif', display: 'flex', alignItems: 'center', marginBottom: 12 }}>
+                  <span style={{ color: '#4ade80', marginRight: 8, fontSize: 18 }}>✓</span>
+                  Instantly automate admin, lead capture, and follow-up
+                </span>
+                <span style={{ fontSize: 16, color: 'var(--text-primary)', fontFamily: 'Montserrat, sans-serif', display: 'flex', alignItems: 'center', marginBottom: 12 }}>
+                  <span style={{ color: '#4ade80', marginRight: 8, fontSize: 18 }}>✓</span>
+                  20+ hours/week freed for strategy, family, and growth
+                </span>
+              </div>
+              <div style={{ textAlign: 'left' }}>
+                <span style={{ fontSize: 16, color: 'var(--text-primary)', fontFamily: 'Montserrat, sans-serif', display: 'flex', alignItems: 'center', marginBottom: 12 }}>
+                  <span style={{ color: '#4ade80', marginRight: 8, fontSize: 18 }}>✓</span>
+                  No more missed leads, no more chaos—just results
+                </span>
+                <span style={{ fontSize: 16, color: 'var(--text-primary)', fontFamily: 'Montserrat, sans-serif', display: 'flex', alignItems: 'center', marginBottom: 12 }}>
+                  <span style={{ color: '#4ade80', marginRight: 8, fontSize: 18 }}>✓</span>
+                  97% success rate with 150+ business owners
+                </span>
+              </div>
+            </div>
+          </div>
+          
+          <div style={{ margin: '48px 0 0 0', textAlign: 'center' }}>
+            <p style={{ fontWeight: 600, fontSize: 18, color: "var(--gold-primary)", fontFamily: 'Montserrat, sans-serif' }}>
+              How much longer will you let your business run you?
+            </p>
+          </div>
+        </section>
+
         {/* Premium Live Automation Metrics Section */}
-        <section className="premium-metrics-section animated-section" ref={metricsRef}>
+        <section className="premium-metrics-section animated-section" ref={metricsRef} id="results">
           <div className="metrics-background-effects">
             <div className="data-stream-1 parallax-medium"></div>
             <div className="data-stream-2 parallax-fast"></div>
@@ -574,55 +1059,33 @@ export default function EliteHubLanding() {
             <div className="metrics-header fade-in-up">
               <div className="metrics-badge-premium">
                 <span className="badge-dot"></span>
-                LIVE PERFORMANCE INTELLIGENCE
+                REAL FREEDOM TRANSFORMATIONS
               </div>
-              <h2 className="metrics-title-premium">Real-Time Client<br/><span className="text-gold">Liberation Analytics</span></h2>
+              <h2 className="metrics-title-premium">Business Owners Who Got<br/><span className="text-gold">Their Lives Back</span></h2>
               <p className="metrics-subtitle-premium">
-                Every data point represents a business owner who reclaimed their freedom. 
-                Your transformation timeline is calculated with Swiss precision.
+                Every data point represents a business owner who escaped the admin trap and reclaimed their freedom. 
+                Your transformation timeline is calculated with precision.
               </p>
             </div>
 
-            <div className="premium-metrics-grid">
-              <div className="premium-dashboard-container glass-card-premium fade-in-left">
-                <div className="dashboard-header">
+            <div className="premium-metrics-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 32, marginBottom: 48 }}>
+              {/* Smaller Dashboard Card */}
+              <div className="premium-dashboard-container glass-card-premium fade-in-left" style={{ padding: '24px', maxWidth: '100%' }}>
+                <div className="dashboard-header" style={{ marginBottom: '16px' }}>
                   <div className="dashboard-title-section">
-                    <h3 className="dashboard-title">Automation Performance Dashboard</h3>
+                    <h3 className="dashboard-title" style={{ fontSize: '18px', marginBottom: '8px' }}>Automation Performance Dashboard</h3>
                     <div className="live-indicator">
                       <div className="live-dot"></div>
                       <span>Live Data</span>
                     </div>
                   </div>
-                  
-                  <div className="dashboard-controls">
-                    <div className="view-selector">
-                      <button 
-                        className={`view-btn ${currentChartView === 'liberation' ? 'active' : ''}`}
-                        onClick={() => switchChartView('liberation')}
-                      >
-                        Liberation Timeline
-                      </button>
-                      <button 
-                        className={`view-btn ${currentChartView === 'efficiency' ? 'active' : ''}`}
-                        onClick={() => switchChartView('efficiency')}
-                      >
-                        Efficiency Growth
-                      </button>
-                      <button 
-                        className={`view-btn ${currentChartView === 'revenue' ? 'active' : ''}`}
-                        onClick={() => switchChartView('revenue')}
-                      >
-                        Revenue Impact
-                      </button>
-                    </div>
-                  </div>
                 </div>
 
                 <div className="advanced-chart-container">
-                  <div className="chart-legend">
+                  <div className="chart-legend" style={{ marginBottom: '12px' }}>
                     <div className="legend-item">
                       <div className="legend-color elite"></div>
-                      <span>EliteHub Clients</span>
+                      <span>Business Owners Free</span>
                     </div>
                     <div className="legend-item">
                       <div className="legend-color industry"></div>
@@ -635,7 +1098,8 @@ export default function EliteHubLanding() {
                   </div>
 
                   <div className="chart-container-professional">
-                    <svg className="premium-interactive-chart" viewBox="0 0 600 280">
+                    {/* Desktop Chart */}
+                    <svg className="premium-interactive-chart desktop-chart" viewBox="0 0 600 280" style={{ width: '100%', height: 'auto' }}>
                       <defs>
                         <linearGradient id="eliteGradient" x1="0%" y1="0%" x2="0%" y2="100%">
                           <stop offset="0%" stopColor="#D4AF37" stopOpacity="0.6" />
@@ -729,6 +1193,7 @@ export default function EliteHubLanding() {
                         </g>
                       ))}
                       
+                      {/* Timeline labels - only show the correct ones */}
                       <text x="80" y="240" fill="rgba(255,255,255,0.6)" fontSize="11" textAnchor="middle">Week 1</text>
                       <text x="130" y="240" fill="rgba(255,255,255,0.6)" fontSize="11" textAnchor="middle">Week 2</text>
                       <text x="180" y="240" fill="rgba(255,255,255,0.6)" fontSize="11" textAnchor="middle">Week 3</text>
@@ -738,17 +1203,86 @@ export default function EliteHubLanding() {
                       <text x="380" y="240" fill="rgba(255,255,255,0.6)" fontSize="11" textAnchor="middle">Month 5</text>
                       <text x="430" y="240" fill="rgba(255,255,255,0.6)" fontSize="11" textAnchor="middle">Month 6</text>
                     </svg>
+
+                    {/* Mobile Chart - Simplified and Larger */}
+                    <div className="mobile-chart-container">
+                      <div className="mobile-chart-header">
+                        <h4 style={{ fontSize: '18px', marginBottom: '8px', color: 'var(--gold-primary)' }}>Freedom Transformation Timeline</h4>
+                        <p style={{ fontSize: '14px', color: 'var(--text-secondary)', marginBottom: '16px' }}>Your journey from admin trap to complete freedom</p>
+                      </div>
+                      
+                      <div className="mobile-chart-data">
+                        <div className="mobile-data-point" style={{ marginBottom: '20px' }}>
+                          <div className="mobile-point-header">
+                            <span className="mobile-week">Week 1</span>
+                            <span className="mobile-hours">3.2h</span>
+                          </div>
+                          <div className="mobile-progress-bar">
+                            <div className="mobile-progress-fill" style={{ width: '10%', backgroundColor: 'var(--gold-primary)' }}></div>
+                          </div>
+                        </div>
+                        
+                        <div className="mobile-data-point" style={{ marginBottom: '20px' }}>
+                          <div className="mobile-point-header">
+                            <span className="mobile-week">Week 3</span>
+                            <span className="mobile-hours">14.7h</span>
+                          </div>
+                          <div className="mobile-progress-bar">
+                            <div className="mobile-progress-fill" style={{ width: '49%', backgroundColor: 'var(--gold-primary)' }}></div>
+                          </div>
+                        </div>
+                        
+                        <div className="mobile-data-point" style={{ marginBottom: '20px' }}>
+                          <div className="mobile-point-header">
+                            <span className="mobile-week">Month 1</span>
+                            <span className="mobile-hours">19.8h</span>
+                          </div>
+                          <div className="mobile-progress-bar">
+                            <div className="mobile-progress-fill" style={{ width: '66%', backgroundColor: 'var(--gold-primary)' }}></div>
+                          </div>
+                        </div>
+                        
+                        <div className="mobile-data-point" style={{ marginBottom: '20px' }}>
+                          <div className="mobile-point-header">
+                            <span className="mobile-week">Month 3</span>
+                            <span className="mobile-hours">26.1h</span>
+                          </div>
+                          <div className="mobile-progress-bar">
+                            <div className="mobile-progress-fill" style={{ width: '87%', backgroundColor: 'var(--gold-primary)' }}></div>
+                          </div>
+                        </div>
+                        
+                        <div className="mobile-data-point" style={{ marginBottom: '20px' }}>
+                          <div className="mobile-point-header">
+                            <span className="mobile-week">Month 6</span>
+                            <span className="mobile-hours">28.9h</span>
+                          </div>
+                          <div className="mobile-progress-bar">
+                            <div className="mobile-progress-fill" style={{ width: '96%', backgroundColor: 'var(--gold-primary)' }}></div>
+                          </div>
+                        </div>
+                      </div>
+                      
+                      <div className="mobile-chart-footer">
+                        <div className="mobile-industry-line">
+                          <div className="mobile-industry-label">Industry Ceiling: 8.1h</div>
+                          <div className="mobile-industry-bar">
+                            <div className="mobile-industry-fill" style={{ width: '27%', backgroundColor: '#ff6b6b' }}></div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 </div>
 
-                <div className="realtime-stats">
+                <div className="realtime-stats" style={{ marginTop: '16px' }}>
                   <div className="stat-item">
                     <div className="stat-icon performance">
                       <div className="icon-core liberation"></div>
                     </div>
                     <div className="stat-text">
                       <div className="stat-value counter" data-target="247" data-counter-id="active-systems">247</div>
-                      <div className="stat-label">Active Systems</div>
+                      <div className="stat-label">Lives Transformed</div>
                     </div>
                   </div>
                   <div className="stat-item">
@@ -757,7 +1291,7 @@ export default function EliteHubLanding() {
                     </div>
                     <div className="stat-text">
                       <div className="stat-value counter" data-target="97.3" data-counter-id="efficiency-rate">97.3</div>
-                      <div className="stat-label">Efficiency Rate</div>
+                      <div className="stat-label">% Get Freedom Back</div>
                     </div>
                   </div>
                   <div className="stat-item">
@@ -766,127 +1300,201 @@ export default function EliteHubLanding() {
                     </div>
                     <div className="stat-text">
                       <div className="stat-value counter" data-target="2.8" data-counter-id="productivity-gain">2.8</div>
-                      <div className="stat-label">Productivity Gain</div>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="enhanced-chart-controls">
-                  <div className="controls-header">
-                    <h4>Analysis Controls</h4>
-                    <div className="data-refresh">
-                      <div className="refresh-dot"></div>
-                      <span>Updated 2 min ago</span>
-                    </div>
-                  </div>
-                  
-                  <div className="control-toggles">
-                    <div className="toggle-group">
-                      <label className="toggle-label">Show Projections</label>
-                      <div 
-                        className={`toggle-switch ${toggleStates.projections ? 'active' : ''}`}
-                        onClick={() => toggleControl('projections')}
-                      >
-                        <div className="toggle-slider"></div>
-                      </div>
-                    </div>
-                    
-                    <div className="toggle-group">
-                      <label className="toggle-label">Industry Comparison</label>
-                      <div 
-                        className={`toggle-switch ${toggleStates.comparison ? 'active' : ''}`}
-                        onClick={() => toggleControl('comparison')}
-                      >
-                        <div className="toggle-slider"></div>
-                      </div>
-                    </div>
-                    
-                    <div className="toggle-group">
-                      <label className="toggle-label">Data Annotations</label>
-                      <div 
-                        className={`toggle-switch ${toggleStates.annotations ? 'active' : ''}`}
-                        onClick={() => toggleControl('annotations')}
-                      >
-                        <div className="toggle-slider"></div>
-                      </div>
+                      <div className="stat-label">More Family Time</div>
                     </div>
                   </div>
                 </div>
               </div>
 
+              {/* Expanded Description Panel */}
               <div className="premium-content-panel fade-in-right">
                 <div className="content-section">
-                  <div className="section-badge premium">TRANSFORMATION INTELLIGENCE</div>
-                  <h3 className="content-title">Beyond Time Savings:<br/>Complete Business Evolution</h3>
+                  <div className="section-badge premium">FREEDOM TRANSFORMATION</div>
+                  <h3 className="content-title">Beyond Time Savings:<br/>Complete Life Liberation</h3>
                   <p className="content-description">
-                    Each data point represents a business leader who transformed from operational chaos to strategic freedom. 
-                    Our Swiss-precision methodology ensures predictable, measurable liberation.
+                    Each data point represents a business owner who escaped the admin trap and reclaimed their freedom. 
+                    Our methodology ensures predictable, measurable life transformation.
                   </p>
-                </div>
-
-                <div className="executive-insight-showcase">
-                  <div className="insight-header">
-                    <div className="insight-badge">EXECUTIVE INSIGHT</div>
-                  </div>
-                  <div className="insight-carousel">
-                    <div className="insight-slide active" style={{ minHeight: '280px' }}>
-                      <div className="insight-content">
-                        <div className="company-badge">{executiveInsights[executiveInsightIndex].company}</div>
-                        <blockquote style={{ 
-                          fontSize: '15px', 
-                          lineHeight: '1.5', 
-                          marginBottom: '20px',
-                          display: 'block',
-                          wordWrap: 'break-word'
-                        }}>
-                          "{executiveInsights[executiveInsightIndex].quote}"
-                        </blockquote>
-                        <div className="insight-author">
-                          <div className="author-info">
-                            <div className="author-name">{executiveInsights[executiveInsightIndex].executive}</div>
-                            <div className="author-title">{executiveInsights[executiveInsightIndex].title}</div>
-                            <div className="author-impact">{executiveInsights[executiveInsightIndex].impact}</div>
-                          </div>
-                        </div>
-                      </div>
+                  
+                  {/* Key Data Points */}
+                  <div style={{ marginTop: '24px', display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '16px' }}>
+                    <div style={{ 
+                      padding: '16px', 
+                      backgroundColor: 'rgba(212,175,55,0.1)', 
+                      borderRadius: '8px',
+                      border: '1px solid rgba(212,175,55,0.2)'
+                    }}>
+                      <div style={{ fontSize: '24px', fontWeight: '700', color: 'var(--gold-primary)', marginBottom: '4px' }}>28.9h</div>
+                      <div style={{ fontSize: '12px', color: 'rgba(255,255,255,0.7)' }}>Average freedom achieved by Month 6</div>
+                    </div>
+                    <div style={{ 
+                      padding: '16px', 
+                      backgroundColor: 'rgba(76,175,80,0.1)', 
+                      borderRadius: '8px',
+                      border: '1px solid rgba(76,175,80,0.2)'
+                    }}>
+                      <div style={{ fontSize: '24px', fontWeight: '700', color: '#4ade80', marginBottom: '4px' }}>97%</div>
+                      <div style={{ fontSize: '12px', color: 'rgba(255,255,255,0.7)' }}>Success rate across all clients</div>
                     </div>
                   </div>
+                  
+                  <p className="content-description" style={{ marginTop: '20px', fontSize: '14px', lineHeight: '1.5' }}>
+                    The chart shows real transformation data from business owners who implemented our automation systems. 
+                    Notice the rapid improvement - most achieve significant freedom within the first month.
+                  </p>
+                  
+                  {/* Additional Content to Fill Space */}
+                  <div style={{ marginTop: '24px', padding: '20px', backgroundColor: 'rgba(0,0,0,0.3)', borderRadius: '12px', border: '1px solid rgba(212,175,55,0.2)' }}>
+                    <h4 style={{ fontSize: '16px', fontWeight: '600', color: 'var(--gold-primary)', marginBottom: '12px' }}>What This Means For You</h4>
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '16px' }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                        <div style={{ width: '8px', height: '8px', backgroundColor: '#4ade80', borderRadius: '50%' }}></div>
+                        <span style={{ fontSize: '13px', color: 'rgba(255,255,255,0.8)' }}>Predictable results</span>
+                      </div>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                        <div style={{ width: '8px', height: '8px', backgroundColor: '#4ade80', borderRadius: '50%' }}></div>
+                        <span style={{ fontSize: '13px', color: 'rgba(255,255,255,0.8)' }}>Proven methodology</span>
+                      </div>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                        <div style={{ width: '8px', height: '8px', backgroundColor: '#4ade80', borderRadius: '50%' }}></div>
+                        <span style={{ fontSize: '13px', color: 'rgba(255,255,255,0.8)' }}>Rapid transformation</span>
+                      </div>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                        <div style={{ width: '8px', height: '8px', backgroundColor: '#4ade80', borderRadius: '50%' }}></div>
+                        <span style={{ fontSize: '13px', color: 'rgba(255,255,255,0.8)' }}>Life-changing impact</span>
+                      </div>
+                    </div>
+                  </div>
                 </div>
+              </div>
+            </div>
 
-                <div className="live-performance-section">
-                  <h4 className="performance-title">Live Performance Indicators</h4>
-                  <div className="performance-grid">
-                    <div className="performance-metric">
-                      <div className="performance-icon liberation">
-                        <div className="icon-core liberation"></div>
-                      </div>
-                      <div className="performance-data">
-                        <div className="performance-value counter" data-target="1247" data-counter-id="hours-liberated">1247</div>
-                        <div className="performance-label">Hours Liberated This Month</div>
-                        <div className="performance-trend up">+23% vs last month</div>
-                      </div>
-                    </div>
-                    
-                    <div className="performance-metric">
-                      <div className="performance-icon uptime">
-                        <div className="icon-core uptime"></div>
-                      </div>
-                      <div className="performance-data">
-                        <div className="performance-value">99.7%</div>
-                        <div className="performance-label">System Uptime</div>
-                        <div className="performance-trend stable">Enterprise Grade</div>
-                      </div>
-                    </div>
+            {/* Testimonial Carousel Section */}
+            <div style={{ marginTop: '48px' }}>
+              <div className="testimonial-carousel-container" style={{ position: 'relative', maxWidth: '800px', margin: '0 auto' }}>
+                {/* External Navigation Buttons */}
+                <button 
+                  className="testimonial-nav-btn prev" 
+                  onClick={() => setActiveTestimonial(prev => prev === 0 ? executiveInsights.length - 1 : prev - 1)}
+                  style={{
+                    position: 'absolute',
+                    left: '-60px',
+                    top: '50%',
+                    transform: 'translateY(-50%)',
+                    background: 'rgba(0,0,0,0.8)',
+                    border: '1px solid rgba(212,175,55,0.4)',
+                    borderRadius: '50%',
+                    width: '48px',
+                    height: '48px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    cursor: 'pointer',
+                    transition: 'all 0.3s ease',
+                    zIndex: 10
+                  }}
+                >
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                    <path d="M15 18L9 12L15 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                  </svg>
+                </button>
+                
+                <button 
+                  className="testimonial-nav-btn next" 
+                  onClick={() => setActiveTestimonial(prev => prev === executiveInsights.length - 1 ? 0 : prev + 1)}
+                  style={{
+                    position: 'absolute',
+                    right: '-60px',
+                    top: '50%',
+                    transform: 'translateY(-50%)',
+                    background: 'rgba(0,0,0,0.8)',
+                    border: '1px solid rgba(212,175,55,0.4)',
+                    borderRadius: '50%',
+                    width: '48px',
+                    height: '48px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    cursor: 'pointer',
+                    transition: 'all 0.3s ease',
+                    zIndex: 10
+                  }}
+                >
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                    <path d="M9 18L15 12L9 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                  </svg>
+                </button>
 
-                    <div className="performance-metric">
-                      <div className="performance-icon value">
-                        <div className="icon-core value"></div>
-                      </div>
-                      <div className="performance-data">
-                        <div className="performance-value">£847k</div>
-                        <div className="performance-label">Client Value Generated</div>
-                        <div className="performance-trend up">+156% growth rate</div>
-                      </div>
+                {/* Single Centered Card */}
+                <div className="testimonial-card glass-card" style={{ 
+                  padding: '40px', 
+                  position: 'relative',
+                  minHeight: '300px',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  justifyContent: 'space-between'
+                }}>
+                  <div className="testimonial-header" style={{ marginBottom: '20px' }}>
+                    <div className="company-badge" style={{ 
+                      display: 'inline-block', 
+                      padding: '6px 16px', 
+                      backgroundColor: 'rgba(212,175,55,0.2)', 
+                      color: 'var(--gold-primary)',
+                      borderRadius: '12px',
+                      fontSize: '13px',
+                      fontWeight: '600'
+                    }}>
+                      {executiveInsights[activeTestimonial].company}
+                    </div>
+                  </div>
+                  
+                  <blockquote style={{ 
+                    fontSize: '18px', 
+                    lineHeight: '1.6', 
+                    marginBottom: '24px',
+                    color: 'var(--text-primary)',
+                    fontStyle: 'italic',
+                    flex: 1
+                  }}>
+                    "{executiveInsights[activeTestimonial].quote}"
+                  </blockquote>
+                  
+                  <div className="testimonial-author" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <div className="author-info">
+                      <h4 className="author-name" style={{ 
+                        fontSize: '20px', 
+                        fontWeight: '600', 
+                        color: 'var(--gold-primary)',
+                        marginBottom: '4px'
+                      }}>
+                        {executiveInsights[activeTestimonial].executive}
+                      </h4>
+                      <p className="author-title" style={{ 
+                        fontSize: '15px', 
+                        color: 'rgba(255,255,255,0.7)',
+                        margin: '0 0 4px 0'
+                      }}>
+                        {executiveInsights[activeTestimonial].title}
+                      </p>
+                      <p className="author-location" style={{ 
+                        fontSize: '13px', 
+                        color: 'rgba(255,255,255,0.5)',
+                        margin: '0'
+                      }}>
+                        {executiveInsights[activeTestimonial].location}
+                      </p>
+                    </div>
+                    <div className="author-impact">
+                      <span className="impact-badge" style={{ 
+                        padding: '8px 16px', 
+                        backgroundColor: 'rgba(76, 175, 80, 0.2)', 
+                        color: '#4ade80',
+                        borderRadius: '8px',
+                        fontSize: '13px',
+                        fontWeight: '600'
+                      }}>
+                        {executiveInsights[activeTestimonial].impact}
+                      </span>
                     </div>
                   </div>
                 </div>
@@ -902,13 +1510,13 @@ export default function EliteHubLanding() {
         </div>
 
         {/* ===== NEW EXECUTIVE AUTOMATION SECTION ===== */}
-        <section className="executive-automation-section animated-section">
+        <section className="executive-automation-section animated-section" id="services">
           <div className="section-container">
             <div className="automation-header fade-in-up">
-              <div className="section-badge gold">EXECUTIVE AUTOMATION</div>
-              <h2 className="section-title">From Operational <span className="text-gold">Firefighting</span> to Strategic <span className="text-gold">Excellence</span></h2>
+              <div className="section-badge gold">FREEDOM AUTOMATION</div>
+              <h2 className="section-title">From <span className="text-gold">Freedom Trap</span> to <span className="text-gold">Freedom Reality</span></h2>
               <p className="section-subtitle">
-                Swiss precision engineering transforms your business operations while you focus on what truly matters: growth, strategy, and profit.
+                You started your business for freedom. Instead, you're trapped doing admin work. We give you back the life you wanted.
               </p>
             </div>
 
@@ -918,24 +1526,24 @@ export default function EliteHubLanding() {
                 <div className="reality-header">
                   <div className="reality-badge current-badge">
                     <div className="status-dot current-dot"></div>
-                    YOUR CURRENT REALITY
+                    YOUR FREEDOM TRAP
                   </div>
-                  <h3 className="reality-title current-title">Drowning in Operations</h3>
+                  <h3 className="reality-title current-title">Trapped in Your Own Business</h3>
                 </div>
 
                 <div className="reality-stats">
                   <div className="stat-block current-stat">
                     <div className="stat-number current-number">
-                      <span className="counter" data-target="70" data-counter-id="current-hours">70</span>
+                      <span className="counter" data-target="60" data-counter-id="current-hours">60</span>
                       <span className="stat-unit">hours/week</span>
                     </div>
-                    <div className="stat-label">Operational firefighting</div>
-                    <div className="stat-description">Endless admin consuming your life</div>
+                    <div className="stat-label">Working for your business</div>
+                    <div className="stat-description">Instead of your business working for you</div>
                   </div>
 
                   <div className="stat-block current-stat">
                     <div className="stat-number current-number">
-                      <span>£</span><span className="counter" data-target="45" data-counter-id="current-cost">45</span><span>k yearly</span>
+                      <span>£</span><span className="counter" data-target="23" data-counter-id="current-cost">23</span><span>k yearly</span>
                     </div>
                     <div className="stat-label">Admin staff costs</div>
                     <div className="stat-description">Plus holidays, sick days, management overhead</div>
@@ -943,7 +1551,7 @@ export default function EliteHubLanding() {
 
                   <div className="stat-block current-stat">
                     <div className="stat-number current-number">
-                      <span className="counter" data-target="23" data-counter-id="current-growth">23</span><span>%</span>
+                      <span className="counter" data-target="25" data-counter-id="current-growth">25</span><span>%</span>
                     </div>
                     <div className="stat-label">of time on actual business growth</div>
                     <div className="stat-description">Strategic thinking becomes impossible</div>
@@ -951,7 +1559,7 @@ export default function EliteHubLanding() {
 
                   <div className="stat-block current-stat">
                     <div className="stat-number current-number">
-                      <span className="stat-icon">📞</span> <span>Missed calls</span>
+                      <span>Missed calls</span>
                     </div>
                     <div className="stat-label">Lost leads during holidays</div>
                     <div className="stat-description">Revenue hemorrhaging when you're away</div>
@@ -964,32 +1572,32 @@ export default function EliteHubLanding() {
                 <div className="reality-header">
                   <div className="reality-badge solution-badge">
                     <div className="status-dot solution-dot"></div>
-                    WITH ELITEHUB AUTOMATION
+                    WITH FREEDOM AUTOMATION
                   </div>
-                  <h3 className="reality-title solution-title">Focus on Scaling</h3>
+                  <h3 className="reality-title solution-title">Your Business Serves You</h3>
                 </div>
 
                 <div className="reality-stats">
                   <div className="stat-block solution-stat">
                     <div className="stat-number solution-number">
-                      <span className="counter" data-target="45" data-counter-id="solution-hours">45</span>
+                      <span className="counter" data-target="25" data-counter-id="solution-hours">25</span>
                       <span className="stat-unit">hours/week</span>
                     </div>
-                    <div className="stat-label">Strategic work focus</div>
-                    <div className="stat-description">Pure executive-level thinking</div>
+                    <div className="stat-label">Focus on what you love</div>
+                    <div className="stat-description">Pure business growth and strategy</div>
                   </div>
 
                   <div className="stat-block solution-stat">
                     <div className="stat-number solution-number">
-                      <span className="counter" data-target="90" data-counter-id="solution-reduction">90</span><span>% less</span>
+                      <span className="counter" data-target="85" data-counter-id="solution-reduction">85</span><span>% less</span>
                     </div>
                     <div className="stat-label">admin costs</div>
-                    <div className="stat-description">Workflows replace expensive staff</div>
+                    <div className="stat-description">Automation replaces expensive staff</div>
                   </div>
 
                   <div className="stat-block solution-stat">
                     <div className="stat-number solution-number">
-                      <span className="counter" data-target="87" data-counter-id="solution-growth">87</span><span>%</span>
+                      <span className="counter" data-target="80" data-counter-id="solution-growth">80</span><span>%</span>
                     </div>
                     <div className="stat-label">of time on business development</div>
                     <div className="stat-description">Strategy, growth, and profit focus</div>
@@ -999,8 +1607,8 @@ export default function EliteHubLanding() {
                     <div className="stat-number solution-number">
                       <span>Zero missed leads</span>
                     </div>
-                    <div className="stat-label">AI receptionist coverage</div>
-                    <div className="stat-description">24/7 lead capture and qualification</div>
+                    <div className="stat-label">24/7 lead capture</div>
+                    <div className="stat-description">Never lose another opportunity</div>
                   </div>
                 </div>
               </div>
@@ -1011,10 +1619,10 @@ export default function EliteHubLanding() {
               <div className="example-card glass-card">
                 <div className="example-header">
                   <div className="example-icon"></div>
-                  <h4 className="example-title">AI Receptionist</h4>
+                  <h4 className="example-title">24/7 Lead Capture</h4>
                 </div>
                 <div className="example-description">
-                  Captures calls during holidays, weekends, and after hours. Never miss another lead.
+                  Never miss another lead. Captures calls during holidays, weekends, and after hours.
                 </div>
                 <div className="example-result">
                   <span className="result-metric">+340% lead capture</span>
@@ -1024,10 +1632,10 @@ export default function EliteHubLanding() {
               <div className="example-card glass-card">
                 <div className="example-header">
                   <div className="example-icon"></div>
-                  <h4 className="example-title">Workflow Automation</h4>
+                  <h4 className="example-title">Complete Admin Automation</h4>
                 </div>
                 <div className="example-description">
-                  Replaces admin staff with intelligent workflows that never take sick days.
+                  Everything an admin does - automated. Email management, data entry, booking systems.
                 </div>
                 <div className="example-result">
                   <span className="result-metric">-85% admin costs</span>
@@ -1037,10 +1645,10 @@ export default function EliteHubLanding() {
               <div className="example-card glass-card">
                 <div className="example-header">
                   <div className="example-icon"></div>
-                  <h4 className="example-title">Lead Management</h4>
+                  <h4 className="example-title">Smart Database Management</h4>
                 </div>
                 <div className="example-description">
-                  24/7 follow-up sequences that nurture prospects while you sleep.
+                  Organize every lead, contact, and opportunity. Automated follow-ups and nurturing.
                 </div>
                 <div className="example-result">
                   <span className="result-metric">+156% conversions</span>
@@ -1051,225 +1659,12 @@ export default function EliteHubLanding() {
             {/* CTA Section */}
             <div className="automation-cta fade-in-up stagger-4">
               <div className="cta-content">
-                <h3 className="cta-title">Ready to Reclaim Your Executive Focus?</h3>
-                <p className="cta-subtitle">See exactly how we engineer your operational liberation</p>
+                <h3 className="cta-title">Ready to Get Your Freedom Back?</h3>
+                <p className="cta-subtitle">See exactly how we can transform your business and give you back your life</p>
                 <a href="https://cal.com/elitehubnetwork/book-strategy-call" className="cta-button automation-cta-btn" target="_blank" rel="noopener noreferrer">
-                  <span className="btn-text">Engineer My Freedom</span>
+                  <span className="btn-text">Get Your Freedom Back</span>
                   <div className="btn-glow"></div>
                 </a>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* Section Divider */}
-        <div className="section-divider">
-          <div className="divider-line"></div>
-          <div className="divider-orb"></div>
-        </div>
-
-        {/* Premium Lives Reclaimed Section */}
-        <section ref={caseStudiesRef} className="premium-lives-reclaimed-section animated-section" id="proof">
-          <div className="testimonial-background-grid parallax-slow"></div>
-          
-          <div className="section-container">
-            <div className="section-badge gold fade-in-up">EXECUTIVE TESTIMONIALS</div>
-            <h2 className="section-title fade-in-up stagger-1">Lives <span className="text-gold">Reclaimed</span></h2>
-            <p className="section-subtitle fade-in-up stagger-2">
-              These aren't just business metrics. These are executives who reclaimed their time, 
-              their sanity, and their strategic advantage through Swiss precision automation.
-            </p>
-            
-            <div className="premium-testimonial-showcase">
-              <div className="testimonial-navigation-controls">
-                <button 
-                  className="testimonial-arrow testimonial-arrow-left"
-                  onClick={handlePreviousTestimonial}
-                  aria-label="Previous testimonial"
-                >
-                  <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/>
-                  </svg>
-                </button>
-
-                <div className="testimonial-content-wrapper">
-                  <div className="testimonial-carousel-premium">
-                    {[
-                      {
-                        company: "LSJTAX",
-                        initials: "LSJ",
-                        executive: "Michael Richardson",
-                        title: "Managing Partner",
-                        location: "Edinburgh",
-                        timeLiberated: "12.8h",
-                        revenueIncrease: "£98k",
-                        efficiency: "+94%",
-                        quote: "EliteHub transformed our practice from chaos to clockwork precision. We handle 180% more clients with the same team. I've reclaimed my evenings and weekends while our revenue soared.",
-                        metrics: [
-                          { label: "Client Capacity", value: "+180%", type: "success" },
-                          { label: "Processing Time", value: "-76%", type: "success" },
-                          { label: "Error Rate", value: "-94%", type: "success" }
-                        ]
-                      },
-                      {
-                        company: "Mason & Co",
-                        initials: "M&C",
-                        executive: "Charlotte Mason",
-                        title: "Founder & CEO",
-                        location: "London",
-                        timeLiberated: "14.4h",
-                        revenueIncrease: "£147k",
-                        efficiency: "+87%",
-                        quote: "From 65-hour weeks drowning in administration to 45-hour weeks focused purely on strategy. Our competitor response time went from days to minutes. Genuinely transformational.",
-                        metrics: [
-                          { label: "Strategic Time", value: "+320%", type: "success" },
-                          { label: "Response Time", value: "-89%", type: "success" },
-                          { label: "Market Share", value: "+28%", type: "success" }
-                        ]
-                      },
-                      {
-                        company: "BROWN GROUP",
-                        initials: "BG",
-                        executive: "James Brown",
-                        title: "Group Director",
-                        location: "Manchester",
-                        timeLiberated: "16.9h",
-                        revenueIncrease: "£234k",
-                        efficiency: "+96%",
-                        quote: "The precision is extraordinary. Every process runs like Swiss clockwork. I focus on growing our empire while the business operates autonomously. Genuinely life-changing.",
-                        metrics: [
-                          { label: "Operational Efficiency", value: "+267%", type: "success" },
-                          { label: "Manual Tasks", value: "-91%", type: "success" },
-                          { label: "Profit Margin", value: "+42%", type: "success" }
-                        ]
-                      },
-                      {
-                        company: "Setter School",
-                        initials: "SS",
-                        executive: "Sarah Williams",
-                        title: "Principal",
-                        location: "Birmingham",
-                        timeLiberated: "11.1h",
-                        revenueIncrease: "£87k",
-                        efficiency: "+89%",
-                        quote: "From educational chaos to teaching excellence. Our administrative burden vanished, allowing pure focus on student outcomes. Parents notice the difference immediately.",
-                        metrics: [
-                          { label: "Admin Reduction", value: "-84%", type: "success" },
-                          { label: "Teaching Focus", value: "+78%", type: "success" },
-                          { label: "Parent Satisfaction", value: "+134%", type: "success" }
-                        ]
-                      },
-                      {
-                        company: "PRECISION TECH",
-                        initials: "PT",
-                        executive: "David Chen",
-                        title: "Technical Director",
-                        location: "Leeds",
-                        timeLiberated: "13.7h",
-                        revenueIncrease: "£189k",
-                        efficiency: "+92%",
-                        quote: "As a tech company, we should have automated first. EliteHub's precision surpassed our own capabilities. Our development velocity increased 240% overnight.",
-                        metrics: [
-                          { label: "Development Speed", value: "+240%", type: "success" },
-                          { label: "Bug Rate", value: "-81%", type: "success" },
-                          { label: "Client Delivery", value: "+156%", type: "success" }
-                        ]
-                      },
-                      {
-                        company: "Elite Legal",
-                        initials: "EL",
-                        executive: "Rebecca Thompson",
-                        title: "Senior Partner",
-                        location: "Bristol",
-                        timeLiberated: "15.3h",
-                        revenueIncrease: "£167k",
-                        efficiency: "+91%",
-                        quote: "Legal precision meets Swiss engineering. Our case preparation time dropped 73% while quality soared. We handle complex litigation with unprecedented efficiency.",
-                        metrics: [
-                          { label: "Case Prep Time", value: "-73%", type: "success" },
-                          { label: "Billing Accuracy", value: "+99.2%", type: "success" },
-                          { label: "Client Satisfaction", value: "+67%", type: "success" }
-                        ]
-                      }
-                    ].map((testimonial, index) => (
-                      <div 
-                        key={index} 
-                        className={`premium-testimonial-card glass-card ${index === activeTestimonial ? 'active' : ''}`}
-                      >
-                        <div className="testimonial-header-premium">
-                          <div className="company-avatar-premium">
-                            <div className="avatar-initials-premium">{testimonial.initials}</div>
-                            <div className="company-name-premium">{testimonial.company}</div>
-                          </div>
-                          <div className="executive-info-premium">
-                            <h4>{testimonial.executive}</h4>
-                            <p>{testimonial.title}</p>
-                            <span className="location-premium">{testimonial.location}</span>
-                          </div>
-                          <div className="liberation-badge-premium">
-                            <span className="badge-label-premium">LIBERATED</span>
-                            <span className="badge-time-premium">{testimonial.timeLiberated}</span>
-                          </div>
-                        </div>
-
-                        <div className="testimonial-content-premium">
-                          <blockquote>"{testimonial.quote}"</blockquote>
-                          
-                          <div className="impact-metrics-premium">
-                            <div className="primary-metrics-premium">
-                              <div className="metric-item-premium">
-                                <div className="metric-value-premium">{testimonial.timeLiberated}</div>
-                                <div className="metric-label-premium">Weekly Liberation</div>
-                              </div>
-                              <div className="metric-item-premium">
-                                <div className="metric-value-premium">{testimonial.revenueIncrease}</div>
-                                <div className="metric-label-premium">Revenue Increase</div>
-                              </div>
-                              <div className="metric-item-premium">
-                                <div className="metric-value-premium">{testimonial.efficiency}</div>
-                                <div className="metric-label-premium">Efficiency Gain</div>
-                              </div>
-                            </div>
-                            
-                            <div className="detailed-metrics-premium">
-                              {testimonial.metrics.map((metric, idx) => (
-                                <div key={idx} className="detailed-metric-premium">
-                                  <span className="metric-desc-premium">{metric.label}:</span>
-                                  <span className={`metric-result-premium ${metric.type}`}>{metric.value}</span>
-                                </div>
-                              ))}
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-
-                <button 
-                  className="testimonial-arrow testimonial-arrow-right"
-                  onClick={handleNextTestimonial}
-                  aria-label="Next testimonial"
-                >
-                  <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M8.59 16.59L10 18l6-6-6-6-1.41 1.41L13.17 12z"/>
-                  </svg>
-                </button>
-              </div>
-
-              <div className="carousel-controls-premium">
-                <div className="carousel-indicators-premium">
-                  {Array.from({ length: 6 }, (_, index) => (
-                    <div 
-                      key={index}
-                      className={`indicator-premium ${index === activeTestimonial ? 'active' : ''}`}
-                      onClick={() => setActiveTestimonial(index)}
-                    ></div>
-                  ))}
-                </div>
-                <div className="carousel-progress-premium">
-                  <div className="progress-bar-premium" style={{ width: `${((activeTestimonial + 1) / 6) * 100}%` }}></div>
-                </div>
               </div>
             </div>
           </div>
@@ -1286,11 +1681,11 @@ export default function EliteHubLanding() {
           <div className="engineering-background-grid parallax-medium"></div>
           
           <div className="section-container">
-            <div className="section-badge blue fade-in-up">SWISS ENGINEERING PROCESS</div>
-            <h2 className="section-title fade-in-up stagger-1">The <span className="text-gold">Method</span></h2>
+            <div className="section-badge blue fade-in-up">FREEDOM TRANSFORMATION PROCESS</div>
+            <h2 className="section-title fade-in-up stagger-1">Your <span className="text-gold">Freedom Blueprint</span></h2>
             <p className="section-subtitle fade-in-up stagger-2">
-              Precision engineering methodology developed over 4 years of executive liberation. 
-              Each phase orchestrated with Swiss watchmaker attention to detail.
+              Our proven 7-10 day process that transforms trapped business owners into free entrepreneurs. 
+              Each step designed to give you back your life.
             </p>
             
             <div className="swiss-engineering-grid fade-in-up stagger-3">
@@ -1302,34 +1697,34 @@ export default function EliteHubLanding() {
                     </div>
                     <div className="phase-number">01</div>
                   </div>
-                  <div className="phase-duration">2-3 Days</div>
+                  <div className="phase-duration">1-2 Days</div>
                 </div>
                 
                 <div className="phase-card-content">
-                  <h3>Blueprint Engineering</h3>
+                  <h3>Business Freedom Audit</h3>
                   <p className="phase-description">
-                    Surgical analysis of every manual process with military precision. 
-                    We map your complete operational ecosystem to identify liberation opportunities.
+                    We analyze every manual process that's stealing your time and freedom. 
+                    We map your complete business to identify liberation opportunities.
                   </p>
                   
                   <div className="phase-features">
                     <div className="feature-item">
                       <div className="feature-icon">✓</div>
-                      <span>47-point operational assessment</span>
+                      <span>Complete business analysis</span>
                     </div>
                     <div className="feature-item">
                       <div className="feature-icon">✓</div>
-                      <span>Time hemorrhage identification</span>
+                      <span>Time theft identification</span>
                     </div>
                     <div className="feature-item">
                       <div className="feature-icon">✓</div>
-                      <span>Liberation potential calculation</span>
+                      <span>Freedom potential calculation</span>
                     </div>
                   </div>
                   
                   <div className="phase-outcome">
-                    <div className="outcome-metric">12.4h</div>
-                    <div className="outcome-label">Average Recovery Potential</div>
+                    <div className="outcome-metric">24h</div>
+                    <div className="outcome-label">Average Freedom Potential</div>
                   </div>
                 </div>
                 
@@ -1340,7 +1735,7 @@ export default function EliteHubLanding() {
                       <div className="dot"></div>
                       <div className="dot"></div>
                     </div>
-                    <span>Swiss Precision</span>
+                    <span>Freedom Focused</span>
                   </div>
                 </div>
               </div>
@@ -1353,34 +1748,34 @@ export default function EliteHubLanding() {
                     </div>
                     <div className="phase-number">02</div>
                   </div>
-                  <div className="phase-duration">5-7 Days</div>
+                  <div className="phase-duration">3-5 Days</div>
                 </div>
                 
                 <div className="phase-card-content">
-                  <h3>Architecture Design</h3>
+                  <h3>Build Your Freedom Systems</h3>
                   <p className="phase-description">
-                  Custom automation systems engineered with watchmaker precision. 
-                    Every component designed for seamless integration and flawless operation.
+                    We build complete automation systems that handle everything an admin does. 
+                    Every component designed for seamless operation and maximum freedom.
                   </p>
                   
                   <div className="phase-features">
                     <div className="feature-item">
                       <div className="feature-icon">✓</div>
-                      <span>Bespoke automation architecture</span>
+                      <span>Complete admin automation</span>
                     </div>
                     <div className="feature-item">
                       <div className="feature-icon">✓</div>
-                      <span>Integration stress testing</span>
+                      <span>Lead capture systems</span>
                     </div>
                     <div className="feature-item">
                       <div className="feature-icon">✓</div>
-                      <span>Performance optimization</span>
+                      <span>Database management</span>
                     </div>
                   </div>
                   
                   <div className="phase-outcome">
                     <div className="outcome-metric">94.3%</div>
-                    <div className="outcome-label">Process Coverage</div>
+                    <div className="outcome-label">Admin Tasks Automated</div>
                   </div>
                 </div>
                 
@@ -1391,7 +1786,7 @@ export default function EliteHubLanding() {
                       <div className="dot active"></div>
                       <div className="dot"></div>
                     </div>
-                    <span>Swiss Precision</span>
+                    <span>Freedom Focused</span>
                   </div>
                 </div>
               </div>
@@ -1404,34 +1799,34 @@ export default function EliteHubLanding() {
                     </div>
                     <div className="phase-number">03</div>
                   </div>
-                  <div className="phase-duration">3-5 Days</div>
+                  <div className="phase-duration">1-2 Days</div>
                 </div>
                 
                 <div className="phase-card-content">
-                  <h3>Precision Deployment</h3>
+                  <h3>Handover & Training</h3>
                   <p className="phase-description">
-                    Zero-disruption implementation with real-time monitoring. 
-                    Your business continues operating while we engineer your freedom.
+                    We give you everything and show you exactly how it works. 
+                    Your business continues operating while you learn your new freedom.
                   </p>
                   
                   <div className="phase-features">
                     <div className="feature-item">
                       <div className="feature-icon">✓</div>
-                      <span>Seamless system integration</span>
+                      <span>Complete system handover</span>
                     </div>
                     <div className="feature-item">
                       <div className="feature-icon">✓</div>
-                      <span>Real-time monitoring</span>
+                      <span>Comprehensive training</span>
                     </div>
                     <div className="feature-item">
                       <div className="feature-icon">✓</div>
-                      <span>Executive training sessions</span>
+                      <span>Freedom coaching</span>
                     </div>
                   </div>
                   
                   <div className="phase-outcome">
-                    <div className="outcome-metric">0</div>
-                    <div className="outcome-label">Operational Disruption</div>
+                    <div className="outcome-metric">100%</div>
+                    <div className="outcome-label">Freedom Ready</div>
                   </div>
                 </div>
                 
@@ -1442,7 +1837,7 @@ export default function EliteHubLanding() {
                       <div className="dot active"></div>
                       <div className="dot active"></div>
                     </div>
-                    <span>Swiss Precision</span>
+                    <span>Freedom Focused</span>
                   </div>
                 </div>
               </div>
@@ -1455,34 +1850,33 @@ export default function EliteHubLanding() {
                     </div>
                     <div className="phase-number">04</div>
                   </div>
-                  <div className="phase-duration">90 Days</div>
+                  <div className="phase-duration">Ongoing</div>
                 </div>
                 
                 <div className="phase-card-content">
-                  <h3>Continuous Evolution</h3>
+                  <h3>Ongoing Freedom Support</h3>
                   <p className="phase-description">
-                    Your systems learn, adapt, and optimize autonomously. 
-                    White-glove support ensures peak performance while you dominate.
+                    We're here to ensure your freedom lasts. Your systems learn, adapt, and optimize while you enjoy your new life.
                   </p>
                   
                   <div className="phase-features">
                     <div className="feature-item">
                       <div className="feature-icon">✓</div>
-                      <span>Autonomous optimization</span>
+                      <span>Continuous optimization</span>
                     </div>
                     <div className="feature-item">
                       <div className="feature-icon">✓</div>
-                      <span>Performance analytics</span>
+                      <span>Performance monitoring</span>
                     </div>
                     <div className="feature-item">
                       <div className="feature-icon">✓</div>
-                      <span>White-glove support</span>
+                      <span>Freedom maintenance</span>
                     </div>
                   </div>
                   
                   <div className="phase-outcome">
                     <div className="outcome-metric">24/7</div>
-                    <div className="outcome-label">Autonomous Operation</div>
+                    <div className="outcome-label">Freedom Support</div>
                   </div>
                 </div>
                 
@@ -1493,19 +1887,18 @@ export default function EliteHubLanding() {
                       <div className="dot active"></div>
                       <div className="dot active"></div>
                     </div>
-                    <span>Swiss Precision</span>
+                    <span>Freedom Focused</span>
                   </div>
                 </div>
               </div>
             </div>
 
             <div className="premium-process-guarantee fade-in-up stagger-7">
-              <div className="guarantee-badge-premium">SWISS PRECISION GUARANTEE</div>
-              <h4>Executive-Grade Service Standard</h4>
+              <div className="guarantee-badge-premium">FREEDOM TRANSFORMATION GUARANTEE</div>
+              <h4>Your Freedom is Our Promise</h4>
               <p>
-                Every system engineered with Swiss watchmaker precision. If we don't liberate 
-                a minimum of 8 hours weekly within 21 days, we continue working at no additional cost 
-                until your executive freedom is achieved.
+                Every system built with freedom in mind. If we don't save you significant time within 21 days, 
+                we continue working until your freedom is achieved. Your transformation is our mission.
               </p>
             </div>
           </div>
@@ -1516,68 +1909,90 @@ export default function EliteHubLanding() {
           <div className="faq-background-grid parallax-slow"></div>
           
           <div className="section-container">
-            <div className="section-badge neutral fade-in-up">EXECUTIVE BRIEFING</div>
+            <div className="section-badge neutral fade-in-up">FREEDOM QUESTIONS</div>
             <h2 className="section-title fade-in-up stagger-1">Let's Be <span className="text-gold">Direct</span></h2>
             <p className="section-subtitle fade-in-up stagger-2">
-              Executive-level answers to the strategic questions that matter. 
-              No marketing fluff—just precise responses to your critical concerns.
+              Honest answers to the questions that matter most. 
+              No marketing fluff—just straight talk about getting your freedom back.
             </p>
             
             <div className="premium-executive-faq-container">
               {[
                 {
                   question: "I'm not technical. How can I manage systems I don't understand?",
-                  answer: "Executive-grade simplicity by design. Every system operates through intuitive dashboards that require zero technical knowledge. Think luxury car—you don't need to understand the engine to enjoy the performance. Plus, our 90-day white-glove support ensures you're never alone.",
+                  answer: "We design everything for simplicity. Our dashboards are intuitive and require no technical knowledge. You'll receive comprehensive training and ongoing support to ensure you're comfortable managing your systems.",
                   details: [
-                    "One-click system monitoring dashboard",
+                    "Intuitive dashboard design",
                     "Plain English performance reports",
-                    "24/7 executive support hotline",
                     "Comprehensive training included",
-                    "90-day hand-holding guarantee"
+                    "Ongoing support available",
+                    "Step-by-step guidance"
                   ]
                 },
                 {
                   question: "What happens when something breaks after implementation?",
-                  answer: "Swiss engineering means things rarely break. Our systems include built-in redundancy, automatic error correction, and real-time monitoring. When issues arise (less than 0.3% of the time), our response is immediate. You have direct access to our engineering team, not a call center.",
+                  answer: "Our systems are designed to be reliable and self-correcting. We provide ongoing support and monitoring to catch issues early. If problems arise, we respond quickly to get your systems back online.",
                   details: [
-                    "99.4% historical uptime record",
-                    "Built-in redundancy systems",
-                    "Automatic error correction",
-                    "Direct engineering team access",
-                    "2-hour maximum response time"
+                    "Reliable system design",
+                    "Ongoing monitoring and support",
+                    "Quick response to issues",
+                    "Direct team access",
+                    "Proactive maintenance"
                   ]
                 },
                 {
                   question: "How is this different from hiring a virtual assistant or employee?",
-                  answer: "People get sick, take holidays, quit, and require management. Automation works 24/7/365 without breaks, never calls in sick, never asks for raises, and never quits. A skilled VA costs £2-4k monthly forever. Our systems pay for themselves in 6-8 weeks, then generate pure profit.",
+                  answer: "Automation works consistently without breaks, holidays, or management overhead. While VAs cost £2-4k monthly ongoing, our systems are a one-time investment that pays for itself quickly and then continues working for you.",
                   details: [
-                    "24/7/365 operation guaranteed",
-                    "Zero ongoing salary costs",
+                    "Consistent operation without breaks",
+                    "No ongoing salary costs",
                     "No holiday or sick days",
-                    "Handles complex multi-step processes",
-                    "6-8 week payback period"
+                    "Handles complex processes",
+                    "Quick return on investment"
                   ]
                 },
                 {
-                  question: "What's your actual success rate with similar executives?",
-                  answer: "94% of executives achieve 8+ hours weekly liberation within 21 days. The remaining 6% typically have unique compliance requirements that extend timeline, but all eventually succeed. Our methodology has been refined through 150+ executive transformations.",
+                  question: "What's your actual success rate with similar business owners?",
+                  answer: "Most business owners see significant time savings within the first few weeks. Our methodology has been refined through numerous implementations across different industries. We work closely with each client to ensure their specific needs are met.",
                   details: [
-                    "94% achieve 8+ hours weekly liberation",
-                    "Average liberation: 13.7 hours weekly",
-                    "150+ executive transformations completed",
-                    "100% eventual success rate",
-                    "Comprehensive performance tracking"
+                    "High success rate across industries",
+                    "Average time savings: 15-20 hours weekly",
+                    "Proven methodology",
+                    "Industry-specific expertise",
+                    "Ongoing support and optimization"
                   ]
                 },
                 {
                   question: "How do I know this will work for my specific industry?",
-                  answer: "We've liberated executives across 47 industries—from legal practices to manufacturing, consulting to e-commerce. The principles of process automation are universal, but our implementation is industry-specific. We study your sector's unique requirements, compliance needs, and workflow patterns.",
+                  answer: "We've liberated business owners across 47 industries—from legal practices to manufacturing, consulting to e-commerce. The principles of freedom automation are universal, but our implementation is industry-specific. We study your sector's unique requirements and workflow patterns.",
                   details: [
                     "47 industries successfully automated",
-                    "Industry-specific compliance expertise",
+                    "Industry-specific expertise",
                     "Custom engineering for your sector",
                     "Regulatory requirement integration",
                     "Proven cross-industry methodology"
+                  ]
+                },
+                {
+                  question: "What if it doesn't work for my business?",
+                  answer: "We offer a satisfaction guarantee. If we don't meet your expectations, we'll work to resolve any issues. No long-term contracts required, and you can cancel anytime.",
+                  details: [
+                    "Satisfaction guarantee",
+                    "No long-term contracts",
+                    "Cancel anytime",
+                    "Ongoing support included",
+                    "Work to resolve any issues"
+                  ]
+                },
+                {
+                  question: "How long does implementation take?",
+                  answer: "Average implementation takes 10 days, but this varies significantly based on complexity. Zero disruption to your business during implementation. Book a call to get your specific timeline.",
+                  details: [
+                    "10 days average implementation",
+                    "Timeline varies by complexity",
+                    "Zero business disruption",
+                    "Ongoing support included",
+                    "Book a call for specific timeline"
                   ]
                 }
               ].map((faq, index) => (
@@ -1616,10 +2031,10 @@ export default function EliteHubLanding() {
           
           <div className="section-container">
             <div className="finale-content">
-              <div className="finale-badge fade-in-up">EXECUTIVE OPPORTUNITY</div>
-              <h2 className="finale-title fade-in-up stagger-1">Your Liberation<br/><span className="text-gold">Awaits</span></h2>
+              <div className="finale-badge fade-in-up">FREEDOM OPPORTUNITY</div>
+              <h2 className="finale-title fade-in-up stagger-1">Your Freedom<br/><span className="text-gold">Awaits</span></h2>
               <p className="finale-subtitle fade-in-up stagger-2">
-                3 executive positions available this month. Next intake: August 2025.
+                {availableSlots} business owner positions available this month. Next intake: August 2025.
               </p>
               
               <div className="availability-showcase scale-in stagger-3">
@@ -1632,10 +2047,10 @@ export default function EliteHubLanding() {
                               strokeLinecap="round" className="availability-progress"
                               style={{ strokeDasharray: '440', strokeDashoffset: '330' }}/>
                     </svg>
-                    <div className="availability-number">3</div>
-                  </div>
-                  <div className="availability-text">Executive Positions</div>
-                  <div className="urgency-indicator">17 days until intake closes</div>
+                                      <div className="availability-number">{availableSlots}</div>
+                </div>
+                <div className="availability-text">Freedom Opportunities</div>
+                <div className="urgency-indicator">{daysRemaining} days until intake closes</div>
                 </div>
                 
                 <div className="exclusivity-factors">
@@ -1645,7 +2060,7 @@ export default function EliteHubLanding() {
                     </div>
                     <div className="factor-content">
                       <h5>Selective Acceptance</h5>
-                      <p>We only work with 12 executives annually to ensure Swiss precision delivery</p>
+                      <p>We only work with 12 business owners annually to ensure freedom-focused delivery</p>
                     </div>
                   </div>
                   
@@ -1654,8 +2069,8 @@ export default function EliteHubLanding() {
                       <div className="icon-geometric-lightning"></div>
                     </div>
                     <div className="factor-content">
-                      <h5>Immediate Implementation</h5>
-                      <p>21-day maximum from handshake to complete liberation</p>
+                      <h5>Immediate Transformation</h5>
+                      <p>7-10 day maximum from handshake to complete freedom</p>
                     </div>
                   </div>
                   
@@ -1664,8 +2079,8 @@ export default function EliteHubLanding() {
                       <div className="icon-geometric-trophy"></div>
                     </div>
                     <div className="factor-content">
-                      <h5>Elite Tier Service</h5>
-                      <p>White-glove implementation reserved for discerning executives</p>
+                      <h5>Freedom-Focused Service</h5>
+                      <p>Hands-on implementation reserved for business owners ready for change</p>
                     </div>
                   </div>
                 </div>
@@ -1673,7 +2088,7 @@ export default function EliteHubLanding() {
               
               <div className="finale-cta-section fade-in-up stagger-4">
                 <a href="https://cal.com/elitehubnetwork/book-strategy-call" className="finale-cta-button" target="_blank" rel="noopener noreferrer">
-                  <span className="cta-text">Secure Your Executive Liberation</span>
+                  <span className="cta-text">Get Your Freedom Back</span>
                   <div className="cta-shine"></div>
                 </a>
                 
@@ -1682,16 +2097,16 @@ export default function EliteHubLanding() {
                     <div className="guarantee-item">
                       <div className="guarantee-icon"></div>
                       <div className="guarantee-text">
-                        <strong>Swiss Precision Guarantee</strong><br/>
-                        8+ hours weekly liberation or we continue at no cost
+                        <strong>Freedom Transformation Guarantee</strong><br/>
+                        Significant time freedom or we continue until achieved
                       </div>
                     </div>
                     
                     <div className="guarantee-item">
                       <div className="guarantee-icon"></div>
                       <div className="guarantee-text">
-                        <strong>Executive-Grade Implementation</strong><br/>
-                        White-glove service with direct engineering access
+                        <strong>Freedom-Focused Implementation</strong><br/>
+                        Hands-on service with direct team access
                       </div>
                     </div>
                     
@@ -1706,7 +2121,7 @@ export default function EliteHubLanding() {
                     <div className="guarantee-item">
                       <div className="guarantee-icon"></div>
                       <div className="guarantee-text">
-                        <strong>Proven Executive Methodology</strong><br/>
+                        <strong>Proven Freedom Methodology</strong><br/>
                         150+ successful transformations across 47 industries
                       </div>
                     </div>
@@ -1722,21 +2137,26 @@ export default function EliteHubLanding() {
           <div className="footer-content">
             <div className="footer-brand">
               <h3>ELITEHUB</h3>
-              <p>Precision automation systems for business leaders who value their time. Because every moment is irreplaceable.</p>
+              <p>Freedom automation systems for business owners who value their time. Because every moment is irreplaceable.</p>
               <div className="social-links">
-                <div className="social-icon"></div>
-                <div className="social-icon"></div>
-                <div className="social-icon"></div>
+                <a href="https://www.instagram.com/matthewbetts.ehub" target="_blank" rel="noopener noreferrer" className="social-link">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+                    <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/>
+                    <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/>
+                  </svg>
+                  <span>MatthewBetts.Ehub</span>
+                </a>
               </div>
             </div>
             
             <div className="footer-links">
               <h4>Services</h4>
               <ul>
-                <li><a href="#">Business Automation</a></li>
-                <li><a href="#">Process Engineering</a></li>
-                <li><a href="#">System Integration</a></li>
-                <li><a href="#">Strategic Consulting</a></li>
+                <li><a href="#">Freedom Automation</a></li>
+                <li><a href="#">Complete Admin Systems</a></li>
+                <li><a href="#">Lead Capture Systems</a></li>
+                <li><a href="#">Freedom Consulting</a></li>
               </ul>
             </div>
             
@@ -1745,7 +2165,7 @@ export default function EliteHubLanding() {
               <ul>
               <li>outreach@elitehubnetwork.com</li>
                 <li>Cardiff, Wales, UK</li>
-                <li><a href="https://cal.com/elitehubnetwork/book-strategy-call" className="contact-cta" target="_blank" rel="noopener noreferrer">Book a Strategic Call →</a></li>
+                <li><a href="https://cal.com/elitehubnetwork/book-strategy-call" className="contact-cta" target="_blank" rel="noopener noreferrer">Get Your Freedom Back →</a></li>
               </ul>
             </div>
           </div>
