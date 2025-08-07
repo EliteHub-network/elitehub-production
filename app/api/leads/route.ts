@@ -4,7 +4,7 @@ import sgMail from '@sendgrid/mail';
 // Initialize SendGrid with API key
 console.log('SENDGRID_API_KEY:', process.env.SENDGRID_API_KEY ? 'Present' : 'Missing');
 console.log('API Key starts with SG:', process.env.SENDGRID_API_KEY?.startsWith('SG.'));
-sgMail.setApiKey('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');
+sgMail.setApiKey(process.env.SENDGRID_API_KEY || '');
 
 export async function POST(request: NextRequest) {
   try {
