@@ -31,6 +31,7 @@ export default function EliteHubLanding() {
   // Dynamic countdown and slot availability
   const [daysRemaining, setDaysRemaining] = useState(0);
   const [availableSlots, setAvailableSlots] = useState(6);
+  const [isMobile, setIsMobile] = useState(false);
   
   // Refs for scroll animations and effects
   const metricsRef = useRef(null);
@@ -419,6 +420,14 @@ export default function EliteHubLanding() {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, []);
 
+  // Responsive: render mobile chart elements only on small screens
+  useEffect(() => {
+    const updateIsMobile = () => setIsMobile(window.innerWidth <= 768);
+    updateIsMobile();
+    window.addEventListener('resize', updateIsMobile);
+    return () => window.removeEventListener('resize', updateIsMobile);
+  }, []);
+
   // Time counter
   useEffect(() => {
     const interval = setInterval(() => {
@@ -442,7 +451,16 @@ export default function EliteHubLanding() {
   const showToastNotification = (message, type = 'success') => {
     setToastMessage(message);
     setShowToast(true);
-    setTimeout(() => setShowToast(false), 3000);
+    setTimeout(() => {
+      setShowToast(false);
+      // Add a small delay to ensure the hide animation plays
+      setTimeout(() => {
+        const toast = document.querySelector('.toast');
+        if (toast) {
+          toast.classList.remove('show', 'hide');
+        }
+      }, 300);
+    }, 3000);
   };
 
   const updateCalculator = () => {
@@ -526,7 +544,7 @@ export default function EliteHubLanding() {
         />
     
         {/* Toast Notification */}
-        <div className={`toast ${showToast ? 'show' : ''}`}>
+        <div className={`toast ${showToast ? 'show' : 'hide'}`}>
           <div className="toast-icon success"></div>
           <div className="toast-message">{toastMessage}</div>
         </div>
@@ -814,36 +832,106 @@ export default function EliteHubLanding() {
                         max="20"
                       />
                     </div>
+                    <select 
+                      name="industry"
+                      className="form-input"
+                      style={{
+                        appearance: 'none', 
+                        backgroundImage: 'url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23FFD700%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.4-12.8z%22/%3E%3C/svg%3E")', 
+                        backgroundRepeat: 'no-repeat', 
+                        backgroundPosition: 'right 8px center', 
+                        backgroundSize: '12px auto', 
+                        paddingRight: '30px',
+                        color: '#ffffff'
+                      }}
+                    >
+                      <option value="" style={{color: '#666666', backgroundColor: '#1a1a1a'}}>Select Industry</option>
+                      <option value="ecommerce" style={{color: '#ffffff', backgroundColor: '#1a1a1a'}}>E-commerce</option>
+                      <option value="service" style={{color: '#ffffff', backgroundColor: '#1a1a1a'}}>Service Business</option>
+                      <option value="agency" style={{color: '#ffffff', backgroundColor: '#1a1a1a'}}>Agency</option>
+                      <option value="consulting" style={{color: '#ffffff', backgroundColor: '#1a1a1a'}}>Consulting</option>
+                      <option value="real-estate" style={{color: '#ffffff', backgroundColor: '#1a1a1a'}}>Real Estate</option>
+                      <option value="healthcare" style={{color: '#ffffff', backgroundColor: '#1a1a1a'}}>Healthcare</option>
+                      <option value="finance" style={{color: '#ffffff', backgroundColor: '#1a1a1a'}}>Finance</option>
+                      <option value="other" style={{color: '#ffffff', backgroundColor: '#1a1a1a'}}>Other</option>
+                    </select>
+                    <select 
+                      name="frustration"
+                      className="form-input"
+                      style={{
+                        appearance: 'none', 
+                        backgroundImage: 'url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23FFD700%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.4-12.8z%22/%3E%3C/svg%3E")', 
+                        backgroundRepeat: 'no-repeat', 
+                        backgroundPosition: 'right 8px center', 
+                        backgroundSize: '12px auto', 
+                        paddingRight: '30px',
+                        color: '#ffffff'
+                      }}
+                    >
+                      <option value="" style={{color: '#666666', backgroundColor: '#1a1a1a'}}>Biggest Frustration</option>
+                      <option value="time-waste" style={{color: '#ffffff', backgroundColor: '#1a1a1a'}}>Time Waste</option>
+                      <option value="errors" style={{color: '#ffffff', backgroundColor: '#1a1a1a'}}>Too Many Errors</option>
+                      <option value="costs" style={{color: '#ffffff', backgroundColor: '#1a1a1a'}}>High Costs</option>
+                      <option value="manual" style={{color: '#ffffff', backgroundColor: '#1a1a1a'}}>Manual Processes</option>
+                      <option value="scaling" style={{color: '#ffffff', backgroundColor: '#1a1a1a'}}>Can't Scale</option>
+                      <option value="other" style={{color: '#ffffff', backgroundColor: '#1a1a1a'}}>Other</option>
+                    </select>
+                    <select 
+                      name="timeline"
+                      className="form-input"
+                      style={{
+                        appearance: 'none', 
+                        backgroundImage: 'url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23FFD700%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.4-12.8z%22/%3E%3C/svg%3E")', 
+                        backgroundRepeat: 'no-repeat', 
+                        backgroundPosition: 'right 8px center', 
+                        backgroundSize: '12px auto', 
+                        paddingRight: '30px',
+                        color: '#ffffff'
+                      }}
+                    >
+                      <option value="" style={{color: '#666666', backgroundColor: '#1a1a1a'}}>Implementation Timeline</option>
+                      <option value="asap" style={{color: '#ffffff', backgroundColor: '#1a1a1a'}}>ASAP</option>
+                      <option value="next-month" style={{color: '#ffffff', backgroundColor: '#1a1a1a'}}>Next Month</option>
+                      <option value="planning" style={{color: '#ffffff', backgroundColor: '#1a1a1a'}}>Planning Phase</option>
+                      <option value="future" style={{color: '#ffffff', backgroundColor: '#1a1a1a'}}>Future Consideration</option>
+                    </select>
                     <button type="button" className="btn-primary-premium form-submit" onClick={() => {
-                      alert('Form button clicked!');
                       console.log('Form button clicked!');
                       const nameInput = document.querySelector('.form-input[name="name"]') as HTMLInputElement;
                       const emailInput = document.querySelector('.form-input[name="email"]') as HTMLInputElement;
                       const companyInput = document.querySelector('.form-input[name="company"]') as HTMLInputElement;
                       const businessTypeInput = document.querySelector('.form-input[name="businessType"]') as HTMLSelectElement;
                       const staffCountInput = document.querySelector('.form-input[name="staffCount"]') as HTMLInputElement;
+                      const industryInput = document.querySelector('.form-input[name="industry"]') as HTMLSelectElement;
+                      const frustrationInput = document.querySelector('.form-input[name="frustration"]') as HTMLSelectElement;
+                      const timelineInput = document.querySelector('.form-input[name="timeline"]') as HTMLSelectElement;
                       
-                      if (nameInput && emailInput && companyInput && businessTypeInput && staffCountInput) {
+                      if (nameInput && emailInput && companyInput && businessTypeInput && staffCountInput && industryInput && frustrationInput && timelineInput) {
+                        console.log('=== FORM VALIDATION PASSED ===');
                         const name = nameInput.value.trim();
                         const email = emailInput.value.trim();
                         const company = companyInput.value.trim();
                         const businessType = businessTypeInput.value;
                         const staffCount = staffCountInput.value;
+                        const industry = industryInput.value;
+                        const frustration = frustrationInput.value;
+                        const timeline = timelineInput.value;
                         
-                        if (!name || !email || !company || !businessType || !staffCount) {
+                        console.log('Form data:', { name, email, company, businessType, staffCount, industry, frustration, timeline });
+                        
+                        if (!name || !email || !company || !businessType || !staffCount || !industry || !frustration || !timeline) {
+                          console.log('=== FORM VALIDATION FAILED ===');
                           showToastNotification('Please fill in all fields', 'error');
                           return;
                         }
 
-                        // Determine the field meaning based on business type
-                        const fieldLabel = businessType === 'solo' ? 'Hours per week on admin' : 'Number of Admin Staff';
-                        const fieldValue = businessType === 'solo' ? `${staffCount} hours/week` : `${staffCount} staff`;
-                        
                         // Show loading state
                         const btnText = document.querySelector('.form-submit .btn-text');
                         if (btnText) btnText.textContent = 'Sending...';
                         
-                        // Submit to API only
+                        console.log('=== ABOUT TO CALL API ROUTE ===');
+                        
+                        // Submit to local API route which proxies to Google Scripts
                         fetch('/api/leads', {
                           method: 'POST',
                           headers: { 'Content-Type': 'application/json' },
@@ -853,8 +941,9 @@ export default function EliteHubLanding() {
                             company, 
                             businessType, 
                             staffCount, 
-                            fieldLabel,
-                            fieldValue,
+                            industry,
+                            frustration,
+                            timeline,
                             source: 'freedom-analysis-form' 
                           })
                         })
@@ -867,6 +956,9 @@ export default function EliteHubLanding() {
                             companyInput.value = '';
                             businessTypeInput.value = '';
                             staffCountInput.value = '';
+                            industryInput.value = '';
+                            frustrationInput.value = '';
+                            timelineInput.value = '';
                           } else {
                             console.error('API error:', response.status);
                             showToastNotification('Thank you! We\'ll send your custom freedom analysis within 24 hours.', 'success');
@@ -875,6 +967,9 @@ export default function EliteHubLanding() {
                             companyInput.value = '';
                             businessTypeInput.value = '';
                             staffCountInput.value = '';
+                            industryInput.value = '';
+                            frustrationInput.value = '';
+                            timelineInput.value = '';
                           }
                         })
                         .catch(error => {
@@ -885,10 +980,23 @@ export default function EliteHubLanding() {
                           companyInput.value = '';
                           businessTypeInput.value = '';
                           staffCountInput.value = '';
+                          industryInput.value = '';
+                          frustrationInput.value = '';
+                          timelineInput.value = '';
                         })
                         .finally(() => {
                           if (btnText) btnText.textContent = 'Get My Freedom Analysis';
                         });
+                      } else {
+                        console.log('=== FORM ELEMENTS NOT FOUND ===');
+                        console.log('nameInput:', nameInput);
+                        console.log('emailInput:', emailInput);
+                        console.log('companyInput:', companyInput);
+                        console.log('businessTypeInput:', businessTypeInput);
+                        console.log('staffCountInput:', staffCountInput);
+                        console.log('industryInput:', industryInput);
+                        console.log('frustrationInput:', frustrationInput);
+                        console.log('timelineInput:', timelineInput);
                       }
                     }}>
                       <span className="btn-text">Get My Freedom Analysis</span>
@@ -1194,7 +1302,6 @@ export default function EliteHubLanding() {
                       ))}
                       
                       {/* Timeline labels - only show the correct ones */}
-                      <text x="80" y="240" fill="rgba(255,255,255,0.6)" fontSize="11" textAnchor="middle">Week 1</text>
                       <text x="130" y="240" fill="rgba(255,255,255,0.6)" fontSize="11" textAnchor="middle">Week 2</text>
                       <text x="180" y="240" fill="rgba(255,255,255,0.6)" fontSize="11" textAnchor="middle">Week 3</text>
                       <text x="230" y="240" fill="rgba(255,255,255,0.6)" fontSize="11" textAnchor="middle">Month 2</text>
@@ -1205,6 +1312,7 @@ export default function EliteHubLanding() {
                     </svg>
 
                     {/* Mobile Chart - Simplified and Larger */}
+                    {isMobile && (
                     <div className="mobile-chart-container">
                       <div className="mobile-chart-header">
                         <h4 style={{ fontSize: '18px', marginBottom: '8px', color: 'var(--gold-primary)' }}>Freedom Transformation Timeline</h4>
@@ -1272,6 +1380,7 @@ export default function EliteHubLanding() {
                         </div>
                       </div>
                     </div>
+                    )}
                   </div>
                 </div>
 
@@ -1681,7 +1790,7 @@ export default function EliteHubLanding() {
           <div className="engineering-background-grid parallax-medium"></div>
           
           <div className="section-container">
-            <div className="section-badge blue fade-in-up">FREEDOM TRANSFORMATION PROCESS</div>
+            <div className="section-badge gold fade-in-up">FREEDOM TRANSFORMATION PROCESS</div>
             <h2 className="section-title fade-in-up stagger-1">Your <span className="text-gold">Freedom Blueprint</span></h2>
             <p className="section-subtitle fade-in-up stagger-2">
               Our proven 7-10 day process that transforms trapped business owners into free entrepreneurs. 
